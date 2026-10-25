@@ -11,7 +11,7 @@ The skill lives in the repository at [`.agents/skills/welldot-converter/`](https
 
 1. **Gets the spec.** Reads the current specification, or the bundled copy when offline.
 2. **Reads the report**, with the assistant's own file and vision tools.
-3. **Extracts the well**: identity, location, construction, lithology, tests, analyses, permits and history, section by section ([what goes where](/format/getting-started/for-geologists)).
+3. **Extracts the well**: identity, location, construction, lithology, tests, analyses, operation, permits and history, section by section ([what goes where](/format/getting-started/for-geologists)).
 4. **Validates** the result: required fields, intervals, units, datetimes with offsets, closed vocabularies.
 5. **Delivers** the file with a summary of the sections found, the fields left out on purpose and the free-text values it kept as written.
 6. **Asks** about ambiguities instead of guessing.

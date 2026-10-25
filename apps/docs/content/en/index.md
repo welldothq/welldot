@@ -13,7 +13,7 @@ navigation: false
 The record of a water well, [as data]{.landing-em}.
 
 #description
-`.well` is an open JSON format for everything a well report holds: construction, lithology, pumping tests, permits and water quality. These docs cover the format, its specification and the libraries that read, validate, analyze and draw it.
+`.well` is an open JSON format for the whole record of a water well, from construction and lithology to pumping tests, operation, permits, water quality and history. These docs cover the format, its specification and the libraries that read, validate, analyze and draw it.
 
 #links
 :u-button{to="/format" size="lg" trailing-icon="i-lucide-arrow-right" label="Read about the format"} :u-button{to="/format/spec" size="lg" color="neutral" variant="outline" icon="i-lucide-scale" label="Specification"}
@@ -27,7 +27,7 @@ The record of a water well, [as data]{.landing-em}.
   :::u-page-grid{class="lg:grid-cols-2"}
     ::::u-page-card{title="I work with wells" icon="i-lucide-mountain" to="/format/getting-started/for-geologists" spotlight variant="subtle"}
     #description
-    Geologists, hydrogeologists and drillers: how a drilling report maps onto a `.well` file, explained in field terms. Lithology, construction, tests and water quality, no code needed.
+    Geologists, hydrogeologists and drillers: how a drilling report maps onto a `.well` file, explained in field terms. Lithology, construction, tests, operation, permits and water quality, no code needed.
     ::::
 
     ::::u-page-card{title="I build software" icon="i-lucide-code" to="/format/getting-started/for-developers" spotlight variant="subtle"}
@@ -52,7 +52,7 @@ A `.well` file starts as a drilling report and grows with the well: tests, permi
     Meters, millimeters, m³/h. The file never declares units, so two files of the same well hold the same numbers.
     ::::
 
-    ::::u-page-card{title="Incomplete is valid" icon="i-lucide-file-check" to="/format/concepts/depths-and-intervals" variant="ghost"}
+    ::::u-page-card{title="Graceful incompleteness" icon="i-lucide-file-check" to="/format/getting-started/what-is-well#key-principles" variant="ghost"}
     #description
     Unknown values are left out, never invented. A registry record with only its construction is a valid file.
     ::::

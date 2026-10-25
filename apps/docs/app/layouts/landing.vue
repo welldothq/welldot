@@ -73,6 +73,11 @@ const { navs } = await useDocsNavigation();
   color: var(--ui-primary);
 }
 
+/* Page sections center their text; put the card icons on the same axis */
+.landing [data-slot='wrapper'] > [data-slot='leading'] {
+  align-self: center;
+}
+
 /* Sections after the hero sit on a hairline, like welldot.org's bands */
 .landing [data-slot='root'] + [data-slot='root'] {
   border-top: 1px solid var(--ui-border);

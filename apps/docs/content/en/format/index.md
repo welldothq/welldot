@@ -1,6 +1,6 @@
 ---
 title: The .well format
-description: An open JSON format for the complete record of a water well, from construction and lithology to tests, permits and water quality.
+description: An open JSON format for the complete record of a water well, from construction and lithology to tests, operation, permits and water quality.
 navigation:
   title: Introduction
 ---
@@ -21,7 +21,7 @@ What a file holds, why it exists and how it relates to the spec and the packages
 :::
 
 :::card{title="For geologists" icon="i-lucide-mountain" to="/format/getting-started/for-geologists"}
-How a drilling report maps onto the file: lithology, construction, tests and water quality.
+How a drilling report maps onto the file: lithology, construction, tests, operation, permits and water quality.
 :::
 
 :::card{title="For developers" icon="i-lucide-code" to="/format/getting-started/for-developers"}
