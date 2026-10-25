@@ -2,142 +2,40 @@ import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 import type { ComponentsDesignTokens, Preset } from '@primeuix/themes/types';
 
-// Cool-slate surface scale (blue-tinted neutrals, light → dark)
-const surfaceLight = {
-  0: '#ffffff',
-  50: '#f7f8fa',
-  100: '#eef0f3',
-  200: '#d8dde3',
-  300: '#b9c0c8',
-  400: '#7888a0',
-  500: '#4f5d75',
-  600: '#3d4a60',
-  700: '#2a3344',
-  800: '#1a2230',
-  900: '#131922',
-  950: '#0d1218',
-};
+// The palette values live in `tokens.css` (`--w-*`, light in `:root`, dark in
+// `.dark-mode`); the preset only points at them, so PrimeVue and the Tailwind
+// theme always agree. Surface and content flip through the variables
+// themselves, so both color schemes share the same maps.
+const NEUTRAL_STEPS = [
+  0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950,
+] as const;
+const ACCENT_STEPS = NEUTRAL_STEPS.slice(1);
 
-// Mirror scale: same hue/chroma, inverted lightness (step N = surfaceLight[950-N])
-const contentLight = {
-  0: '#0d1218',
-  50: '#131922',
-  100: '#1a2230',
-  200: '#2a3344',
-  300: '#3d4a60',
-  400: '#4f5d75',
-  500: '#7888a0',
-  600: '#b9c0c8',
-  700: '#d8dde3',
-  800: '#eef0f3',
-  900: '#f7f8fa',
-  950: '#ffffff',
-};
+/** `{ [step]: 'var(--w-<name>-<step>)' }` for each step. */
+function tokenScale(
+  name: string,
+  steps: readonly number[],
+): Record<number, string> {
+  return Object.fromEntries(
+    steps.map(step => [step, `var(--w-${name}-${step})`]),
+  );
+}
 
-// Dark mode: both scales fully inverted so {surface.0} stays the ground
-// and {content.0} stays the primary text — same token references work in both modes
-const surfaceDark = {
-  0: '#0d1218',
-  50: '#131922',
-  100: '#1a2230',
-  200: '#2a3344',
-  300: '#3d4a60',
-  400: '#4f5d75',
-  500: '#7888a0',
-  600: '#b9c0c8',
-  700: '#d8dde3',
-  800: '#eef0f3',
-  900: '#f7f8fa',
-  950: '#ffffff',
-};
-
-const contentDark = {
-  0: '#ffffff',
-  50: '#f7f8fa',
-  100: '#eef0f3',
-  200: '#d8dde3',
-  300: '#b9c0c8',
-  400: '#7888a0',
-  500: '#4f5d75',
-  600: '#3d4a60',
-  700: '#2a3344',
-  800: '#1a2230',
-  900: '#131922',
-  950: '#0d1218',
-};
+const surface = tokenScale('surface', NEUTRAL_STEPS);
+const content = tokenScale('content', NEUTRAL_STEPS);
 
 const WelldotAuraPreset = definePreset(Aura, {
   primitive: {
-    surface: surfaceLight,
-    content: contentLight,
+    surface,
+    content,
   },
 
   semantic: {
-    primary: {
-      50: '#f0f5fc',
-      100: '#dde9f8',
-      200: '#bdd1f1',
-      300: '#92b1e6',
-      400: '#5d86d2',
-      500: '#2f5fae',
-      600: '#29539b',
-      700: '#22427d',
-      800: '#1a325f',
-      900: '#112343',
-      950: '#0a172e',
-    },
-    error: {
-      50: 'oklch(97% 0.02 25)',
-      100: 'oklch(94% 0.05 25)',
-      200: 'oklch(85% 0.11 25)',
-      300: 'oklch(72% 0.17 25)',
-      400: 'oklch(61% 0.19 25)',
-      500: 'oklch(50% 0.20 25)',
-      600: 'oklch(43% 0.19 25)',
-      700: 'oklch(36% 0.17 25)',
-      800: 'oklch(29% 0.14 25)',
-      900: 'oklch(23% 0.11 25)',
-      950: 'oklch(17% 0.08 25)',
-    },
-    warning: {
-      50: 'oklch(97% 0.02 75)',
-      100: 'oklch(94% 0.05 75)',
-      200: 'oklch(85% 0.11 75)',
-      300: 'oklch(72% 0.17 75)',
-      400: 'oklch(61% 0.19 75)',
-      500: 'oklch(50% 0.20 75)',
-      600: 'oklch(43% 0.19 75)',
-      700: 'oklch(36% 0.17 75)',
-      800: 'oklch(29% 0.14 75)',
-      900: 'oklch(23% 0.11 75)',
-      950: 'oklch(17% 0.08 75)',
-    },
-    success: {
-      50: 'oklch(97% 0.02 145)',
-      100: 'oklch(94% 0.05 145)',
-      200: 'oklch(85% 0.11 145)',
-      300: 'oklch(72% 0.17 145)',
-      400: 'oklch(61% 0.19 145)',
-      500: 'oklch(50% 0.20 145)',
-      600: 'oklch(43% 0.19 145)',
-      700: 'oklch(36% 0.17 145)',
-      800: 'oklch(29% 0.14 145)',
-      900: 'oklch(23% 0.11 145)',
-      950: 'oklch(17% 0.08 145)',
-    },
-    info: {
-      50: 'oklch(97% 0.02 235)',
-      100: 'oklch(94% 0.05 235)',
-      200: 'oklch(85% 0.11 235)',
-      300: 'oklch(72% 0.17 235)',
-      400: 'oklch(61% 0.19 235)',
-      500: 'oklch(50% 0.20 235)',
-      600: 'oklch(43% 0.19 235)',
-      700: 'oklch(36% 0.17 235)',
-      800: 'oklch(29% 0.14 235)',
-      900: 'oklch(23% 0.11 235)',
-      950: 'oklch(17% 0.08 235)',
-    },
+    primary: tokenScale('primary', ACCENT_STEPS),
+    error: tokenScale('error', ACCENT_STEPS),
+    warning: tokenScale('warning', ACCENT_STEPS),
+    success: tokenScale('success', ACCENT_STEPS),
+    info: tokenScale('info', ACCENT_STEPS),
     colorScheme: {
       light: {
         primary: {
@@ -146,8 +44,8 @@ const WelldotAuraPreset = definePreset(Aura, {
           hoverColor: '{primary.500}',
           activeColor: '{primary.600}',
         },
-        surface: surfaceLight,
-        content: contentLight,
+        surface,
+        content,
         text: {
           color: '{content.0}',
           hoverColor: '{content.50}',
@@ -183,8 +81,8 @@ const WelldotAuraPreset = definePreset(Aura, {
           hoverColor: '{primary.600}',
           activeColor: '{primary.500}',
         },
-        surface: surfaceDark,
-        content: contentDark,
+        surface,
+        content,
         text: {
           color: '{content.0}',
           hoverColor: '{content.50}',
@@ -1065,7 +963,7 @@ const WelldotAuraPreset = definePreset(Aura, {
 export const WelldotPreset = {
   preset: WelldotAuraPreset,
   options: {
-    prefix: 'w',
+    prefix: 'p',
     darkModeSelector: '.dark-mode',
     cssLayer: {
       name: 'primevue',

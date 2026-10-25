@@ -7,6 +7,7 @@ import {
 
 const tokens = readThemeCss('tokens.css');
 const theme = readThemeCss('theme.css');
+const stripComments = (css: string) => css.replace(/\/\*[\s\S]*?\*\//g, '');
 const light = ruleDeclarations(tokens, ':root');
 const dark = ruleDeclarations(tokens, '.dark-mode');
 
@@ -43,11 +44,11 @@ describe('tokens.css', () => {
   });
 
   it('keeps theme.css free of imports and sources', () => {
-    expect(theme).not.toContain('@import');
-    expect(theme).not.toContain('@source');
+    expect(stripComments(theme)).not.toContain('@import');
+    expect(stripComments(theme)).not.toContain('@source');
   });
 
   it('keeps tokens.css plain CSS', () => {
-    expect(tokens.replace(/\/\*[\s\S]*?\*\//g, '')).not.toMatch(/@[a-z]/);
+    expect(stripComments(tokens)).not.toMatch(/@[a-z]/);
   });
 });

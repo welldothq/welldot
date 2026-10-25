@@ -16,7 +16,9 @@ export function ruleDeclarations(
   selector: string,
 ): Map<string, string> {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const body = new RegExp(`(?:^|\\n)${escaped}\\s*\\{([^}]*)\\}`).exec(css)?.[1];
+  const body = new RegExp(`(?:^|\\n)${escaped}\\s*\\{([^}]*)\\}`).exec(
+    css,
+  )?.[1];
   const declarations = new Map<string, string>();
   for (const [, name, value] of (body ?? '').matchAll(
     /(--[\w-]+)\s*:\s*([^;]+);/g,
