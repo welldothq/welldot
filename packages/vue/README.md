@@ -16,6 +16,7 @@ This README covers installation, Vue and Nuxt setup, the Tailwind tokens, `creat
   - [Nuxt](#nuxt)
 - [Tailwind setup](#tailwind-setup)
   - [Overriding the tokens](#overriding-the-tokens)
+  - [Custom palette](#custom-palette)
 - [Configuration](#configuration)
   - [Layering](#layering)
 - [Text and i18n](#text-and-i18n)
@@ -143,18 +144,26 @@ The components are styled with Tailwind CSS 4 utilities and the Welldot tokens. 
 @import '@welldot/vue/tailwind.css';
 ```
 
-`@welldot/vue/tailwind.css` brings the `@theme` tokens, the `dark` variant (`.dark-mode`), the base layer, the data grid's styles and the components' own styles, and adds the package's built files as a Tailwind `@source`. It must be imported from the app's CSS (not from JS) so the tokens join the app's Tailwind compilation. The tokens read PrimeVue's `--w-*` variables, so use `WelldotPreset` (prefix `w`) or a preset with the same prefix.
+`@welldot/vue/tailwind.css` brings the color tokens, the `@theme` tokens, the `dark` variant (`.dark-mode`), the base layer, the data grid's styles and the components' own styles, and adds the package's built files as a Tailwind `@source`. It must be imported from the app's CSS (not from JS) so the tokens join the app's Tailwind compilation.
+
+The colors are plain CSS variables (`--w-*`) declared in `@welldot/vue/tokens.css`, which both `WelldotPreset` and the Tailwind theme read. `tailwind.css` is built from two files you can also import on their own, for example in an app that doesn't use PrimeVue:
+
+```css
+@import 'tailwindcss';
+@import '@welldot/vue/tokens.css'; /* --w-* color variables, light and dark */
+@import '@welldot/vue/theme.css'; /* dark variant, @theme tokens, base layer */
+```
 
 ### Overriding the tokens
 
 Everything in `tailwind.css` can be overridden from the app's own stylesheet, **after** the import:
 
-| Token                                                                     | Where it comes from                      | Override with                                                                                                                                     |
-| ------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Colors (`--color-{surface,content,primary,error,warning,success,info}-*`) | PrimeVue's `--w-*` variables             | The preset — `defineWelldotTheme` (see [Overriding the theme](#overriding-the-theme)), so PrimeVue components and Tailwind utilities stay in sync |
-| Fonts (`--font-display`, `--font-serif`, `--font-mono`)                   | `@theme static`                          | The app's `@theme` block                                                                                                                          |
-| Radii (`--radius-{sm,md,lg,xl,2xl,pill}`)                                 | `@theme static`                          | The app's `@theme` block                                                                                                                          |
-| Focus/error rings (`--color-focus-ring`, `--color-error-ring`)            | `@layer base` (`:root` and `.dark-mode`) | The app's `@layer base`                                                                                                                           |
+| Token                                                                     | Where it comes from                      | Override with                                                                                                                       |
+| ------------------------------------------------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Colors (`--color-{surface,content,primary,error,warning,success,info}-*`) | `--w-*` variables in `tokens.css`        | Redeclare the `--w-*` variables (see [Custom palette](#custom-palette)), so PrimeVue components and Tailwind utilities stay in sync |
+| Fonts (`--font-display`, `--font-serif`, `--font-mono`)                   | `@theme static`                          | The app's `@theme` block                                                                                                            |
+| Radii (`--radius-{sm,md,lg,xl,2xl,pill}`)                                 | `@theme static`                          | The app's `@theme` block                                                                                                            |
+| Focus/error rings (`--color-focus-ring`, `--color-error-ring`)            | `@layer base` (`:root` and `.dark-mode`) | The app's `@layer base`                                                                                                             |
 
 ```css
 /* app main.css */
@@ -177,7 +186,35 @@ Everything in `tailwind.css` can be overridden from the app's own stylesheet, **
 }
 ```
 
-Avoid overriding a color token in `@theme` directly: Tailwind utilities would change while PrimeVue components keep the preset's color. Fonts and radii are declared `static` so they're always emitted, even when only component styles read them through `var()`. The fonts themselves aren't loaded by the package; load them in the app (e.g. `@nuxt/fonts`).
+Avoid overriding a color token in `@theme` directly: Tailwind utilities would change while PrimeVue components keep the old color. Change the `--w-*` variable instead. Fonts and radii are declared `static` so they're always emitted, even when only component styles read them through `var()`. The fonts themselves aren't loaded by the package; load them in the app (e.g. `@nuxt/fonts`).
+
+### Custom palette
+
+The palette lives in plain CSS variables, so any app can rebrand `@welldot/vue` with a few lines of CSS loaded after the package's stylesheet. No JavaScript is involved, and one change reaches both the PrimeVue components and the Tailwind utilities (`bg-primary-500`, `text-content-0`, …).
+
+```css
+/* app main.css */
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
+@import '@welldot/vue/tailwind.css'; /* or '@welldot/vue/tokens.css' without PrimeVue */
+
+:root {
+  --w-primary-500: #0a7d5a;
+  --w-primary-600: #086a4c;
+  /* … the other steps you use */
+}
+
+.dark-mode {
+  --w-surface-0: #0b1410;
+  --w-content-0: #f4faf7;
+  /* … */
+}
+```
+
+- **Names:** `--w-{surface,content}-{0,50,100,…,900,950}` and `--w-{primary,success,info,warning,error}-{50,100,…,900,950}`. See [`src/theme/tokens.css`](src/theme/tokens.css) for the defaults.
+- **Dark mode:** only surface and content change between light and dark (they mirror each other: `surface-0` is the page, `content-0` the main text). The other palettes need just the `:root` value.
+- **Order:** your rules have the same specificity as the package's, so they must load after it.
+- Use [`defineWelldotTheme`](#overriding-the-theme) for component-level tweaks (padding, radius, a component's own colors), not for the palette.
 
 ---
 
@@ -498,7 +535,7 @@ DD/DMS toggle, latitude/longitude inputs, optional elevation and the map. `v-mod
 
 `@welldot/vue/theme` exports:
 
-- `WelldotPreset`: `{ preset, options }` for PrimeVue's `theme` option (prefix `w`, dark mode on `.dark-mode`, CSS layer `primevue`);
+- `WelldotPreset`: `{ preset, options }` for PrimeVue's `theme` option (prefix `p`, dark mode on `.dark-mode`, CSS layer `primevue`). Its palettes point at the `--w-*` variables of `tokens.css`;
 - `welldotPt`: the global pass-through (filled inputs, full-width fields, …).
 
 ```ts
@@ -514,15 +551,15 @@ Toggle dark mode with the `dark-mode` class on `<html>`.
 - Plain objects merge key by key, so you only write what changes.
 - Any other value you set wins: a PT section given as a class string or a function **replaces** the default's (it is not combined with it).
 - Arrays are concatenated.
-- Keep `options.prefix` at `w`: the Tailwind tokens read PrimeVue's `--w-*` variables.
+- Change colors in CSS ([Custom palette](#custom-palette)), not through the preset: a palette set here would reach PrimeVue but not the Tailwind utilities.
+- Keep `options.darkModeSelector` at `.dark-mode`: the dark values in `tokens.css` switch on that class.
 
 ```ts
 import { defineWelldotPt, defineWelldotTheme } from '@welldot/vue/theme';
 
 app.use(PrimeVue, {
   theme: defineWelldotTheme({
-    preset: { semantic: { primary: { 500: '#0f766e' } } },
-    options: { darkModeSelector: '.night' },
+    preset: { components: { dialog: { borderRadius: '0.5rem' } } },
   }),
   pt: defineWelldotPt({ tabpanels: { root: 'p-0' } }),
 });

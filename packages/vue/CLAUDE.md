@@ -37,7 +37,9 @@ src/
     index.ts                  ← WelldotPreset ({ preset, options }), welldotPt (named exports only)
     preset.ts  pt.ts
     define.ts                 ← defineWelldotTheme / defineWelldotPt: defu(overrides, defaults)
-    tailwind.css              → `@welldot/vue/tailwind.css` (tokens, dark variant, base, @source)
+    tokens.css                → `@welldot/vue/tokens.css`: the `--w-*` color palettes (source of truth; light `:root`, dark `.dark-mode`)
+    theme.css                 → `@welldot/vue/theme.css`: dark variant, `@theme` tokens mapped to `--w-*`, fonts, radii, base rings (no @import/@source)
+    tailwind.css              → `@welldot/vue/tailwind.css` (imports grid, style, tokens, theme; @source)
   nuxt/                       → `@welldot/vue/nuxt`
     module.ts                 ← defineNuxtModule: components, imports, transpile (+ imports.transform.exclude of dist/), PrimeVue theme defaults
     runtime/plugin.ts         ← createWelldot({ locale }) from nuxtApp.$i18n
@@ -86,8 +88,9 @@ pnpm lint       # eslint .
 - **RevoGrid cells only see app-level provides.** `VGridVueTemplate` mounts each cell with the app context only, so `createWelldot` must use `app.provide` (never a component-level `provide`), and the grid's `components`/`labels` reach cells as template props, never through inject. Create cell/editor factories during setup, not inside a `computed`.
 - Don't add `vue-tsc`: in this workspace it becomes the optional peer of the root `prettier-plugin-organize-imports`, which then rewrites the profiler's `.vue` imports. Type checking runs through `vite-plugin-dts` (`afterDiagnostic` throws).
 - Every dependency is external (`vite.config.ts` `EXTERNAL`); `leaflet`, RevoGrid, `vue-color`, `@nuxt/kit` and `@nuxt/schema` are optional peers, imported only from their subpath (`/location`, `/grid`, `/nuxt`). Never import them from the root entry.
-- `tailwind.css` token split, so apps can override after importing it: colors in `@theme` map to PrimeVue's `--w-*` (override through the preset, `defineWelldotTheme`); fonts and radii in `@theme static` (always emitted; override in the app's `@theme`); focus/error rings in `@layer base` (override in the app's `@layer base`). Never redeclare a `@theme` token in `@layer base` — the base layer comes after the theme layer, so it silently beats the app's `@theme` override.
-- CSS ships as `dist/tailwind.css` (exported as `./tailwind.css`), `dist/grid.css` and `dist/style.css` (extracted SFC styles); `tailwind.css` imports the other two. Apps import it manually after `tailwindcss` and `tailwindcss-primeui`, so the tokens share the app's Tailwind compilation — the Nuxt module does not inject CSS.
+- Colors live only in `tokens.css` as `--w-*` variables. `WelldotPreset` points its palettes at them (`tokenScale` → `var(--w-…)`) and PrimeVue uses its default prefix `p`; never put color literals back in the preset, and never set the PrimeVue prefix to `w` (it would redeclare `--w-*` as references to themselves). Apps rebrand by redeclaring `--w-*` after the import.
+- `theme.css` token split, so apps can override after importing it: colors in `@theme` map to `--w-*` (override by redeclaring `--w-*`); fonts and radii in `@theme static` (always emitted; override in the app's `@theme`); focus/error rings in `@layer base` (override in the app's `@layer base`). Never redeclare a `@theme` token in `@layer base` — the base layer comes after the theme layer, so it silently beats the app's `@theme` override.
+- CSS ships as `dist/tailwind.css` (exported as `./tailwind.css`), `dist/tokens.css` and `dist/theme.css` (exported as `./tokens.css` / `./theme.css`, usable without PrimeVue), `dist/grid.css` and `dist/style.css` (extracted SFC styles); `tailwind.css` imports the other four. Apps import it manually after `tailwindcss` and `tailwindcss-primeui`, so the tokens share the app's Tailwind compilation — the Nuxt module does not inject CSS.
 - Icons are compiled in with `unplugin-icons` (`~icons/ph/*`). String icon names (e.g. `WellChip`'s `icon="ph:drop"`) render only through the `icon` part.
 - Nuxt runtime code imports Nuxt APIs and `createWelldot` from `#imports` (typed by `runtime/imports.d.ts`, aliased to `src/test/nuxtImports.ts` in vitest), so the app's own `@welldot/vue` copy provides the config. PrimeVue's module emits a default import for `importTheme`/`importPT`, so the module generates `.nuxt/welldot/primevue-{theme,pt}.mjs` re-exporting the named theme exports as defaults.
 - ESM only, target ES2020.
