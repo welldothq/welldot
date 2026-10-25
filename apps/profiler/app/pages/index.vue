@@ -339,12 +339,20 @@ const TOOL_PATHS = [
   'apps/profiler',
 ] as const;
 
+// Packages with a section on docs.welldot.org (pdf and vue join later).
+const TOOL_DOCS: Partial<Record<(typeof TOOL_PATHS)[number], string>> = {
+  'packages/core': docsUrl('/core'),
+  'packages/utils': docsUrl('/utils'),
+  'packages/render': docsUrl('/render'),
+};
+
 const toolCards = computed(() =>
   (tm('tools.cards') as any[]).map((card: any, i: number) => ({
     title: rt(card.title),
     body: rt(card.body),
     path: TOOL_PATHS[i]!,
-    href: `https://github.com/welldothq/welldot/tree/main/${TOOL_PATHS[i]}`,
+    href: `${REPO_URL}/tree/main/${TOOL_PATHS[i]}`,
+    docsHref: TOOL_DOCS[TOOL_PATHS[i]!],
   })),
 );
 </script>
@@ -414,7 +422,7 @@ const toolCards = computed(() =>
             <Button
               :label="t('hero.ctaSecondary')"
               as="a"
-              href="https://github.com/welldothq/welldot/tree/main/spec"
+              :href="docsUrl('/format/spec')"
               target="_blank"
               variant="outlined"
               severity="secondary"
@@ -664,12 +672,21 @@ const toolCards = computed(() =>
           class="text-[15px] lg:text-[18px] leading-[1.55] text-content-400 mb-6 lg:mb-0"
         >
           <i18n-t keypath="contexts.text2" tag="span">
-            <template #skill><b>welldot.skill</b></template>
-            <template #repo>
-              <code
-                class="font-mono text-[0.92em] bg-black/[0.04] px-1.5 py-0.5 rounded"
-                >github.com/welldothq/welldot</code
+            <template #skill>
+              <a
+                :href="docsUrl('/ai/conversion-skill')"
+                target="_blank"
+                class="font-bold text-primary-500 underline underline-offset-2"
+                >welldot.skill</a
               >
+            </template>
+            <template #repo>
+              <a :href="REPO_URL" target="_blank" class="no-underline">
+                <code
+                  class="font-mono text-[0.92em] bg-black/4 px-1.5 py-0.5 rounded"
+                  >github.com/welldothq/welldot</code
+                >
+              </a>
             </template>
           </i18n-t>
         </p>
@@ -814,17 +831,25 @@ const toolCards = computed(() =>
         </div>
         <div class="flex flex-col sm:flex-row gap-2.5 mb-8 lg:mb-0">
           <Button
+            :label="t('extensible.ctaExtend')"
+            as="a"
+            :href="docsUrl('/format/guides/extending')"
+            target="_blank"
+          />
+          <Button
             :label="t('extensible.ctaContribute')"
             as="a"
-            href="https://github.com/welldothq/welldot/blob/main/CONTRIBUTING.md"
+            :href="`${REPO_URL}/blob/main/CONTRIBUTING.md`"
             target="_blank"
+            variant="outlined"
+            severity="secondary"
           />
           <Button
             :label="t('extensible.ctaPropose')"
             as="a"
-            href="https://github.com/welldothq/welldot/issues/new"
+            :href="`${REPO_URL}/issues/new`"
             target="_blank"
-            variant="outlined"
+            variant="text"
             severity="secondary"
           />
         </div>
@@ -926,6 +951,8 @@ const toolCards = computed(() =>
           :path="card.path"
           :href="card.href"
           :link-label="t('tools.viewSource')"
+          :docs-href="card.docsHref"
+          :docs-label="t('tools.readDocs')"
         >
           {{ card.body }}
         </LandingToolCard>
@@ -976,11 +1003,19 @@ const toolCards = computed(() =>
           :to="localePath('/editor')"
         />
         <Button
-          :label="t('cta.secondary')"
+          :label="t('cta.docs')"
           as="a"
-          href="https://github.com/welldothq/welldot"
+          :href="DOCS_URL"
           target="_blank"
           variant="outlined"
+          severity="secondary"
+        />
+        <Button
+          :label="t('cta.secondary')"
+          as="a"
+          :href="REPO_URL"
+          target="_blank"
+          variant="text"
           severity="secondary"
         />
       </div>
