@@ -1,0 +1,62 @@
+{
+  "name": "docs",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "generate:api": "tsx scripts/generate-api.ts",
+    "generate:reference": "tsx scripts/generate-reference.ts",
+    "generate:content": "pnpm generate:api && pnpm generate:reference",
+    "prebuild": "pnpm generate:content",
+    "predev": "pnpm generate:content",
+    "pregenerate": "pnpm generate:content",
+    "build": "nuxt build",
+    "dev": "nuxt dev --port 3001",
+    "generate": "nuxt generate",
+    "lint": "nuxt prepare && eslint .",
+    "lint:fix": "nuxt prepare && eslint . --fix",
+    "test": "vitest run --passWithNoTests",
+    "check:examples": "tsx scripts/check-examples.ts",
+    "check:links": "tsx scripts/check-links.ts && tsx scripts/check-payloads.ts",
+    "check:touched": "tsx scripts/check-docs-touched.ts",
+    "check:translations": "tsx scripts/check-translations.ts"
+  },
+  "dependencies": {
+    "@iconify-json/lucide": "^1.2.147",
+    "@iconify-json/ph": "^1.2.2",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "@nuxt/content": "^3.6.0",
+    "@nuxt/eslint": "^1.15.2",
+    "@nuxt/ui": "^4.12.0",
+    "@shikijs/langs": "4.5.0",
+    "@welldot/core": "workspace:*",
+    "@welldot/render": "workspace:*",
+    "@welldot/utils": "workspace:*",
+    "@welldot/vue": "workspace:*",
+    "github-slugger": "2.0.0",
+    "hast-util-to-string": "3.0.1",
+    "mermaid": "12.1.0",
+    "nuxt": "^4.4.4",
+    "nuxt-llms": "^0.3.0",
+    "tailwindcss": "^4.3.0",
+    "unist-util-visit": "5.1.0",
+    "vue": "^3.5.34",
+    "vue-router": "^5.0.6",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vue/test-utils": "^2.4.6",
+    "@welldot/lint": "workspace:*",
+    "eslint": "^10.3.0",
+    "happy-dom": "^20.0.0",
+    "mdast-util-from-markdown": "2.1.0",
+    "tsx": "^4.22.0",
+    "typedoc": "0.28.20",
+    "typedoc-plugin-markdown": "4.14.1",
+    "vitest": "^4.1.6",
+    "wrangler": "^4.90.0"
+  }
+}

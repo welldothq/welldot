@@ -1,5 +1,7 @@
 # @welldot/render
 
+Documentation: [docs.welldot.org/render](https://docs.welldot.org/render)
+
 ## Overview
 
 D3-based SVG renderer for `.well` geological well profiles. Part of the [welldot](https://github.com/welldothq/welldot) open-source ecosystem.

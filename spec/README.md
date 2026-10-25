@@ -2,6 +2,8 @@
 
 This folder holds the normative specification of the `.well` format, an open JSON format for water well data. It is the standard itself and doesn't depend on any implementation: `@welldot/core`, the welldot.org editor and any third-party tool follow it.
 
+Read it rendered at https://docs.welldot.org/format/spec
+
 ## Contents
 
 | Folder       | What it holds                                                                                                                                                                                                                              |

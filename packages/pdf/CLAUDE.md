@@ -2,6 +2,8 @@
 
 Customizable PDF report export for `.well` profiles, built on pdfmake. Depends on `@welldot/core`, `@welldot/utils` and `@welldot/render`.
 
+> **Docs:** a change to this package's public API (or, for core, to the spec) follows the docs rules in [apps/docs/CLAUDE.md](../../apps/docs/CLAUDE.md): update the TSDoc and every guide that uses it, in the same PR.
+
 ## Purpose
 
 Turns a `Well` into a pdfmake document: header, profile SVG pages (drawn with `@welldot/render`) in one of two formats (`detailed`, default, or `compact`), legend, info grids, general metadata and every content section (construction, hydrodynamic events, history log, pumps, meters, regimes, production, permits, water samples), plus footer with QR code.

@@ -11,6 +11,17 @@
       "cache": false,
       "persistent": true
     },
+    "docs#build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*",
+        "../../spec/**",
+        "../../packages/*/CHANGELOG.md",
+        "../../packages/{core,utils,render}/src/**"
+      ],
+      "outputs": [".output/**"]
+    },
     "test": {
       "dependsOn": ["^build"]
     },

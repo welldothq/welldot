@@ -2,6 +2,8 @@
 
 Foundation package. No internal monorepo dependencies. Everything in this package must be publishable, self-contained, and framework-agnostic.
 
+> **Docs:** a change to this package's public API (or, for core, to the spec) follows the docs rules in [apps/docs/CLAUDE.md](../../apps/docs/CLAUDE.md): update the TSDoc and every guide that uses it, in the same PR.
+
 ## Purpose
 
 Defines the canonical `.well` JSON schema: TypeScript types, Zod validators, and serialization utilities. All other packages and apps consume from here — changing a type or schema here has ripple effects across the entire monorepo.

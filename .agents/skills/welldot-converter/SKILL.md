@@ -98,14 +98,14 @@ evolve; anything in this SKILL.md is secondary to the live spec.
 This skill targets **spec version 2.4** — write `"version": "2.4"` (a string). welldot.org / `@welldot/core`
 do not accept `version: 1` files for new conversions, and `@welldot/core` up to 0.4.0 rejects `"2.4"` files.
 
-| Doc              | URL                                                                              |
-| ---------------- | -------------------------------------------------------------------------------- |
-| Overview         | https://github.com/welldothq/welldot/blob/main/spec/v2/overview.md             |
-| Format reference | https://github.com/welldothq/welldot/blob/main/spec/v2/format-reference.md     |
-| Object schemas   | https://github.com/welldothq/welldot/blob/main/spec/v2/object-schemas.md       |
-| Water quality    | https://github.com/welldothq/welldot/blob/main/spec/v2/water-quality.md        |
-| Interoperability | https://github.com/welldothq/welldot/blob/main/spec/v2/interoperability.md     |
-| FGDC textures    | https://github.com/welldothq/welldot/blob/main/spec/reference/fgdc-textures.md |
+| Doc              | URL                                                          |
+| ---------------- | ------------------------------------------------------------ |
+| Overview         | https://docs.welldot.org/format/spec/v2/overview             |
+| Format reference | https://docs.welldot.org/format/spec/v2/format-reference     |
+| Object schemas   | https://docs.welldot.org/format/spec/v2/object-schemas       |
+| Water quality    | https://docs.welldot.org/format/spec/v2/water-quality        |
+| Interoperability | https://docs.welldot.org/format/spec/v2/interoperability     |
+| FGDC textures    | https://docs.welldot.org/format/spec/reference/fgdc-textures |
 
 Fetch these if you can browse. **If you cannot browse**, `references/well-spec.md` — bundled
 alongside this file, and uploaded with it into a ChatGPT Project or Gemini Gem — is a full
@@ -445,6 +445,9 @@ debris, or partial backfill reduced the depth; SIAGAS-style records with a separ
 ---
 
 ## Step 4 — Validate
+
+Validate the output with the welldot MCP `validate_well` tool when it is available
+(`https://docs.welldot.org/mcp`); it runs the same `parseWell` check as `@welldot/core`.
 
 1. `"version": "2.4"` present (a string), and no optional field written as `null`
 2. All required fields present per object type (per spec from Step 1)

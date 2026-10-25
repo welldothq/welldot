@@ -6,24 +6,29 @@ Welldot (formerly Well Profiler) provides a web application for drawing well con
 
 The `.well` format is designed for three use cases: **visualization** — accurate profile drawings at true depth scale; **registration** — a complete, structured digital record suitable for regulatory submissions and easy long-term storage of well information; and **research** — structured data aligned with FGDC/hydrogeological standards for cross-well analysis. Because a `.well` file is a fully structured JSON document rather than a scanned image or a closed vendor format, it can be validated, diffed, version-controlled, and programmatically exchanged.
 
+## Documentation
+
+- [Welldot docs](https://docs.welldot.org): Guides, the `.well` specification and API reference. Full index for LLMs: https://docs.welldot.org/llms.txt
+- [MCP server](https://docs.welldot.org/mcp): Streamable HTTP endpoint with `search_docs`, `get_page` and `validate_well` tools.
+
 ## Application
 
 - [Welldot](https://welldot.org): The web app — build, visualize, and export `.well` water well profiles in the browser.
 
 ## The `.well` format
 
-- [Format overview (v2)](https://github.com/welldothq/welldot/blob/main/spec/v2/overview.md): Purpose, design principles, and changes from v1.
-- [Format reference (v2)](https://github.com/welldothq/welldot/blob/main/spec/v2/format-reference.md): Top-level fields, units, precision, location/CRS, extensibility rules.
-- [Object schemas (v2)](https://github.com/welldothq/welldot/blob/main/spec/v2/object-schemas.md): Full schema for every object type (borehole, casing, screen, lithology, hydrodynamic events, aquifer analysis, etc.) with a complete example file.
-- [Interoperability (v2)](https://github.com/welldothq/welldot/blob/main/spec/v2/interoperability.md): JSON-LD context and GWML2 relationship.
+- [Format overview (v2)](https://docs.welldot.org/format/spec/v2/overview): Purpose, design principles, and changes from v1.
+- [Format reference (v2)](https://docs.welldot.org/format/spec/v2/format-reference): Top-level fields, units, precision, location/CRS, extensibility rules.
+- [Object schemas (v2)](https://docs.welldot.org/format/spec/v2/object-schemas): Full schema for every object type (borehole, casing, screen, lithology, hydrodynamic events, aquifer analysis, etc.) with a complete example file.
+- [Interoperability (v2)](https://docs.welldot.org/format/spec/v2/interoperability): JSON-LD context and GWML2 relationship.
 - [JSON Schema (v2)](https://welldot.org/schema/v2/well.schema.json): Machine-readable schema, generated from the Zod validators.
-- [FGDC texture reference](https://github.com/welldothq/welldot/blob/main/spec/reference/fgdc-textures.md): Lithology texture codes used in the `texture` field.
+- [FGDC texture reference](https://docs.welldot.org/format/spec/reference/fgdc-textures): Lithology texture codes used in the `texture` field.
 
 ## Packages
 
-- [@welldot/core](https://github.com/welldothq/welldot/blob/main/packages/core/README.md): TypeScript types, Zod validators, and serialization for the `.well` schema. `npm install @welldot/core`.
-- [@welldot/utils](https://www.npmjs.com/package/@welldot/utils): Profile analysis utilities — depth/diameter extraction, gravel pack volumes, drawdown and aquifer hydraulics. `npm install @welldot/utils`.
-- [@welldot/render](https://github.com/welldothq/welldot/blob/main/packages/render/README.md): D3-based SVG renderer that draws `.well` profiles into any web app. `npm install @welldot/render`.
+- [@welldot/core](https://docs.welldot.org/core): TypeScript types, Zod validators, and serialization for the `.well` schema. `npm install @welldot/core`.
+- [@welldot/utils](https://docs.welldot.org/utils): Profile analysis utilities — depth/diameter extraction, gravel pack volumes, drawdown and aquifer hydraulics. `npm install @welldot/utils`.
+- [@welldot/render](https://docs.welldot.org/render): D3-based SVG renderer that draws `.well` profiles into any web app. `npm install @welldot/render`.
 
 ## Optional
 

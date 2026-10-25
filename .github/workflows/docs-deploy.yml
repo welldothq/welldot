@@ -1,0 +1,64 @@
+name: docs — Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - preview
+    paths:
+      - '.github/workflows/docs-deploy.yml'
+      - 'apps/docs/**'
+      - 'spec/**'
+      - 'packages/core/**'
+      - 'packages/utils/**'
+      - 'packages/render/**'
+      - 'packages/vue/src/theme/**'
+      - 'pnpm-workspace.yaml'
+      - 'turbo.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+  workflow_dispatch:
+
+concurrency:
+  group: docs-deploy-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.22.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm turbo build --filter=docs
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+
+      - name: Set deploy environment
+        id: env
+        run: |
+          if [ "${{ github.ref_name }}" = "preview" ]; then
+            echo "wrangler_env=--env preview" >> "$GITHUB_OUTPUT"
+          else
+            echo "wrangler_env=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/docs
+          command: deploy ${{ steps.env.outputs.wrangler_env }}

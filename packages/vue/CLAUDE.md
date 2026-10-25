@@ -2,6 +2,8 @@
 
 Vue 3 + PrimeVue base components, theme and composables for `.well` editors, plus a thin Nuxt module at `@welldot/vue/nuxt`. Depends on `@welldot/core`, `@welldot/utils` and `@welldot/render` (peers).
 
+> **Docs:** a change to this package's public API (or, for core, to the spec) follows the docs rules in [apps/docs/CLAUDE.md](../../apps/docs/CLAUDE.md): update the TSDoc and every guide that uses it, in the same PR.
+
 ## Purpose
 
 The shared UI layer of `apps/profiler` and `welldot-manager`, published so both consume the same versioned components instead of drifting copies. Base components only: labeled field, chip, tag select, combo select (editable Select with a suggestions hint), info popover, number/unit inputs, texture select/thumbnail, the data grid and the location picker. Domain editors (tabs, permit/sample/event/pump dialogs) and `RecordCard` stay in the apps.
