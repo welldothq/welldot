@@ -77,6 +77,8 @@ app.use(createWelldot({ locale: 'pt' }));
 app.mount('#app');
 ```
 
+`WelldotPreset` reads its colors from CSS variables, so the app must also load `@welldot/vue/tailwind.css` (see [Tailwind setup](#tailwind-setup)) or, without Tailwind, `@welldot/vue/tokens.css`. Without one of them, PrimeVue components render with no colors.
+
 ```vue
 <script setup lang="ts">
 import { WellLabeledField, WellUnitInput } from '@welldot/vue';
@@ -213,7 +215,9 @@ The palette lives in plain CSS variables, so any app can rebrand `@welldot/vue` 
 
 - **Names:** `--w-{surface,content}-{0,50,100,…,900,950}` and `--w-{primary,success,info,warning,error}-{50,100,…,900,950}`. See [`src/theme/tokens.css`](src/theme/tokens.css) for the defaults.
 - **Dark mode:** only surface and content change between light and dark (they mirror each other: `surface-0` is the page, `content-0` the main text). The other palettes need just the `:root` value.
+- **Surface and content come in pairs:** whenever you redeclare a `--w-surface-*` or `--w-content-*` step in `:root`, redeclare it in `.dark-mode` too, in a rule placed after your `:root` rule. Both selectors match `<html>` with the same specificity, so a lone `:root` override would also win in dark mode (e.g. a light page background under white dark-mode text).
 - **Order:** your rules have the same specificity as the package's, so they must load after it.
+- **No layers:** `tokens.css` is unlayered, and unlayered CSS beats any `@layer`, so write the `--w-*` overrides outside `@layer` (not in `@layer base` like the rings above), or they are silently ignored.
 - Use [`defineWelldotTheme`](#overriding-the-theme) for component-level tweaks (padding, radius, a component's own colors), not for the palette.
 
 ---
@@ -542,7 +546,7 @@ DD/DMS toggle, latitude/longitude inputs, optional elevation and the map. `v-mod
 app.use(PrimeVue, { theme: WelldotPreset, pt: welldotPt });
 ```
 
-Toggle dark mode with the `dark-mode` class on `<html>`.
+The preset holds no color values: load `@welldot/vue/tailwind.css` or `@welldot/vue/tokens.css` alongside it, or PrimeVue components render with no colors. Toggle dark mode with the `dark-mode` class on `<html>`.
 
 ### Overriding the theme
 
