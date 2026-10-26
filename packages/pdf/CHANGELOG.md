@@ -1,5 +1,17 @@
 # @welldot/pdf
 
+## 0.1.2
+
+### Patch Changes
+
+- 0332665: The repository moved to the `welldothq` GitHub organization. The package `repository`, `homepage` and `bugs` URLs now point at `https://github.com/welldothq/welldot`.
+- Updated dependencies [0c76546]
+- Updated dependencies [0332665]
+- Updated dependencies [147708f]
+  - @welldot/core@0.6.0
+  - @welldot/utils@0.5.1
+  - @welldot/render@0.4.2
+
 ## 0.1.1
 
 ### Patch Changes
