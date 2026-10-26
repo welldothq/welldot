@@ -21,3 +21,6 @@ apps/well-profiler/
 # Prettier collapses its arrays, the generator re-expands them, and the two
 # fight — leaving the drift guard permanently red.
 spec/schema/
+
+# The docs landing nests MDC blocks by indentation; Prettier flattens them and breaks the nesting
+apps/docs/content/en/index.md

@@ -1,0 +1,61 @@
+name: docs — Check
+
+on:
+  pull_request:
+    paths:
+      - 'apps/docs/**'
+      - 'spec/**'
+      - 'packages/**'
+      - '.changeset/**'
+
+concurrency:
+  group: docs-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.22.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # The docs read the packages' dist (API pages, validator, renderer)
+      - name: Build workspace dependencies
+        run: pnpm turbo build --filter=docs^...
+
+      # Blocking: the core tests that compare the spec with the code (vocab, examples)
+      - name: Test core (spec vs code)
+        run: pnpm turbo test --filter=@welldot/core
+
+      - name: Test
+        run: pnpm --filter docs test
+
+      - name: Check .well examples
+        run: pnpm --filter docs check:examples
+
+      - name: Generate site
+        run: pnpm --filter docs generate
+
+      - name: Check links
+        run: pnpm --filter docs check:links
+
+      - name: Check changeset has docs
+        run: git diff --name-only origin/${{ github.base_ref }}...HEAD | pnpm --filter docs check:touched
+
+      - name: Check translations
+        run: pnpm --filter docs check:translations

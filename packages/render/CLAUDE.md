@@ -2,6 +2,8 @@
 
 D3-based SVG visualization engine for geological well profiles. Depends on `@welldot/core` and `@welldot/utils`.
 
+> **Docs:** a change to this package's public API (or, for core, to the spec) follows the docs rules in [apps/docs/CLAUDE.md](../../apps/docs/CLAUDE.md): update the TSDoc and every guide that uses it, in the same PR.
+
 ## Purpose
 
 Renders `.well` profile data into an SVG element. Consumers instantiate `Renderer`, call `draw()` with a `Well` and a config, and the library mutates a provided DOM container. Used by both apps.

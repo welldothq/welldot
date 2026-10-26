@@ -2,6 +2,8 @@
 
 Profile analysis utilities. Depends on `@welldot/core`. No UI or rendering dependencies.
 
+> **Docs:** a change to this package's public API (or, for core, to the spec) follows the docs rules in [apps/docs/CLAUDE.md](../../apps/docs/CLAUDE.md): update the TSDoc and every guide that uses it, in the same PR.
+
 ## Purpose
 
 Provides computational helpers for analyzing `.well` profiles: depth calculations, diameter extraction, gravel pack estimates, and other derived data. Used by `@welldot/render` and by apps.

@@ -228,7 +228,7 @@ Key rules:
 - `surface` for backgrounds exclusively; `content` for everything neutral on top of it.
 - Pair at the same index. Slight offset toward higher values for hierarchy is fine; a large gap (>400 steps) is a bug.
 - High `surface` values (`400+`) signal a deliberate inversion (dark hero, inverted sidebar) — rare. High `content` values (`800+`) are nearly always wrong.
-- Tailwind utilities (`bg-surface-*`, `text-content-*`, `bg-primary-*`, etc.) are bridged from PrimeVue CSS vars by `@welldot/vue/tailwind.css`, imported in `app/assets/styles/main.css`. Never use Tailwind grays, raw `bg-white`, or hardcoded hex — they break dark mode.
+- Tailwind utilities (`bg-surface-*`, `text-content-*`, `bg-primary-*`, etc.) are bridged from the `--w-*` color tokens of `@welldot/vue/tokens.css` (also read by the PrimeVue preset) by `@welldot/vue/tailwind.css`, imported in `app/assets/styles/main.css`. Never use Tailwind grays, raw `bg-white`, or hardcoded hex — they break dark mode.
 - Chart series (data marks only, never text) use `--chart-series-1…8` from `main.css`: a categorical palette with its own validated steps per mode (`:root` / `.dark-mode`), assigned in fixed order (`stepColor()` in `hydrodynamicEvents/charts/types.ts`).
 
 ## PrimeVue components

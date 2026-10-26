@@ -1,0 +1,9 @@
+.nuxt
+.output
+.data
+.nitro
+.cache
+dist
+node_modules
+content/en/*/api/
+content/en/format/reference/objects/

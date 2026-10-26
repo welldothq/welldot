@@ -35,6 +35,8 @@ const previewPillClass =
   'text-xs font-semibold uppercase tracking-wider px-1.5 py-0.5 ' +
   'rounded-full bg-surface-100 text-content-400';
 
+const footerLinkClass = 'hover:text-content-300 transition-colors no-underline';
+
 // Same 32px bordered box as the theme toggle, so the two drawer rows align.
 const localeBtnClass =
   'size-8 rounded-lg border flex items-center justify-center cursor-pointer ' +
@@ -65,6 +67,13 @@ const localeBtnClass =
             {{ t('nav.editor') }}
           </NuxtLink>
           <NuxtLink
+            :to="DOCS_URL"
+            target="_blank"
+            class="text-content-400 hover:text-content-0 font-medium transition-colors no-underline"
+          >
+            {{ t('nav.docs') }}
+          </NuxtLink>
+          <NuxtLink
             v-tooltip.bottom="t('nav.managerTooltip')"
             to="https://manager.welldot.org/"
             target="_blank"
@@ -74,7 +83,7 @@ const localeBtnClass =
             <span :class="previewPillClass">{{ t('nav.preview') }}</span>
           </NuxtLink>
           <NuxtLink
-            to="https://github.com/welldothq/welldot"
+            :to="REPO_URL"
             target="_blank"
             class="text-content-400 hover:text-content-0 font-medium transition-colors no-underline"
           >
@@ -182,7 +191,16 @@ const localeBtnClass =
           }}</span>
         </NuxtLink>
         <NuxtLink
-          to="https://github.com/welldothq/welldot"
+          :to="DOCS_URL"
+          target="_blank"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-content-200 hover:text-content-0 hover:bg-surface-100 transition-colors no-underline"
+          @click="drawerOpen = false"
+        >
+          <Icon name="heroicons:book-open" class="size-4 shrink-0" />
+          {{ t('nav.docs') }}
+        </NuxtLink>
+        <NuxtLink
+          :to="REPO_URL"
           target="_blank"
           class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-content-200 hover:text-content-0 hover:bg-surface-100 transition-colors no-underline"
           @click="drawerOpen = false"
@@ -268,7 +286,19 @@ const localeBtnClass =
         class="container-landing py-7 font-mono text-[11px] text-content-500 flex flex-wrap gap-6"
       >
         <span>{{ t('footer.version') }}</span>
-        <span>{{ t('footer.spec') }}</span>
+        <a
+          :href="docsUrl('/format/spec')"
+          target="_blank"
+          :class="footerLinkClass"
+        >
+          {{ t('footer.spec') }}
+        </a>
+        <a :href="DOCS_URL" target="_blank" :class="footerLinkClass">
+          {{ t('footer.docs') }}
+        </a>
+        <a :href="REPO_URL" target="_blank" :class="footerLinkClass">
+          {{ t('nav.github') }}
+        </a>
         <span class="flex-1" />
         <div class="flex items-center gap-3">
           <button

@@ -1,3 +1,3 @@
 # Moved
 
-This document now lives at [`spec/v2/object-schemas.md`](../../../../../spec/v2/object-schemas.md) in the repository root.
+This document now lives at [`spec/v2/object-schemas.md`](https://docs.welldot.org/format/spec/v2/object-schemas) in the repository root, rendered at the docs site.

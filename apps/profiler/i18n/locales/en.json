@@ -22,6 +22,7 @@
     "manager": "Manager",
     "preview": "Preview",
     "managerTooltip": "Well manager — preview release",
+    "docs": "Docs",
     "github": "GitHub",
     "openEditor": "Open editor",
     "openEditorMobile": "Editor",
@@ -35,6 +36,7 @@
   "footer": {
     "version": "welldot · v2.4",
     "spec": ".well spec v2.4",
+    "docs": "Documentation",
     "license": "Open · Apache 2.0"
   },
   "hero": {
@@ -237,6 +239,7 @@
         "body": "An x- value that proves useful across many sources can be promoted to canonical: x-slug_test becomes slug_test, and both forms stay valid until the next major version. Changes to the core start as an open issue with the data, its real-world source and why no field can carry it."
       }
     ],
+    "ctaExtend": "How to extend",
     "ctaContribute": "How to contribute",
     "ctaPropose": "Propose a change"
   },
@@ -281,6 +284,7 @@
     "headline2": ", not just an app.",
     "intro": "welldot is a set of small, independent packages. Use the editor, or pull just the piece you need into your own stack.",
     "viewSource": "View source →",
+    "readDocs": "Read the docs →",
     "cards": [
       {
         "title": "\\@welldot/core",
@@ -320,6 +324,7 @@
     "headline2": ".",
     "subtitle": "Free to use. Free to implement. Open forever.",
     "primary": "Open well editor",
+    "docs": "Read the docs",
     "secondary": "github.com/welldothq/welldot"
   },
   "heroVisual": {

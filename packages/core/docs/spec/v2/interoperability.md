@@ -1,3 +1,3 @@
 # Moved
 
-This document now lives at [`spec/v2/interoperability.md`](../../../../../spec/v2/interoperability.md) in the repository root.
+This document now lives at [`spec/v2/interoperability.md`](https://docs.welldot.org/format/spec/v2/interoperability) in the repository root, rendered at the docs site.

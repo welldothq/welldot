@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "profiler": "pnpm --filter profiler",
+    "documentation": "pnpm --filter docs",
     "core": "pnpm --filter @welldot/core",
     "utils": "pnpm --filter @welldot/utils",
     "render": "pnpm --filter @welldot/render",

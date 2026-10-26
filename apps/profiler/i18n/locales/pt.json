@@ -22,6 +22,7 @@
     "manager": "Gerenciador",
     "preview": "Prévia",
     "managerTooltip": "Gerenciador de poços — versão prévia",
+    "docs": "Docs",
     "github": "GitHub",
     "openEditor": "Abrir editor",
     "openEditorMobile": "Editor",
@@ -35,6 +36,7 @@
   "footer": {
     "version": "welldot · v2.4",
     "spec": ".well spec v2.4",
+    "docs": "Documentação",
     "license": "Aberto · Apache 2.0"
   },
   "hero": {
@@ -237,6 +239,7 @@
         "body": "Um valor x- que se mostra útil em várias fontes pode ser promovido a canônico: x-slug_test vira slug_test, e as duas formas seguem válidas até a próxima versão maior. Mudanças no núcleo começam com uma issue aberta: o dado, a fonte real dele e por que nenhum campo o comporta."
       }
     ],
+    "ctaExtend": "Como estender",
     "ctaContribute": "Como contribuir",
     "ctaPropose": "Propor uma mudança"
   },
@@ -281,6 +284,7 @@
     "headline2": ", não só um app.",
     "intro": "O welldot é um conjunto de pacotes pequenos e independentes. Use o editor, ou aproveite só a peça que você precisa na sua própria stack.",
     "viewSource": "Ver código-fonte →",
+    "readDocs": "Ler a documentação →",
     "cards": [
       {
         "title": "\\@welldot/core",
@@ -320,6 +324,7 @@
     "headline2": ".",
     "subtitle": "Livre para usar. Livre para implementar. Aberto para sempre.",
     "primary": "Abrir editor de poços",
+    "docs": "Ler a documentação",
     "secondary": "github.com/welldothq/welldot"
   },
   "heroVisual": {

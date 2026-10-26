@@ -1,5 +1,7 @@
 # @welldot/utils
 
+Documentation: [docs.welldot.org/utils](https://docs.welldot.org/utils)
+
 ## Overview
 
 Profile analysis utilities for the [`.well` open format](https://github.com/welldothq/welldot) — depth and diameter summaries, cylindrical and annular volumes, gravel pack estimates, and aquifer hydraulics. Part of the [welldot](https://github.com/welldothq/welldot) open-source ecosystem.

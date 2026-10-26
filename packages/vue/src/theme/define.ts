@@ -26,8 +26,8 @@ export interface WelldotThemeOverrides {
  * merge key by key, any other value set in `overrides` wins, arrays are
  * concatenated). The defaults are never mutated.
  *
- * Changing `options.prefix` breaks `@welldot/vue/tailwind.css`, whose tokens
- * read PrimeVue's `--w-*` variables.
+ * Colors come from the `--w-*` variables of `@welldot/vue/tokens.css`; override
+ * them there, in CSS, not through the preset, so PrimeVue and Tailwind agree.
  *
  * @example
  * app.use(PrimeVue, {

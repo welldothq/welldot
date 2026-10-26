@@ -36,11 +36,15 @@ const EXTERNAL: RegExp[] = [
  * relative `@import`s inside `tailwind.css` resolve after publishing:
  *
  *   dist/tailwind.css  ← src/theme/tailwind.css  (exported as `./tailwind.css`)
+ *   dist/tokens.css    ← src/theme/tokens.css    (exported as `./tokens.css`)
+ *   dist/theme.css     ← src/theme/theme.css     (exported as `./theme.css`)
  *   dist/grid.css      ← src/grid/grid.css
  *   dist/style.css     ← SFC `<style>` blocks, extracted by Vite (`cssFileName`)
  */
 const CSS_FILES: Array<[from: string, to: string]> = [
   ['src/theme/tailwind.css', 'tailwind.css'],
+  ['src/theme/tokens.css', 'tokens.css'],
+  ['src/theme/theme.css', 'theme.css'],
   ['src/grid/grid.css', 'grid.css'],
 ];
 
