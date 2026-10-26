@@ -17,7 +17,7 @@
     "generate": "nuxt generate",
     "lint": "nuxt prepare && eslint .",
     "lint:fix": "nuxt prepare && eslint . --fix",
-    "test": "vitest run --passWithNoTests",
+    "test": "nuxt prepare && vitest run --passWithNoTests",
     "check:examples": "tsx scripts/check-examples.ts",
     "check:links": "tsx scripts/check-links.ts && tsx scripts/check-payloads.ts",
     "check:touched": "tsx scripts/check-docs-touched.ts",
