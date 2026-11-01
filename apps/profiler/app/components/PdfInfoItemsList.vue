@@ -61,6 +61,7 @@ function confirmMetadataFields() {
           class="flex items-center gap-2 w-full min-w-0"
           @click.stop
           @mousedown.stop
+          @keydown.stop
         >
           <InputText
             v-model="option.label"
