@@ -203,7 +203,7 @@ export const PDF_LABELS = {
         type: { en: 'Type', pt: 'Tipo' },
         typeInfo: {
           en: 'A renewal is not a type: create a new permit of the same type that supersedes the previous one.',
-          pt: 'Renovação não é um tipo: crie uma nova outorga do mesmo tipo que substitui a anterior.',
+          pt: 'Renovação não é um tipo: crie uma nova licença do mesmo tipo que substitui a anterior.',
         },
         authority: { en: 'Authority', pt: 'Órgão' },
         authorityInfo: {
@@ -213,12 +213,12 @@ export const PDF_LABELS = {
         status: { en: 'Status', pt: 'Situação' },
         statusInfo: {
           en: 'Administrative situation set by the authority. Leave "Granted" for an issued permit: its validity status is then derived from the dates.',
-          pt: 'Situação administrativa definida pelo órgão. Mantenha "Concedida" para uma outorga emitida: a vigência é então derivada das datas.',
+          pt: 'Situação administrativa definida pelo órgão. Mantenha "Concedida" para uma licença emitida: a vigência é então derivada das datas.',
         },
-        identifier: { en: 'Permit identifier', pt: 'Identificação da outorga' },
+        identifier: { en: 'Permit identifier', pt: 'Identificação da licença' },
         identifierInfo: {
           en: 'Identifier of the granted instrument (portaria, license code…), as written in the document. Empty while the permit is only requested.',
-          pt: 'Identificação do ato concedido (portaria, código da licença…), como no documento. Vazia enquanto a outorga está apenas requerida.',
+          pt: 'Identificação do ato concedido (portaria, código da licença…), como no documento. Vazia enquanto a licença está apenas requerida.',
         },
         requestIdentifier: {
           en: 'Request identifier',
@@ -245,7 +245,7 @@ export const PDF_LABELS = {
         },
         renewalRequestedAtInfo: {
           en: 'A renewal filed on or before the expiry keeps the permit active while it is pending.',
-          pt: 'Um pedido protocolado até o vencimento mantém a outorga vigente enquanto é analisado.',
+          pt: 'Um pedido protocolado até o vencimento mantém a licença vigente enquanto é analisado.',
         },
         validity: { en: 'Validity', pt: 'Vigência' },
         waterUse: { en: 'Water use', pt: 'Finalidade de uso' },
@@ -269,14 +269,14 @@ export const PDF_LABELS = {
         monthlySchedule: { en: 'Monthly schedule', pt: 'Regime mensal' },
         monthlyScheduleInfo: {
           en: 'When a schedule exists, months left empty have no abstraction granted.',
-          pt: 'Quando há regime mensal, meses vazios não têm captação outorgada.',
+          pt: 'Quando há regime mensal, meses vazios não têm captação autorizada.',
         },
         month: { en: 'Month', pt: 'Mês' },
         days: { en: 'Days', pt: 'Dias' },
         supersedes: { en: 'Supersedes', pt: 'Substitui' },
         supersedesInfo: {
           en: 'The permit this one legally replaces (renewal).',
-          pt: 'A outorga que esta substitui legalmente (renovação).',
+          pt: 'A licença que esta substitui legalmente (renovação).',
         },
         notes: { en: 'Notes', pt: 'Observações' },
       },
@@ -297,7 +297,7 @@ export const PDF_LABELS = {
         type: { en: 'Type', pt: 'Tipo' },
       },
       noExpiry: { en: 'no fixed expiry', pt: 'sem vencimento' },
-      title: { en: 'Permits', pt: 'Outorgas' },
+      title: { en: 'Permits', pt: 'Licenças' },
     },
     production: {
       annual: { en: 'Annual production', pt: 'Produção anual' },

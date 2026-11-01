@@ -1,11 +1,11 @@
 {
   "meta": {
     "title": "Editor de Perfil de Poço em Formato Aberto (.well)",
-    "description": "Antigo Well Profiler, agora app gratuito para dados de poços no formato aberto .well — perfis construtivos e geológicos, testes de bombeamento, operação, outorgas e qualidade da água, exportados em relatórios PDF.",
+    "description": "Antigo Well Profiler, agora app gratuito para dados de poços no formato aberto .well — perfis construtivos e geológicos, testes de bombeamento, operação, licenças e qualidade da água, exportados em relatórios PDF.",
     "featureList": [
       "Crie, visualize e exporte perfis geológicos e construtivos de poços",
       "Testes de bombeamento com gráficos semilog, de recuperação de Theis e de teste escalonado",
-      "Operação, produção, outorgas, qualidade da água e séries contínuas de nível (.well v2.4)",
+      "Operação, produção, licenças, qualidade da água e séries contínuas de nível (.well v2.4)",
       "Relatórios PDF personalizáveis",
       "Formato de arquivo .well aberto e versionado",
       "Aceita registros de campo e legados incompletos — valor ausente significa desconhecido, nunca zero",
@@ -44,7 +44,7 @@
     "headline1": "Perfis de poços, em",
     "headlineEm": "arquivo aberto",
     "headline2": ".",
-    "body": "Editor livre para todo o registro de um poço: perfis construtivos e geológicos, testes de bombeamento, operação, outorgas e qualidade da água, exportados em PDF. Um JSON simples, versionado, legível por qualquer linguagem.",
+    "body": "Editor livre para todo o registro de um poço: perfis construtivos e geológicos, testes de bombeamento, operação, licenças e qualidade da água, exportados em PDF. Um JSON simples, versionado, legível por qualquer linguagem.",
     "ctaPrimary": "Abrir editor de poços →",
     "ctaSecondary": "Ver especificação",
     "badgeSpec": "spec",
@@ -58,7 +58,7 @@
     "headline1": "Um JSON.",
     "headlineEm": "Todo",
     "headline2": "o poço.",
-    "intro": "Hoje, dados de poços vivem em PDFs que não se conversam entre si. O arquivo {well} é um formato simples e versionado para mudar isso — um único JSON que descreve o poço por inteiro, da construção e geologia aos testes de bombeamento, às bombas instaladas, hidrômetros e produção, outorgas, qualidade da água e histórico de manutenção, pensado como {standard}.",
+    "intro": "Hoje, dados de poços vivem em PDFs que não se conversam entre si. O arquivo {well} é um formato simples e versionado para mudar isso — um único JSON que descreve o poço por inteiro, da construção e geologia aos testes de bombeamento, às bombas instaladas, hidrômetros e produção, licenças, qualidade da água e histórico de manutenção, pensado como {standard}.",
     "standard": "padrão internacional",
     "props": [
       {
@@ -89,7 +89,7 @@
       {
         "num": "§ 1.6",
         "title": "Operação e histórico",
-        "body": "Bombas instaladas, hidrômetros, volumes produzidos e regime de operação, outorgas com suas condicionantes, amostras de qualidade da água, séries contínuas de nível de dataloggers instalados e um log de manutenções e incidentes ao longo da vida útil do poço."
+        "body": "Bombas instaladas, hidrômetros, volumes produzidos e regime de operação, licenças com suas condicionantes, amostras de qualidade da água, séries contínuas de nível de dataloggers instalados e um log de manutenções e incidentes ao longo da vida útil do poço."
       }
     ]
   },
@@ -179,12 +179,12 @@
     "headline1": "Comece com",
     "headlineEm": "o que você tem",
     "headline2": ".",
-    "intro": "Dado de poço quase nunca está completo. Um relatório de 1987 só com a profundidade e a vazão do air-lift, um cadastro sem coordenadas, um perfil sem litologia, uma outorga ainda sem número: cada um já é um arquivo {well} válido. Quase todo campo é opcional, campos abertos aceitam qualquer texto e um campo ausente significa {unknown} — nunca {zero}. No campo e em arquivos antigos, saber o que falta também é informação.",
+    "intro": "Dado de poço quase nunca está completo. Um relatório de 1987 só com a profundidade e a vazão do air-lift, um cadastro sem coordenadas, um perfil sem litologia, uma licença ainda sem número: cada um já é um arquivo {well} válido. Quase todo campo é opcional, campos abertos aceitam qualquer texto e um campo ausente significa {unknown} — nunca {zero}. No campo e em arquivos antigos, saber o que falta também é informação.",
     "unknown": "desconhecido",
     "zero": "zero",
     "valid": "✓ válido",
     "stagesLabel": "Etapa do registro",
-    "stages": ["Relatório", "Visita", "Outorga"],
+    "stages": ["Relatório", "Visita", "Licença"],
     "sample": {
       "obs": "Relatório de 1987. Sem perfil litológico.",
       "inspection": "Sem bomba. Sem selo sanitário."
@@ -193,12 +193,12 @@
       {
         "num": "§ 5.1",
         "title": "Quase tudo é opcional",
-        "body": "Nome, coordenadas, data de construção, perfurador, litologia, testes, outorgas: cada bloco e cada campo entra quando existir. Blocos construtivos podem ser listas vazias. Um evento precisa só de id, tipo e data; uma outorga, de tipo e órgão."
+        "body": "Nome, coordenadas, data de construção, perfurador, litologia, testes, licenças: cada bloco e cada campo entra quando existir. Blocos construtivos podem ser listas vazias. Um evento precisa só de id, tipo e data; uma licença, de tipo e órgão."
       },
       {
         "num": "§ 5.2",
         "title": "Valores sugeridos, texto livre",
-        "body": "Material do revestimento, método de perfuração, tipo de outorga, tipo de manutenção, uso do poço: o formato recomenda um vocabulário para interoperar, mas campos abertos aceitam qualquer valor. Valores fora dele levam o prefixo x- e são preservados e exibidos como foram escritos."
+        "body": "Material do revestimento, método de perfuração, tipo de licença, tipo de manutenção, uso do poço: o formato recomenda um vocabulário para interoperar, mas campos abertos aceitam qualquer valor. Valores fora dele levam o prefixo x- e são preservados e exibidos como foram escritos."
       },
       {
         "num": "§ 5.3",
@@ -248,7 +248,7 @@
     "headline1": "O",
     "headlineEm": "futuro",
     "headline2": ".",
-    "intro": "A v2.4 cobre perfis geológicos, construtivos e hidrodinâmicos — testes de bombeamento, análise de aquífero, séries contínuas de nível de dataloggers, instalações de bomba, hidrômetros, produção e regime de operação, outorgas e suas condicionantes, qualidade da água, anexos gerais e histórico operacional. A especificação evolui de forma aberta, e estas são as lacunas já mapeadas para as próximas versões.",
+    "intro": "A v2.4 cobre perfis geológicos, construtivos e hidrodinâmicos — testes de bombeamento, análise de aquífero, séries contínuas de nível de dataloggers, instalações de bomba, hidrômetros, produção e regime de operação, licenças e suas condicionantes, qualidade da água, anexos gerais e histórico operacional. A especificação evolui de forma aberta, e estas são as lacunas já mapeadas para as próximas versões.",
     "props": [
       {
         "num": "§ 7.1",
@@ -258,7 +258,7 @@
       {
         "num": "§ 7.2",
         "title": "Poços vinculados",
-        "body": "Referências entre arquivos: poços de observação para o coeficiente de armazenamento e uma outorga compartilhada por vários poços, em vez de repetida em cada um."
+        "body": "Referências entre arquivos: poços de observação para o coeficiente de armazenamento e uma licença compartilhada por vários poços, em vez de repetida em cada um."
       },
       {
         "num": "§ 7.3",
@@ -273,7 +273,7 @@
       {
         "num": "§ 7.5",
         "title": "Pacotes offline (.wellz)",
-        "body": "Um ZIP com o arquivo .well e seus anexos — relatórios, fotos, outorgas digitalizadas — em caminhos relativos, cada um conferido pelo sha256, para levar o poço inteiro a campo ou arquivá-lo sem links. Já definido na v2.4; em breve no editor."
+        "body": "Um ZIP com o arquivo .well e seus anexos — relatórios, fotos, licenças digitalizadas — em caminhos relativos, cada um conferido pelo sha256, para levar o poço inteiro a campo ou arquivá-lo sem links. Já definido na v2.4; em breve no editor."
       }
     ]
   },
@@ -288,12 +288,12 @@
     "cards": [
       {
         "title": "\\@welldot/core",
-        "body": "Tipos, validadores Zod, JSON Schema e serialização do formato .well, mais seus vocabulários — materiais, tipos de outorga, parâmetros e limites de qualidade da água. A base sobre a qual tudo o mais é construído.",
+        "body": "Tipos, validadores Zod, JSON Schema e serialização do formato .well, mais seus vocabulários — materiais, tipos de licença, parâmetros e limites de qualidade da água. A base sobre a qual tudo o mais é construído.",
         "path": "packages/core"
       },
       {
         "title": "\\@welldot/utils",
-        "body": "Análise de um arquivo .well: geometria e volumes, hidráulica de aquífero e séries de teste de bombeamento, produção por período e prazos de outorga, derivações de qualidade da água como balanço iônico, Piper e Stiff.",
+        "body": "Análise de um arquivo .well: geometria e volumes, hidráulica de aquífero e séries de teste de bombeamento, produção por período e prazos de licença, derivações de qualidade da água como balanço iônico, Piper e Stiff.",
         "path": "packages/utils"
       },
       {
@@ -405,7 +405,7 @@
       "hydro": "Hidro",
       "inDevelopment": "Em dev",
       "operation": "Operação",
-      "permits": "Outorgas",
+      "permits": "Licenças",
       "waterQuality": "Qualidade da água",
       "waterQualityShort": "Qualidade"
     },
@@ -490,7 +490,7 @@
         "meters": "Hidrômetros",
         "operating_regime": "Regime de operação",
         "production": "Produção",
-        "permits": "Outorgas"
+        "permits": "Licenças"
       },
       "lastVisibleHint": "Pelo menos um item precisa continuar visível."
     },
@@ -900,15 +900,15 @@
         "empty": "Nenhuma amostra registrada."
       },
       "permit": {
-        "title": "Outorga",
-        "total": "{n} outorgas no total",
+        "title": "Licença",
+        "total": "{n} licenças no total",
         "validity": "Validade",
-        "flowRate": "Vazão outorgada",
+        "flowRate": "Vazão autorizada",
         "dailyTime": "Tempo diário",
         "waterUse": "Finalidade de uso",
         "nextDeadlines": "Próximas condicionantes",
         "noDeadlines": "Nenhum prazo pendente.",
-        "empty": "Nenhuma outorga registrada.",
+        "empty": "Nenhuma licença registrada.",
         "overdueCount": "{n} atrasadas"
       },
       "activity": {
@@ -921,7 +921,7 @@
         "recentLogs": "Últimos registros",
         "noLogs": "Nenhum registro no histórico.",
         "domains": {
-          "permits": "Outorgas",
+          "permits": "Licenças",
           "pump": "Bombas",
           "operation": "Operação",
           "historyLog": "Histórico",
@@ -955,12 +955,12 @@
         "thickness": "Espessura"
       },
       "alerts": {
-        "permitExpired": "Outorga {number} vencida em {date}.",
-        "permitPendingRenewal": "Outorga {number} vencida em {date}; renovação em análise.",
-        "permitExpiring": "Outorga {number} vence em {date} ({n} dias).",
-        "permit_suspended": "Outorga {number} suspensa.",
-        "permit_revoked": "Outorga {number} revogada.",
-        "permitStepsOverdue": "Outorga {number}: {n} etapa(s) administrativa(s) vencida(s) — {description}",
+        "permitExpired": "Licença {number} vencida em {date}.",
+        "permitPendingRenewal": "Licença {number} vencida em {date}; renovação em análise.",
+        "permitExpiring": "Licença {number} vence em {date} ({n} dias).",
+        "permit_suspended": "Licença {number} suspensa.",
+        "permit_revoked": "Licença {number} revogada.",
+        "permitStepsOverdue": "Licença {number}: {n} etapa(s) administrativa(s) vencida(s) — {description}",
         "conditionOverdue": "Condicionante atrasada desde {date}: {description}",
         "conditionOverdueMany": "{n} prazos atrasados desde {date}: {description}",
         "waterExceedances": "{n} parâmetro(s) fora dos limites de {set} na amostra de {date}.",
@@ -1442,7 +1442,7 @@
         "unknownIntervals": "{n} intervalo entre leituras tem volume desconhecido (o totalizador diminuiu e o hidrômetro não tem capacidade informada). | {n} intervalos entre leituras têm volume desconhecido (o totalizador diminuiu e o hidrômetro não tem capacidade informada).",
         "unknownIntervalsLabel": "Intervalos desconhecidos",
         "compliance": {
-          "title": "Conformidade · outorga {number}",
+          "title": "Conformidade · licença {number}",
           "annual": "Ano {period}",
           "monthly": "Mês {period}"
         },
@@ -1471,12 +1471,12 @@
         "since": "desde {date}"
       },
       "permit": {
-        "title": "Outorgas",
-        "intro": "Um registro por instrumento legal. O documento anexado prevalece. Uma renovação é uma nova outorga que substitui a anterior; situação e prazos das condicionantes são calculados.",
-        "add": "Adicionar outorga",
-        "edit": "Editar outorga",
-        "deleteConfirm": "Excluir esta outorga?",
-        "empty": "Nenhuma outorga registrada.",
+        "title": "Licenças",
+        "intro": "Um registro por instrumento legal. O documento anexado prevalece. Uma renovação é uma nova licença que substitui a anterior; situação e prazos das condicionantes são calculados.",
+        "add": "Adicionar licença",
+        "edit": "Editar licença",
+        "deleteConfirm": "Excluir esta licença?",
+        "empty": "Nenhuma licença registrada.",
         "noExpiry": "sem vencimento",
         "supersedes": "Substitui {number}",
         "supersededBy": "Substituída por {number}",
@@ -1495,13 +1495,13 @@
         },
         "fields": {
           "type": "Tipo",
-          "typeInfo": "Renovação não é um tipo: crie uma nova outorga do mesmo tipo que substitui a anterior.",
+          "typeInfo": "Renovação não é um tipo: crie uma nova licença do mesmo tipo que substitui a anterior.",
           "authority": "Órgão",
           "authorityInfo": "Órgão emissor, ex.: ANA, SEMAS-PA.",
           "status": "Situação",
-          "statusInfo": "Situação administrativa definida pelo órgão. Mantenha \"Concedida\" para uma outorga emitida: a vigência é então derivada das datas.",
-          "identifier": "Identificação da outorga",
-          "identifierInfo": "Identificação do ato concedido (portaria, código da licença…), como no documento. Vazia enquanto a outorga está apenas requerida.",
+          "statusInfo": "Situação administrativa definida pelo órgão. Mantenha \"Concedida\" para uma licença emitida: a vigência é então derivada das datas.",
+          "identifier": "Identificação da licença",
+          "identifierInfo": "Identificação do ato concedido (portaria, código da licença…), como no documento. Vazia enquanto a licença está apenas requerida.",
           "requestIdentifier": "Identificação do requerimento",
           "requestIdentifierInfo": "Protocolo ou número do processo do requerimento, atribuído pelo órgão.",
           "issuedAt": "Emitida em",
@@ -1510,7 +1510,7 @@
           "validUntil": "Válida até",
           "validUntilInfo": "Deixe vazio quando não há vencimento.",
           "renewalRequestedAt": "Renovação solicitada em",
-          "renewalRequestedAtInfo": "Um pedido protocolado até o vencimento mantém a outorga vigente enquanto é analisado.",
+          "renewalRequestedAtInfo": "Um pedido protocolado até o vencimento mantém a licença vigente enquanto é analisado.",
           "validity": "Vigência",
           "waterUse": "Finalidade de uso",
           "waterUseEmpty": "Nenhuma finalidade selecionada",
@@ -1527,15 +1527,15 @@
             "annual": "Anual"
           },
           "monthlySchedule": "Regime mensal",
-          "monthlyScheduleInfo": "Quando há regime mensal, meses vazios não têm captação outorgada.",
+          "monthlyScheduleInfo": "Quando há regime mensal, meses vazios não têm captação autorizada.",
           "month": "Mês",
           "days": "Dias",
           "supersedes": "Substitui",
-          "supersedesInfo": "A outorga que esta substitui legalmente (renovação).",
+          "supersedesInfo": "A licença que esta substitui legalmente (renovação).",
           "notes": "Observações"
         },
         "grantDetails": "Vigência e concessão",
-        "grantDetailsInfo": "preenchidas quando a outorga for concedida",
+        "grantDetailsInfo": "preenchidas quando a licença for concedida",
         "conditions": {
           "title": "Condicionantes",
           "add": "Adicionar condicionante",
@@ -1580,7 +1580,7 @@
           "remove": "Remover condicionante",
           "schedule": "Cronograma da condicionante",
           "openSchedule": "Ver cronograma",
-          "scheduleInfo": "Os cumprimentos marcados aqui são salvos junto com a outorga.",
+          "scheduleInfo": "Os cumprimentos marcados aqui são salvos junto com a licença.",
           "fulfilledCount": "{n} cumprido(s)"
         },
         "fulfill": {
@@ -1596,7 +1596,7 @@
         },
         "history": {
           "title": "Histórico",
-          "info": "Etapas administrativas da outorga: protocolo, andamentos do processo, notificações, taxas, vistorias, decisões.",
+          "info": "Etapas administrativas da licença: protocolo, andamentos do processo, notificações, taxas, vistorias, decisões.",
           "add": "Adicionar etapa",
           "empty": "Nenhuma etapa registrada.",
           "remove": "Remover etapa",
@@ -1614,18 +1614,18 @@
           "save": "Salvar etapa",
           "markDone": "Marcar como concluída",
           "reopen": "Reabrir etapa",
-          "deleteConfirm": "Remover esta etapa do histórico da outorga?"
+          "deleteConfirm": "Remover esta etapa do histórico da licença?"
         },
         "view": {
           "open": "Visualizar",
           "close": "Fechar",
           "tabs": {
-            "grant": "Outorga",
+            "grant": "Licença",
             "conditions": "Condicionantes",
             "history": "Histórico"
           },
           "sections": {
-            "grant": "Outorga e concessão",
+            "grant": "Licença e concessão",
             "notes": "Observações e documentos"
           },
           "fulfilledCount": "{done}/{total} cumpridos",
@@ -1634,21 +1634,21 @@
         },
         "warnings": {
           "valid_until_before_valid_from": "O vencimento é anterior ao início da vigência.",
-          "supersedes_unresolved": "A outorga substituída não existe neste arquivo.",
+          "supersedes_unresolved": "A licença substituída não existe neste arquivo.",
           "supersedes_cycle": "A cadeia de substituições volta para si mesma.",
-          "overlapping_validity": "Outra outorga do mesmo tipo tem vigência sobreposta.",
+          "overlapping_validity": "Outra licença do mesmo tipo tem vigência sobreposta.",
           "daily_operating_time_normalized": "Um tempo diário de operação acima de 24 h foi lido como 24 h.",
-          "monthly_above_max": "Um valor mensal excede o máximo da outorga.",
+          "monthly_above_max": "Um valor mensal excede o máximo da licença.",
           "duplicate_month": "Um mês aparece mais de uma vez no regime.",
           "duplicate_volume_period": "Um período de volume aparece mais de uma vez.",
           "duplicate_condition_id": "Duas condicionantes têm o mesmo id.",
           "condition_due_conflict": "Uma condicionante tem data fixa e prazo relativo; a data fixa prevalece.",
           "invalid_duration": "Uma condicionante tem duração inválida.",
-          "missing_identifier": "Preencha a identificação da outorga ou do requerimento.",
-          "granted_without_identifier": "Uma outorga concedida está sem identificação.",
+          "missing_identifier": "Preencha a identificação da licença ou do requerimento.",
+          "granted_without_identifier": "Uma licença concedida está sem identificação.",
           "duplicate_history_id": "Duas etapas do histórico têm o mesmo id.",
           "duplicate_fulfillment_id": "Dois cumprimentos de uma condicionante têm o mesmo id.",
-          "unmatched_fulfillment": "Um cumprimento de condicionante não corresponde a nenhum prazo desta outorga.",
+          "unmatched_fulfillment": "Um cumprimento de condicionante não corresponde a nenhum prazo desta licença.",
           "missing_timezone": "O poço não tem fuso horário; os prazos usam o offset escrito em cada data."
         }
       },
@@ -1666,7 +1666,7 @@
         "estimated_overlaps_meter": "Este volume estimado se sobrepõe a leituras de hidrômetro; o hidrômetro prevalece.",
         "duplicate_regime_id": "Dois regimes têm o mesmo id.",
         "regime_duplicate_effective_from": "Outro regime começa no mesmo instante.",
-        "regime_exceeds_permit": "O regime vigente excede a vazão ou a operação diária outorgadas.",
+        "regime_exceeds_permit": "O regime vigente excede a vazão ou a operação diária autorizadas.",
         "log_category_field_mismatch": "Esta entrada tem campos de outra categoria.",
         "log_reference_unresolved": "Uma bomba, hidrômetro ou evento referenciado não existe neste arquivo.",
         "log_after_decommission": "Esta entrada é posterior à desativação ou ao abandono do poço.",
@@ -2085,7 +2085,7 @@
       "open": "Abrir exemplo",
       "loading": "Carregando exemplos",
       "loadError": "Não foi possível carregar os exemplos. Verifique a conexão e tente de novo.",
-      "disclaimer": "Baseados em poços reais do SIAGAS (SGB). Nomes, outorgas, análises e dados de operação são ilustrativos.",
+      "disclaimer": "Baseados em poços reais do SIAGAS (SGB). Nomes, licenças, análises e dados de operação são ilustrativos.",
       "confirm": {
         "header": "Abrir exemplo",
         "message": "Há alterações não salvas. Abrir um exemplo irá descartá-las.",
