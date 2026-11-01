@@ -1,5 +1,11 @@
 # @welldot/pdf
 
+## 0.1.3
+
+### Patch Changes
+
+- 1d76145: Portuguese permit labels now say "Licenças"/"licença" instead of "Outorgas"/"outorga", to cover permits, authorizations and other licensing documents.
+
 ## 0.1.2
 
 ### Patch Changes
