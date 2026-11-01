@@ -12,6 +12,8 @@ const props = defineProps<{
   save: (value: unknown, preventFocus?: boolean) => void;
   close: (focusNext?: boolean) => void;
   unitType: DisplayUnitType;
+  /** `val` is the key typed to open the editor, already in display units. */
+  entered?: boolean;
 }>();
 
 defineOptions({ inheritAttrs: false });
@@ -28,9 +30,12 @@ const raw =
     ? Number(props.val)
     : null;
 
+const opened = raw != null && !isNaN(raw) ? raw : null;
+
 /** Display value the editor opened with (null for an empty cell). */
-const initialDisplay = raw != null && !isNaN(raw) ? toDisplay(raw) : null;
-const localValue = ref<number | null>(initialDisplay);
+const initialDisplay =
+  opened != null && !props.entered ? toDisplay(opened) : null;
+const localValue = ref<number | null>(props.entered ? opened : initialDisplay);
 
 onMounted(() =>
   nextTick(() => {
