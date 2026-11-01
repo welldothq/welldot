@@ -108,12 +108,16 @@ const UNIT_TYPES: readonly DisplayUnitType[] = [
 ];
 
 /** Props RevoGrid hands to every editor (`EditorType`). */
-interface GridEditorProps {
+export interface GridEditorProps {
   val?: unknown;
   save: (value: unknown, preventFocus?: boolean) => void;
   close: (focusNext?: boolean) => void;
   /** Cell data model; `column.column` is the `ColumnRegular`. */
   column?: { column?: { editorProps?: Record<string, unknown> } };
+  /** Row model of the edited cell. */
+  model?: Record<string, unknown>;
+  /** Key of the edited cell on `model`. */
+  prop?: string | number;
 }
 
 /* eslint-disable vue/one-component-per-file -- tiny render-function editor
@@ -124,7 +128,17 @@ const EDITOR_PROP_KEYS: Array<keyof GridEditorProps> = [
   'save',
   'close',
   'column',
+  'model',
+  'prop',
 ];
+
+/**
+ * Whether `val` is the key the user typed to open the editor rather than
+ * the cell's stored value (RevoGrid passes `editCell.val || modelValue`).
+ */
+export function isEnteredValue(p: GridEditorProps): boolean {
+  return p.prop != null && p.val !== p.model?.[p.prop];
+}
 
 /**
  * Editor that forwards `val`/`save`/`close` plus the column's
@@ -133,7 +147,7 @@ const EDITOR_PROP_KEYS: Array<keyof GridEditorProps> = [
  */
 function columnEditor(
   component: Component,
-  extraProps?: () => Record<string, unknown>,
+  extraProps?: (p: GridEditorProps) => Record<string, unknown>,
 ) {
   return VGridVueEditor(
     defineComponent(
@@ -143,7 +157,7 @@ function columnEditor(
           save: p.save,
           close: p.close,
           ...p.column?.column?.editorProps,
-          ...extraProps?.(),
+          ...extraProps?.(p),
         }),
       { inheritAttrs: false, props: EDITOR_PROP_KEYS },
     ),
@@ -211,7 +225,9 @@ export function useWellGridColumns(options: UseWellGridColumnsOptions) {
     text: VGridVueEditor(GridTextEditor),
     number: VGridVueEditor(GridNumberEditor),
     color: VGridVueEditor(GridColorPickerEditor),
-    unit: columnEditor(GridUnitEditor),
+    unit: columnEditor(GridUnitEditor, p => ({
+      entered: isEnteredValue(p),
+    })),
     select: columnEditor(GridSelectEditor),
     combo: columnEditor(GridComboEditor, () => ({
       hint: labels.value.comboHint,

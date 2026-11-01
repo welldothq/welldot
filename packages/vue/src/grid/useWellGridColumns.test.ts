@@ -6,6 +6,7 @@ import { createApp, defineComponent, h, nextTick, type App } from 'vue';
 import { createWelldot, type WelldotConfig } from '../config';
 import type { WellGridColumn } from './types';
 import {
+  isEnteredValue,
   useWellGridColumns,
   type UseWellGridColumnsOptions,
 } from './useWellGridColumns';
@@ -416,5 +417,19 @@ describe('useWellGridColumns — drag and delete columns', () => {
     expect(button?.getAttribute('aria-label')).toBe('Excluir linha');
     (button as HTMLButtonElement).click();
     expect(onDelete).toHaveBeenCalledWith(4, { a: 'x' });
+  });
+});
+
+describe('isEnteredValue', () => {
+  const base = { save: () => {}, close: () => {}, prop: 'd' };
+
+  it('is false when the editor opens with the stored value', () => {
+    expect(isEnteredValue({ ...base, val: 127, model: { d: 127 } })).toBe(
+      false,
+    );
+  });
+
+  it('is true when the editor opens with a typed key', () => {
+    expect(isEnteredValue({ ...base, val: '6', model: { d: 127 } })).toBe(true);
   });
 });

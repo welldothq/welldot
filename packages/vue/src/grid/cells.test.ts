@@ -111,6 +111,25 @@ describe('GridUnitEditor', () => {
     wrapper.unmount();
   });
 
+  it('takes a typed key as a display value', () => {
+    const save = vi.fn();
+    const wrapper = mount(GridUnitEditor, {
+      props: {
+        val: '6',
+        save,
+        close: vi.fn(),
+        unitType: 'diameter',
+        entered: true,
+      },
+      global: welldotGlobal({ units: { diameter: 'inches' } }),
+      attachTo: document.body,
+    });
+    expect(wrapper.get('input').element.value).toBe('6');
+    wrapper.findComponent(InputNumber).vm.$emit('update:modelValue', 6);
+    expect(save.mock.calls[0]![0]).toBeCloseTo(152.4, 10);
+    wrapper.unmount();
+  });
+
   it.each([undefined, null, ''])(
     'starts empty for %s and saves nothing on blur',
     async val => {
