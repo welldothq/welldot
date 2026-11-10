@@ -10,6 +10,10 @@ export const DRILLING_METHODS = [
     value: 'air_hammer',
     label: { en: 'Air hammer', pt: 'Martelo pneumático' },
   },
+  {
+    value: 'manual',
+    label: { en: 'Manual excavation', pt: 'Escavação manual' },
+  },
 ] as const satisfies readonly VocabEntry[];
 
 export type DrillingMethod = (typeof DRILLING_METHODS)[number]['value'];
@@ -17,7 +21,9 @@ export type DrillingMethod = (typeof DRILLING_METHODS)[number]['value'];
 /**
  * Recommended construction materials, shared by `well_case[].type`,
  * `well_screen[].type`, `reduction[].type` and
- * `pump_installations[].riser_material`.
+ * `pump_installations[].riser_material`. The last four (`brick`,
+ * `stone_masonry`, `precast_concrete`, `cast_in_place_concrete`) are
+ * lining materials, mainly for the `well_case` of a `hand_dug` well.
  */
 export const CONSTRUCTION_MATERIALS = [
   { value: 'pvc', label: { en: 'PVC', pt: 'PVC' } },
@@ -35,6 +41,22 @@ export const CONSTRUCTION_MATERIALS = [
     label: { en: 'Stainless steel', pt: 'Aço inox' },
   },
   { value: 'fiberglass', label: { en: 'Fiberglass', pt: 'Fibra de vidro' } },
+  { value: 'brick', label: { en: 'Brick', pt: 'Tijolo' } },
+  {
+    value: 'stone_masonry',
+    label: { en: 'Stone masonry', pt: 'Alvenaria de pedra' },
+  },
+  {
+    value: 'precast_concrete',
+    label: {
+      en: 'Precast concrete rings',
+      pt: 'Anéis de concreto pré-moldado',
+    },
+  },
+  {
+    value: 'cast_in_place_concrete',
+    label: { en: 'Cast-in-place concrete', pt: 'Concreto moldado in loco' },
+  },
 ] as const satisfies readonly VocabEntry[];
 
 export type ConstructionMaterial =

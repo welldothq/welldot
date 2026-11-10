@@ -50,6 +50,9 @@ v2.4 additions:
   sha256 required only inside the package
 - Application extensions: x-<vendor>-<name> is RECOMMENDED
   (e.g. x-welldot-custom)
+- Recommended values for hand-dug wells: drilling_method manual, and
+  the lining materials brick, stone_masonry, precast_concrete and
+  cast_in_place_concrete (construction materials, mainly well_case)
 
 v2.4 clarifications:
 - A known hydrodynamic event type is validated against its own schema

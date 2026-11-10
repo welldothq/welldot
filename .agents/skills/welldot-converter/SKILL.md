@@ -212,12 +212,13 @@ Produce a single JSON object conforming to the v2 spec you read in Step 1, apply
 own wording maps to it losslessly (no dropped nuance/brand/equipment/shape detail); otherwise
 transcribe the report's own phrase verbatim, in its own language:
 
-- `bore_hole[].drilling_method`: rotary, percussion, cable_tool, auger, air_hammer
+- `bore_hole[].drilling_method`: rotary, percussion, cable_tool, auger, air_hammer, manual (hand-dug)
 - `cement_pad.type`: concrete, reinforced_concrete, cement, mortar — or the report's material and/or
   shape wording (e.g. "circular") when a key would drop detail
 - `well_case[].type`, `reduction[].type`, `well_screen[].type`, `pump_installations[].riser_material`
   (construction materials): pvc, geomechanical_pvc, carbon_steel, galvanized_steel, stainless_steel,
-  fiberglass — never invent others (`steel`, `hdpe`, `wire_wound`); keep the report's phrase when it
+  fiberglass; lining materials of dug wells: brick, stone_masonry, precast_concrete,
+  cast_in_place_concrete — never invent others (`steel`, `hdpe`, `wire_wound`); keep the report's phrase when it
   carries more (standard, wall class)
 - `well_screen[].slot_type` (screen design, since v2.3): continuous_slot (espiralado / Johnson /
   wire-wound), slotted (ranhurado), bridge_slot (tipo ponte), louver (veneziana), perforated (perfurado),

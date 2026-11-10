@@ -7,9 +7,12 @@ const { t } = useI18n();
 const { vocabOptions } = useVocab();
 const profileStore = useProfileStore();
 
-// Fiberglass reducers are uncommon; the rest of the materials are offered.
+// Fiberglass reducers are uncommon and lining materials (brick, masonry,
+// concrete) are not reducers; the rest of the materials are offered.
 const reductionTypeOptions = computed(() =>
-  vocabOptions(CONSTRUCTION_MATERIALS).filter(o => o.value !== 'fiberglass'),
+  vocabOptions(CONSTRUCTION_MATERIALS).filter(
+    o => o.value !== 'fiberglass' && !LINING_MATERIAL_VALUES.includes(o.value),
+  ),
 );
 
 const reductionColumns = computed<WellGridColumn[]>(() => [

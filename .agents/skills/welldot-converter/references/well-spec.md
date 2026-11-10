@@ -173,7 +173,7 @@ single most common extraction mistake for this format.**
 | `diameter`        | number (mm) | yes      |                                                    |
 | `drilling_method` | string      | no       | **Tier 1 — recommended, not enforced.** See below. |
 
-**Tier 1 field.** Recommended values: `rotary`, `percussion`, `cable_tool`, `auger`, `air_hammer`. Use one
+**Tier 1 field.** Recommended values: `rotary`, `percussion`, `cable_tool`, `auger`, `air_hammer`, `manual` (hand-excavated, the usual method of a `hand_dug` well). Use one
 of these **only if the report's own wording maps to it losslessly** — no dropped nuance, no discarded
 equipment/brand detail. If the method is hybrid, unusual, or described with detail beyond a bare method
 name, transcribe the report's own phrase instead, in the report's own language. Never force a mismatched
@@ -188,7 +188,7 @@ canonical term just to have a canonical value.
 | `diameter`   | number (mm) | yes      |                                                 |
 
 **Tier 1 field — construction materials (since v2.3).** Recommended values, shared by `well_case.type`,
-`reduction.type`, `well_screen.type` and `pump_installations[].riser_material`: `pvc`, `geomechanical_pvc`, `carbon_steel`, `galvanized_steel`, `stainless_steel`, `fiberglass`.
+`reduction.type`, `well_screen.type` and `pump_installations[].riser_material`: `pvc`, `geomechanical_pvc`, `carbon_steel`, `galvanized_steel`, `stainless_steel`, `fiberglass`, and the lining materials `brick`, `stone_masonry`, `precast_concrete` (manilhas / anéis pré-moldados), `cast_in_place_concrete` (concreto moldado in loco), used mainly for the `well_case` of a `hand_dug` well.
 Use a key only when the report's wording maps to it losslessly ("aço carbono" → `carbon_steel`,
 "PVC geomecânico" → `geomechanical_pvc`). When the report adds detail the key would drop (a standard,
 a wall class, "aço carbono SCH 40"), transcribe the report's phrase verbatim instead. Never invent other
