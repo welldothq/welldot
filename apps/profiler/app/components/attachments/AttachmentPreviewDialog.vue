@@ -31,6 +31,24 @@ watch(
   { immediate: true },
 );
 
+/**
+ * Escape closes only this dialog. PrimeVue's own handler listens on
+ * `document` in every open Dialog and closes each of them, so a preview
+ * opened from a view dialog would take its parent down too. A capture
+ * listener on `window` runs first and stops the event there.
+ */
+function onEscape(event: KeyboardEvent) {
+  if (event.key !== 'Escape' || event.isComposing) return;
+  event.stopPropagation();
+  visible.value = false;
+}
+
+watch(visible, open => {
+  if (open) window.addEventListener('keydown', onEscape, true);
+  else window.removeEventListener('keydown', onEscape, true);
+});
+onBeforeUnmount(() => window.removeEventListener('keydown', onEscape, true));
+
 const onLoad = () => (status.value = 'loaded');
 const onError = () => (status.value = 'error');
 </script>
@@ -41,6 +59,7 @@ const onError = () => (status.value = 'error');
     modal
     maximizable
     dismissable-mask
+    :close-on-escape="false"
     :header="attachment ? attachmentLabel(attachment) : ''"
     :style="{ width: '56rem' }"
     :breakpoints="{ '640px': '95vw' }"
