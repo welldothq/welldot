@@ -587,7 +587,7 @@
         "to": "Até",
         "diameter": "Diâm.",
         "drillingMethod": "Método",
-        "drillingMethodInfo": "Método de perfuração usado para abrir este intervalo do furo. Escolha uma das sugestões — rotativo, percussão, percussão a cabo, trado ou martelo pneumático.",
+        "drillingMethodInfo": "Método de perfuração usado para abrir este intervalo do furo. Escolha uma das sugestões — rotativo, percussão, percussão a cabo, trado, martelo pneumático ou escavação manual (poços escavados).",
         "drillingMethodFreeText": "Este campo é livre: se o método não estiver na lista, basta digitá-lo (ex.: circulação reversa, sônico, jateamento) e ele será salvo como escrito.",
         "addRow": "Adicionar trecho",
         "empty": "Nenhum trecho cadastrado",
@@ -610,7 +610,7 @@
         "to": "Até",
         "diameter": "Diâm.",
         "type": "Tipo / Material",
-        "typeInfo": "Material do revestimento que reveste o poço e sustenta as paredes do furo, ex.: PVC, PVC geomecânico, aço carbono ou aço inox.",
+        "typeInfo": "Material do revestimento que reveste o poço e sustenta as paredes do furo, ex.: PVC, PVC geomecânico, aço carbono ou aço inox. Poços escavados são revestidos com tijolo, alvenaria de pedra ou concreto (anéis pré-moldados ou moldado in loco).",
         "typeFreeText": "Este campo é livre: se o material não estiver na lista, basta digitá-lo (ex.: PEAD, tubo de aço liso) e ele será salvo como escrito.",
         "addRow": "Adicionar revestimento"
       },
@@ -1285,7 +1285,12 @@
       "documentTypeInfo": "O que é o documento (.well v2.3). Opcional — deixe vazio se não tiver certeza.",
       "documentTypePlaceholder": "Não informado",
       "description": "Descrição",
-      "mediaTypeOther": "Outro"
+      "mediaTypeOther": "Outro",
+      "preview": "Visualizar {name}",
+      "openInNewTab": "Abrir em nova aba",
+      "previewUnavailable": "Sem pré-visualização para este tipo de arquivo.",
+      "previewFailed": "Não foi possível carregar o arquivo. O link pode estar fora do ar ou não permitir incorporação.",
+      "notReachable": "Este arquivo é referenciado por caminho relativo e não pode ser aberto aqui."
     },
     "operation": {
       "wellStatuses": {

@@ -23,8 +23,11 @@ const { lengthUnit, diameterUnit, flowUnit, powerUnit } = useUnitFormat();
 
 const typeOptions = computed(() => vocabOptions(PUMP_TYPES));
 const powerSourceOptions = computed(() => vocabOptions(POWER_SOURCES));
+// Lining materials (brick, masonry, concrete) are not riser pipes.
 const riserMaterialOptions = computed(() =>
-  vocabOptions(CONSTRUCTION_MATERIALS),
+  vocabOptions(CONSTRUCTION_MATERIALS).filter(
+    o => !LINING_MATERIAL_VALUES.includes(o.value),
+  ),
 );
 const phaseOptions = [
   { label: '1φ', value: 1 },

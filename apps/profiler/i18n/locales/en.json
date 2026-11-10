@@ -587,7 +587,7 @@
         "to": "To",
         "diameter": "Diam.",
         "drillingMethod": "Method",
-        "drillingMethodInfo": "Drilling method used to open this bore hole interval. Pick one of the suggestions — rotary, percussion, cable tool, auger or air hammer.",
+        "drillingMethodInfo": "Drilling method used to open this bore hole interval. Pick one of the suggestions — rotary, percussion, cable tool, auger, air hammer or manual excavation (dug wells).",
         "drillingMethodFreeText": "This field is free text: if the method is not in the list, just type it (e.g. reverse circulation, sonic, jetting) and it will be saved as-is.",
         "addRow": "Add bore hole",
         "empty": "No bore hole intervals yet",
@@ -610,7 +610,7 @@
         "to": "To",
         "diameter": "Diam.",
         "type": "Type / Material",
-        "typeInfo": "Material of the casing that lines the well and holds the bore hole walls, e.g. PVC, geomechanical PVC, carbon steel or stainless steel.",
+        "typeInfo": "Material of the casing that lines the well and holds the bore hole walls, e.g. PVC, geomechanical PVC, carbon steel or stainless steel. Dug wells are lined with brick, stone masonry or concrete (precast rings or cast in place).",
         "typeFreeText": "This field is free text: if the material is not in the list, just type it (e.g. HDPE, blank steel pipe) and it will be saved as-is.",
         "addRow": "Add casing"
       },
@@ -1285,7 +1285,12 @@
       "documentTypeInfo": "What the document is (.well v2.3). Optional — leave empty when unsure.",
       "documentTypePlaceholder": "Not specified",
       "description": "Description",
-      "mediaTypeOther": "Other"
+      "mediaTypeOther": "Other",
+      "preview": "Preview {name}",
+      "openInNewTab": "Open in new tab",
+      "previewUnavailable": "No preview for this file type.",
+      "previewFailed": "Couldn't load the file. The link may be offline or not allow embedding.",
+      "notReachable": "This file is referenced by a relative path and can't be opened here."
     },
     "operation": {
       "wellStatuses": {

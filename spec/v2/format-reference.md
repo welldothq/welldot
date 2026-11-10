@@ -390,28 +390,33 @@ Non-canonical values SHOULD use the `x-` prefix (e.g. `x-radial_collector`).
 
 ## `bore_hole[].drilling_method` — Recommended values _(since v2.3)_
 
-| Value        | English    | Portuguese (BR)    |
-| ------------ | ---------- | ------------------ |
-| `rotary`     | Rotary     | Rotativo           |
-| `percussion` | Percussion | Percussão          |
-| `cable_tool` | Cable tool | Percussão a cabo   |
-| `auger`      | Auger      | Trado              |
-| `air_hammer` | Air hammer | Martelo pneumático |
+| Value        | English           | Portuguese (BR)    |
+| ------------ | ----------------- | ------------------ |
+| `rotary`     | Rotary            | Rotativo           |
+| `percussion` | Percussion        | Percussão          |
+| `cable_tool` | Cable tool        | Percussão a cabo   |
+| `auger`      | Auger             | Trado              |
+| `air_hammer` | Air hammer        | Martelo pneumático |
+| `manual`     | Manual excavation | Escavação manual   |
 
-Non-canonical values SHOULD use the `x-` prefix.
+`manual` _(since v2.4)_ is a bore hole excavated by hand, the usual method of a `hand_dug` well. Non-canonical values SHOULD use the `x-` prefix.
 
 ## Construction materials — Recommended values _(since v2.3)_
 
-Shared by `well_case[].type`, `well_screen[].type`, `reduction[].type` and `pump_installations[].riser_material`.
+Shared by `well_case[].type`, `well_screen[].type`, `reduction[].type` and `pump_installations[].riser_material`. The last four values are lining materials, used mainly for the `well_case` of a `hand_dug` well _(since v2.4)_. An unlined interval has no `well_case` entry.
 
-| Value               | English           | Portuguese (BR) |
-| ------------------- | ----------------- | --------------- |
-| `pvc`               | PVC               | PVC             |
-| `geomechanical_pvc` | Geomechanical PVC | PVC geomecânico |
-| `carbon_steel`      | Carbon steel      | Aço carbono     |
-| `galvanized_steel`  | Galvanized steel  | Aço galvanizado |
-| `stainless_steel`   | Stainless steel   | Aço inox        |
-| `fiberglass`        | Fiberglass        | Fibra de vidro  |
+| Value                    | English                | Portuguese (BR)                          |
+| ------------------------ | ---------------------- | ---------------------------------------- |
+| `pvc`                    | PVC                    | PVC                                      |
+| `geomechanical_pvc`      | Geomechanical PVC      | PVC geomecânico                          |
+| `carbon_steel`           | Carbon steel           | Aço carbono                              |
+| `galvanized_steel`       | Galvanized steel       | Aço galvanizado                          |
+| `stainless_steel`        | Stainless steel        | Aço inox                                 |
+| `fiberglass`             | Fiberglass             | Fibra de vidro                           |
+| `brick`                  | Brick                  | Tijolo                                   |
+| `stone_masonry`          | Stone masonry          | Alvenaria de pedra                       |
+| `precast_concrete`       | Precast concrete rings | Anéis de concreto pré-moldado (manilhas) |
+| `cast_in_place_concrete` | Cast-in-place concrete | Concreto moldado in loco                 |
 
 Non-canonical values SHOULD use the `x-` prefix.
 
