@@ -1285,7 +1285,12 @@
       "documentTypeInfo": "What the document is (.well v2.3). Optional — leave empty when unsure.",
       "documentTypePlaceholder": "Not specified",
       "description": "Description",
-      "mediaTypeOther": "Other"
+      "mediaTypeOther": "Other",
+      "preview": "Preview {name}",
+      "openInNewTab": "Open in new tab",
+      "previewUnavailable": "No preview for this file type.",
+      "previewFailed": "Couldn't load the file. The link may be offline or not allow embedding.",
+      "notReachable": "This file is referenced by a relative path and can't be opened here."
     },
     "operation": {
       "wellStatuses": {

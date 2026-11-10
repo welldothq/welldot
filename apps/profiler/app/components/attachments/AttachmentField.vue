@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import type { Attachment, DocumentTypeContext } from '@welldot/core';
-import { DOCUMENT_TYPES } from '@welldot/core';
 import { useConfirm } from 'primevue/useconfirm';
 import AttachmentDialog from './AttachmentDialog.vue';
+import AttachmentPreviewDialog from './AttachmentPreviewDialog.vue';
+import AttachmentThumb from './AttachmentThumb.vue';
 
 /**
  * Self-contained attachment editor for one record: a label row with an "add"
- * button, a thumbnail strip with copy / edit / delete actions, and the
- * add/edit dialog. Bind the record's list with `v-model`; every change is
+ * button, a thumbnail strip (click to preview) with copy / edit / delete
+ * actions, the add/edit dialog and the preview dialog. Bind the record's list with `v-model`; every change is
  * emitted as a new array (never mutated in place), so the caller decides
  * where it lands — a local form draft or the store.
  */
@@ -35,19 +36,23 @@ const model = defineModel<Attachment[]>({ default: () => [] });
 const list = computed(() => model.value ?? []);
 
 const { t } = useI18n();
-const { vocabLabel } = useVocab();
 const confirm = useConfirm();
-const {
-  attachmentIcon,
-  attachmentLabel,
-  copiedAttachmentId,
-  copyAttachmentPath,
-} = useAttachmentDisplay();
+const { copiedAttachmentId, copyAttachmentPath } = useAttachmentDisplay();
 
 const expanded = ref(false);
 const shown = computed(() =>
   expanded.value ? list.value : list.value.slice(0, props.visibleCount),
 );
+
+// ─── Preview — open in every mode, read-only included ────────────────────────
+
+const previewing = ref<Attachment | null>(null);
+const previewVisible = ref(false);
+
+function openPreview(attachment: Attachment) {
+  previewing.value = attachment;
+  previewVisible.value = true;
+}
 
 // ─── Dialog — the draft stays local until the dialog saves ───────────────────
 
@@ -108,66 +113,17 @@ defineExpose({ open });
     </div>
 
     <div v-if="list.length" class="flex flex-wrap gap-2">
-      <div v-for="att in shown" :key="att.id" class="attachment-thumb">
-        <Icon
-          :name="attachmentIcon(att.media_type)"
-          class="size-5 text-content-300 shrink-0"
-        />
-        <div class="flex flex-col min-w-0 flex-1">
-          <span
-            class="font-mono text-[10px] text-content-300 truncate"
-            :title="att.description ?? att.uri"
-          >
-            {{ attachmentLabel(att) }}
-          </span>
-          <span
-            v-if="att.document_type"
-            class="text-[9px] uppercase tracking-wider text-content-500 truncate"
-          >
-            {{ vocabLabel(DOCUMENT_TYPES, att.document_type) }}
-          </span>
-        </div>
-        <div class="flex items-center gap-1 shrink-0">
-          <button
-            class="thumb-action"
-            type="button"
-            :aria-label="t('editor.historyLog.logs.copyPath')"
-            :title="
-              copiedAttachmentId === att.id
-                ? t('editor.historyLog.logs.copied')
-                : t('editor.historyLog.logs.copyPath')
-            "
-            @click="copyAttachmentPath(att)"
-          >
-            <Icon
-              :name="
-                copiedAttachmentId === att.id
-                  ? 'ph:check-bold'
-                  : 'ph:copy-duotone'
-              "
-              class="size-3"
-            />
-          </button>
-          <button
-            v-if="!readonly"
-            class="thumb-action"
-            type="button"
-            :aria-label="t('editor.historyLog.logs.editAttachment')"
-            @click="open(att)"
-          >
-            <Icon name="ph:pencil-simple-duotone" class="size-3" />
-          </button>
-          <button
-            v-if="!readonly"
-            class="thumb-action thumb-action--danger"
-            type="button"
-            :aria-label="t('editor.historyLog.logs.deleteAttachment')"
-            @click="remove(att)"
-          >
-            <Icon name="ph:trash-duotone" class="size-3" />
-          </button>
-        </div>
-      </div>
+      <AttachmentThumb
+        v-for="att in shown"
+        :key="att.id"
+        :attachment="att"
+        :readonly="readonly"
+        :copied="copiedAttachmentId === att.id"
+        @preview="openPreview(att)"
+        @copy="copyAttachmentPath(att)"
+        @edit="open(att)"
+        @remove="remove(att)"
+      />
 
       <button
         v-if="list.length > visibleCount"
@@ -190,6 +146,11 @@ defineExpose({ open });
     v-model:visible="dialogVisible"
     :context="context"
     @save="upsert"
+  />
+
+  <AttachmentPreviewDialog
+    v-model:visible="previewVisible"
+    :attachment="previewing"
   />
 </template>
 
@@ -218,43 +179,6 @@ defineExpose({ open });
   background: var(--color-surface-50);
   color: var(--color-content-200);
   border-color: var(--color-surface-400);
-}
-
-.attachment-thumb {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 8px;
-  border-radius: 8px;
-  border: 1px solid var(--color-surface-200);
-  background: var(--color-surface-50);
-  max-width: 220px;
-  min-width: 120px;
-}
-
-.thumb-action {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  padding: 2px;
-  border-radius: 4px;
-  color: var(--color-content-400);
-  cursor: pointer;
-  transition:
-    color 100ms ease,
-    background 100ms ease;
-}
-
-.thumb-action:hover {
-  background: var(--color-surface-100);
-  color: var(--color-content-100);
-}
-
-.thumb-action--danger:hover {
-  background: color-mix(in srgb, var(--color-error-500) 10%, transparent);
-  color: var(--color-error-500);
 }
 
 .attachment-overflow-btn {
