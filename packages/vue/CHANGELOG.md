@@ -1,5 +1,14 @@
 # @welldot/vue
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [d80fdbd]
+  - @welldot/core@0.7.0
+  - @welldot/render@0.4.3
+  - @welldot/utils@0.5.2
+
 ## 0.2.1
 
 ### Patch Changes
