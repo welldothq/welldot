@@ -40,14 +40,14 @@
       "from": 0,
       "to": 10,
       "diameter": 1200,
-      "drilling_method": "x-hand_dug"
+      "drilling_method": "manual"
     }
   ],
   "well_case": [
     {
       "from": -0.3,
       "to": 6,
-      "type": "x-brick_masonry",
+      "type": "brick",
       "diameter": 1000
     }
   ],

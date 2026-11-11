@@ -1,5 +1,15 @@
 # @welldot/pdf
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [435bfc3]
+- Updated dependencies [ca89368]
+  - @welldot/core@0.7.1
+  - @welldot/utils@0.5.3
+  - @welldot/render@0.4.4
+
 ## 0.1.4
 
 ### Patch Changes
