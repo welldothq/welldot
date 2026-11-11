@@ -53,6 +53,7 @@ export default defineEventHandler(async event => {
       { onConflict: 'id', ignoreDuplicates: true },
     );
   if (upsertError) {
+    console.error('[share] upsert failed:', upsertError.message);
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to store share',
@@ -65,6 +66,10 @@ export default defineEventHandler(async event => {
     .eq('id', id)
     .single();
   if (selectError || !data) {
+    console.error(
+      '[share] expiry lookup failed:',
+      selectError?.message ?? 'no row',
+    );
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to store share',

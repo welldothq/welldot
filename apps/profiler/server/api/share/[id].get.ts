@@ -24,6 +24,11 @@ export default defineEventHandler(async event => {
     .gt('expires_at', new Date().toISOString())
     .single();
 
+  // PGRST116 is `.single()` matching no row: a real miss. Anything else
+  // (bad key, outage) is logged so it shows up in `wrangler tail`.
+  if (error && error.code !== 'PGRST116') {
+    console.error('[share] lookup failed:', error.code, error.message);
+  }
   if (error || !data) {
     throw createError({ statusCode: 404, statusMessage: NOT_FOUND_MESSAGE });
   }
