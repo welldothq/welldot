@@ -1,5 +1,13 @@
 # Welldot (fka Well Profiler)
 
+[![Docs](https://img.shields.io/badge/docs-docs.welldot.org-08609c)](https://docs.welldot.org)
+[![@welldot/core](https://img.shields.io/npm/v/@welldot/core?label=%40welldot%2Fcore)](https://www.npmjs.com/package/@welldot/core)
+[![@welldot/utils](https://img.shields.io/npm/v/@welldot/utils?label=%40welldot%2Futils)](https://www.npmjs.com/package/@welldot/utils)
+[![@welldot/render](https://img.shields.io/npm/v/@welldot/render?label=%40welldot%2Frender)](https://www.npmjs.com/package/@welldot/render)
+[![@welldot/pdf](https://img.shields.io/npm/v/@welldot/pdf?label=%40welldot%2Fpdf)](https://www.npmjs.com/package/@welldot/pdf)
+[![@welldot/vue](https://img.shields.io/npm/v/@welldot/vue?label=%40welldot%2Fvue)](https://www.npmjs.com/package/@welldot/vue)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](./LICENCE.md)
+
 ## Overview
 
 Most software for documenting and visualizing water well profiles is proprietary, expensive, and not interoperable. Well Profiler exists to change that.
@@ -10,15 +18,13 @@ The core tools — the Well Profiler app, the `.well` format, and the libraries 
 
 You can try the app at [welldot.org](https://welldot.org). Documentation lives at [docs.welldot.org](https://docs.welldot.org). The source lives at [github.com/welldothq/welldot](https://github.com/welldothq/welldot).
 
-This README covers the `.well` format at a glance, the published packages, the app's features, how to run the repository locally, the tech stack and the roadmap.
+This README covers where to find the documentation, the `.well` format at a glance, the published packages, the app's features, how to run the repository locally, the tech stack and the roadmap.
 
 ## Table of contents
 
+- [Documentation](#documentation)
 - [The `.well` File Format](#the-well-file-format)
 - [Packages](#packages)
-  - [`@welldot/core`](#welldotcore)
-  - [`@welldot/render`](#welldotrender)
-  - [`@welldot/utils`](#welldotutils)
 - [App Features](#app-features)
 - [Getting Started](#getting-started)
 - [Tech Stack](#tech-stack)
@@ -30,6 +36,23 @@ This README covers the `.well` format at a glance, the published packages, the a
 - [Claude Code Skill — `welldot-converter`](#claude-code-skill--welldot-converter)
 - [Contributing](#contributing)
 - [Licensing](#licensing)
+
+---
+
+## Documentation
+
+The documentation site is [docs.welldot.org](https://docs.welldot.org). It covers the format and its specification, plus the libraries that read, validate, analyze and draw `.well` files.
+
+| Start here                                                                                                                                 | For                                                                                       |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| [What is `.well`?](https://docs.welldot.org/format)                                                                                        | An introduction to the format and its key principles                                      |
+| [For geologists](https://docs.welldot.org/format/getting-started/for-geologists)                                                           | How a drilling report maps onto a `.well` file, in field terms, with no code              |
+| [For developers](https://docs.welldot.org/format/getting-started/for-developers)                                                           | Reading and validating files from TypeScript or any language with the JSON Schema         |
+| [Specification](https://docs.welldot.org/format/spec)                                                                                      | The normative `.well` spec, rendered from [`spec/`](spec/)                                |
+| [`@welldot/core`](https://docs.welldot.org/core) · [`utils`](https://docs.welldot.org/utils) · [`render`](https://docs.welldot.org/render) | Guides and the API reference of each library                                              |
+| [AI tools](https://docs.welldot.org/ai)                                                                                                    | The conversion skill, `llms.txt` and the docs MCP server (`https://docs.welldot.org/mcp`) |
+
+The JSON Schema is served at [`https://welldot.org/schema/v2/well.schema.json`](https://welldot.org/schema/v2/well.schema.json).
 
 ---
 
@@ -158,7 +181,7 @@ The format captures:
 | General attachments | `attachments[]`                                                                            | Root-level files about the well as a whole, e.g. the drilling report (v2.3)                           |
 | Water quality       | `water_samples[]`                                                                          | Ledger of water samples with field and lab results, sampling point, purge, lab and QA/QC data (v2.3)  |
 
-All depths are in **meters**, all diameters in **millimeters**, measured from ground level. The full specification is in [`spec/v2/`](spec/v2/).
+All depths are in **meters**, all diameters in **millimeters**, measured from ground level. The full specification is in [`spec/v2/`](spec/v2/), also published at [docs.welldot.org/format/spec](https://docs.welldot.org/format/spec).
 
 The format is open. You are welcome to implement parsers, exporters, converters, or viewers in any language. Contributions to the specification are welcome via issues and pull requests.
 
@@ -166,30 +189,22 @@ The format is open. You are welcome to implement parsers, exporters, converters,
 
 ## Packages
 
-This monorepo publishes three standalone npm packages:
+This monorepo publishes five npm packages. Each one installs on its own:
 
-### [`@welldot/core`](./packages/core)
-
-Types, Zod validators, and serialization utilities for the `.well` format. The foundation for all other packages.
-
-```bash
-npm install @welldot/core
-```
-
-### [`@welldot/render`](./packages/render)
-
-D3-based SVG renderer for `.well` profiles. This is the visualization engine used by Well Profiler — available as a standalone library so you can embed well profile diagrams in any web application.
+| Package                                | npm                                                  | Docs                                    | What it does                                                                                                                 |
+| -------------------------------------- | ---------------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| [`@welldot/core`](./packages/core)     | [npm](https://www.npmjs.com/package/@welldot/core)   | [docs](https://docs.welldot.org/core)   | Types, Zod validators, vocabularies and serialization for the `.well` format. The foundation for all other packages.         |
+| [`@welldot/utils`](./packages/utils)   | [npm](https://www.npmjs.com/package/@welldot/utils)  | [docs](https://docs.welldot.org/utils)  | Profile analysis: depths, volumes, gravel pack estimates, pumping tests, permits, operation, water quality, SIAGAS import.   |
+| [`@welldot/render`](./packages/render) | [npm](https://www.npmjs.com/package/@welldot/render) | [docs](https://docs.welldot.org/render) | D3-based SVG renderer for `.well` profiles, the engine behind the welldot editor, to embed in any web application.           |
+| [`@welldot/pdf`](./packages/pdf)       | [npm](https://www.npmjs.com/package/@welldot/pdf)    | [README](./packages/pdf/README.md)      | Customizable PDF reports built on pdfmake: branding, watermark, page layout, theme, sections, English and Portuguese labels. |
+| [`@welldot/vue`](./packages/vue)       | [npm](https://www.npmjs.com/package/@welldot/vue)    | [README](./packages/vue/README.md)      | Vue 3 + PrimeVue base components, theme and Tailwind tokens for `.well` editors, with a Nuxt module.                         |
 
 ```bash
-npm install @welldot/render
-```
-
-### [`@welldot/utils`](./packages/utils)
-
-Profile analysis utilities: depth calculations, cylindrical volumes, gravel pack volume estimates, and construction data summaries.
-
-```bash
-npm install @welldot/utils
+npm install @welldot/core           # read, validate and write .well files
+npm install @welldot/utils          # analysis helpers (depends on core)
+npm install @welldot/render         # draw profiles (depends on core and utils)
+npm install @welldot/pdf            # PDF reports
+npm install @welldot/vue            # Vue components
 ```
 
 ---
@@ -223,10 +238,10 @@ pnpm dev
 
 `pnpm dev` starts every workspace at once: the active Nuxt app on
 [localhost:3000](http://localhost:3000), the deprecated Next.js app on
-[localhost:5000](http://localhost:5000), and `tsup --watch` for the three libraries. To run just the
-active app, use `pnpm turbo dev --filter=profiler`.
+[localhost:5000](http://localhost:5000), the docs site on [localhost:3001](http://localhost:3001), and watch builds for the libraries.
+To run just the active app, use `pnpm turbo dev --filter=profiler`.
 
-To use the libraries in your own project, install them individually — see the README in each package for usage details.
+To use the libraries in your own project, install them individually from npm (see [Packages](#packages)). The guides and API reference are at [docs.welldot.org](https://docs.welldot.org).
 
 ---
 
@@ -322,7 +337,7 @@ Open Claude Code in any project and run:
 /welldot-converter
 ```
 
-Then attach or describe the well report you want to convert. Claude will extract the data, validate it, and produce a `.well` file ready for upload to [welldot.org](https://welldot.org) or use with `@welldot/core`.
+Then attach or describe the well report you want to convert. Claude will extract the data, validate it, and produce a `.well` file ready for upload to [welldot.org](https://welldot.org) or use with `@welldot/core`. More about the skill at [docs.welldot.org/ai/conversion-skill](https://docs.welldot.org/ai/conversion-skill).
 
 ---
 
