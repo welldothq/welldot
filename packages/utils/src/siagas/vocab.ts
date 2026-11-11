@@ -21,6 +21,7 @@ function firstMatch<T>(
 export function mapDrillingMethod(value: string | undefined) {
   return firstMatch(value, [
     [/jato/, undefined],
+    [/manual|escavad/, 'manual'],
     [/roto.?pneumatic|roto.?percuss|martelo|dth/, 'air_hammer'],
     [/rotativ|rotary/, 'rotary'],
     [/percuss|cabo/, 'percussion'],
@@ -28,7 +29,10 @@ export function mapDrillingMethod(value: string | undefined) {
   ]);
 }
 
-/** Pipe "Material" → construction material (casing and screen `type`). */
+/**
+ * Pipe "Material" → construction material (casing and screen `type`), including
+ * the lining materials of a hand-dug well (v2.4).
+ */
 export function mapPipeMaterial(value: string | undefined) {
   return firstMatch(value, [
     [/nao especificad/, ''],
@@ -36,6 +40,11 @@ export function mapPipeMaterial(value: string | undefined) {
     [/geomecanic/, 'geomechanical_pvc'],
     [/p\.?v\.?c/, 'pvc'],
     [/fibra|fiberglass|prfv/, 'fiberglass'],
+    // Linings of hand-dug wells
+    [/manilha|aneis|anel|pre.?moldad/, 'precast_concrete'],
+    [/concreto/, 'cast_in_place_concrete'],
+    [/pedra/, 'stone_masonry'],
+    [/tijolo|alvenaria/, 'brick'],
     [/nold preto/, 'carbon_steel'],
     [/galvaniz/, 'galvanized_steel'],
     [/aco|ferro|nold/, 'carbon_steel'],
