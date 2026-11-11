@@ -5,6 +5,8 @@ import { restoreGithubHeadingIds } from './content-hooks/github-heading-ids';
 import rehypeGithubSlugs from './rehype/rehype-github-slugs';
 import remarkSpecLinks from './remark/remark-spec-links';
 
+const SITE_URL = 'https://docs.welldot.org';
+
 const localPath = (path: string) =>
   fileURLToPath(new URL(path, import.meta.url));
 
@@ -38,6 +40,8 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxt/content', 'nuxt-llms'],
 
   css: ['~/assets/css/main.css'],
+
+  runtimeConfig: { public: { siteUrl: SITE_URL } },
 
   // Welldot uses `.dark-mode` / `.light-mode` instead of `.dark` / `.light`
   colorMode: { classSuffix: '-mode' },
@@ -128,7 +132,7 @@ export default defineNuxtConfig({
   // llms.txt (see server/plugins/llms.ts), since a `/raw/**` rule alone does not enumerate them.
   // The sections are filled from the content by that plugin
   llms: {
-    domain: 'https://docs.welldot.org',
+    domain: SITE_URL,
     title: 'Welldot',
     description:
       'Open-source ecosystem for geological water well log visualization and data management, built around the `.well` open file format: a JSON standard to digitally communicate, register and store water well data instead of raw scanned images, PDFs or closed formats. Everything is Apache 2.0 licensed and free. Welldot provides a web application for drawing well construction and lithology profiles, plus framework-agnostic TypeScript libraries to read, validate, analyze and render `.well` files.',

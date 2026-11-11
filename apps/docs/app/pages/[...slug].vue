@@ -72,12 +72,20 @@ const title = computed(() =>
 
 const toc = computed(() => page.value.body.toc?.links ?? []);
 
+const seoTitle =
+  data.value!.collection === 'changelogs'
+    ? `${page.value.title} changelog`
+    : page.value.title;
+const { siteUrl } = useRuntimeConfig().public;
+
 useSeoMeta({
-  title:
-    data.value!.collection === 'changelogs'
-      ? `${page.value.title} changelog`
-      : page.value.title,
+  title: seoTitle,
   description: description.value,
+  ogTitle: seoTitle,
+  ogDescription: description.value,
+  ogUrl: `${siteUrl}${route.path === '/' ? '' : route.path}`,
+  twitterTitle: seoTitle,
+  twitterDescription: description.value,
 });
 </script>
 

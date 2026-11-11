@@ -1,0 +1,354 @@
+<!doctype html>
+<!--
+  Source of apps/docs/public/og-image.png (1200×630). Render with `pnpm generate:og`
+  (scripts/og-image/render.ts). Fonts match nuxt.config.ts `fonts`.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@1,500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=block"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy-950: #08142a;
+        --navy-900: #0b1a33;
+        --navy-800: #112b53;
+        --blue: #06a4f2;
+        --blue-soft: #7cc8f5;
+        --ink: #f1f5fb;
+        --muted: #9fb0c8;
+        --faint: #5f7391;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+      body {
+        position: relative;
+        font-family: 'Space Grotesk', system-ui, sans-serif;
+        color: var(--ink);
+        background: radial-gradient(
+          ellipse 900px 700px at 1110px 315px,
+          #133566 0%,
+          var(--navy-900) 55%,
+          var(--navy-950) 100%
+        );
+      }
+      .rings {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* Left column */
+      .text {
+        position: absolute;
+        left: 72px;
+        top: 64px;
+        bottom: 60px;
+        width: 600px;
+        display: flex;
+        flex-direction: column;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .brand svg {
+        width: 46px;
+        height: 46px;
+      }
+      .brand .docs {
+        font-weight: 400;
+        color: var(--muted);
+        margin-left: -4px;
+      }
+      .eyebrow {
+        margin-top: 42px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 17px;
+        letter-spacing: 0.14em;
+        color: var(--blue-soft);
+      }
+      h1 {
+        margin-top: 18px;
+        font-size: 70px;
+        line-height: 1.02;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+      }
+      h1 em {
+        font-family: 'IBM Plex Serif', serif;
+        font-style: italic;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        color: var(--blue);
+      }
+      .sub {
+        margin-top: 22px;
+        font-size: 24px;
+        line-height: 1.4;
+        color: var(--muted);
+        width: 560px;
+      }
+      .foot {
+        margin-top: auto;
+        display: flex;
+        gap: 28px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 17px;
+        color: var(--muted);
+      }
+      .foot b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .foot span + span::before {
+        content: '·';
+        margin-right: 28px;
+        color: var(--faint);
+      }
+
+      /* JSON card */
+      .card {
+        position: absolute;
+        left: 690px;
+        top: 112px;
+        width: 352px;
+        padding: 18px 20px 20px;
+        border-radius: 14px;
+        background: rgba(8, 20, 42, 0.82);
+        border: 1px solid rgba(124, 200, 245, 0.22);
+        box-shadow:
+          0 24px 60px rgba(0, 0, 0, 0.45),
+          0 0 0 6px rgba(6, 164, 242, 0.05);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 15px;
+        line-height: 1.62;
+        white-space: pre;
+        color: #cfd9e8;
+      }
+      .card .bar {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 12px;
+        font-size: 13px;
+        color: var(--faint);
+      }
+      .card .bar i {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #26395a;
+      }
+      .card .bar span {
+        margin-left: 8px;
+      }
+      .k {
+        color: #7cc8f5;
+      }
+      .s {
+        color: #f2c98a;
+      }
+      .n {
+        color: #b8e986;
+      }
+      .p {
+        color: #5f7391;
+      }
+
+      .well {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Concentric rings: the logo, i.e. a well seen from above -->
+    <svg class="rings" viewBox="0 0 1200 630" aria-hidden="true">
+      <g fill="none" stroke="#7cc8f5">
+        <circle
+          cx="1110"
+          cy="315"
+          r="170"
+          stroke-opacity="0.10"
+          stroke-width="2"
+        />
+        <circle
+          cx="1110"
+          cy="315"
+          r="290"
+          stroke-opacity="0.07"
+          stroke-width="2"
+        />
+        <circle
+          cx="1110"
+          cy="315"
+          r="420"
+          stroke-opacity="0.05"
+          stroke-width="2"
+        />
+        <circle
+          cx="1110"
+          cy="315"
+          r="560"
+          stroke-opacity="0.035"
+          stroke-width="2"
+        />
+      </g>
+    </svg>
+
+    <!-- Well profile (right) + leader lines to the JSON -->
+    <svg class="well" viewBox="0 0 1200 630" aria-hidden="true">
+      <defs>
+        <pattern id="sand" width="10" height="10" patternUnits="userSpaceOnUse">
+          <rect width="10" height="10" fill="#e2c37a" />
+          <circle cx="3" cy="3" r="1.2" fill="#a8823c" />
+          <circle cx="8" cy="7.5" r="1.2" fill="#a8823c" />
+        </pattern>
+        <pattern id="clay" width="14" height="6" patternUnits="userSpaceOnUse">
+          <rect width="14" height="6" fill="#c26a3a" />
+          <path d="M0 3h7" stroke="#8f4523" stroke-width="1.4" />
+        </pattern>
+        <pattern id="rock" width="20" height="16" patternUnits="userSpaceOnUse">
+          <rect width="20" height="16" fill="#8b93a3" />
+          <path d="M0 8h20M5 0v8M15 8v8" stroke="#5c6474" stroke-width="1.4" />
+        </pattern>
+        <pattern id="screen" width="6" height="6" patternUnits="userSpaceOnUse">
+          <rect width="6" height="6" fill="#dfe7f2" />
+          <path d="M0 3h6" stroke="#4a5a74" stroke-width="2" />
+        </pattern>
+        <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fff" stop-opacity="0" />
+          <stop offset="0.06" stop-color="#fff" stop-opacity="1" />
+          <stop offset="0.94" stop-color="#fff" stop-opacity="1" />
+          <stop offset="1" stop-color="#fff" stop-opacity="0" />
+        </linearGradient>
+        <mask id="fadeMask">
+          <rect x="1060" y="0" width="140" height="630" fill="url(#fade)" />
+        </mask>
+      </defs>
+
+      <!-- Leader lines: JSON rows → layers (clay, sand, screen, bottom of hole) -->
+      <g fill="none" stroke="#06a4f2" stroke-width="2" stroke-dasharray="3 4">
+        <path d="M1042 262 C1062 262 1052 92 1074 92" />
+        <path d="M1042 310 C1062 310 1052 225 1074 225" />
+        <path d="M1042 394 C1062 394 1052 265 1074 265" />
+        <path d="M1042 442 C1062 442 1052 530 1074 530" />
+      </g>
+      <g fill="#06a4f2">
+        <circle cx="1074" cy="92" r="4" />
+        <circle cx="1074" cy="225" r="4" />
+        <circle cx="1074" cy="265" r="4" />
+        <circle cx="1074" cy="530" r="4" />
+      </g>
+
+      <g mask="url(#fadeMask)">
+        <!-- lithology column, 5 px per metre from y=30 -->
+        <rect x="1080" y="0" width="96" height="45" fill="#5b4a33" />
+        <rect x="1080" y="45" width="96" height="95" fill="url(#clay)" />
+        <rect x="1080" y="140" width="96" height="170" fill="url(#sand)" />
+        <rect x="1080" y="310" width="96" height="120" fill="#b9874b" />
+        <rect x="1080" y="430" width="96" height="200" fill="url(#rock)" />
+        <g stroke="#08142a" stroke-opacity="0.55" stroke-width="1.5">
+          <path d="M1080 45h96M1080 140h96M1080 310h96M1080 430h96" />
+        </g>
+        <!-- bore hole, 0–100 m -->
+        <rect
+          x="1110"
+          y="0"
+          width="36"
+          height="530"
+          fill="#0b1a33"
+          fill-opacity="0.9"
+        />
+        <!-- casing 0–40 m, screen 40–54 m, casing and sump 54–98 m -->
+        <rect x="1116" y="0" width="24" height="230" fill="#c9d4e3" />
+        <rect x="1116" y="230" width="24" height="70" fill="url(#screen)" />
+        <rect x="1116" y="300" width="24" height="220" fill="#c9d4e3" />
+        <rect x="1122" y="0" width="12" height="516" fill="#0b1a33" />
+        <!-- water column from the static level (8 m) -->
+        <rect
+          x="1122"
+          y="70"
+          width="12"
+          height="446"
+          fill="#06a4f2"
+          fill-opacity="0.75"
+        />
+      </g>
+      <!-- static water level -->
+      <path d="M1183 70 l9 -10 h-18 z" fill="#06a4f2" />
+      <path d="M1176 70 h24" stroke="#06a4f2" stroke-width="2" />
+    </svg>
+
+    <div class="text">
+      <div class="brand">
+        <svg
+          viewBox="0 0 512 512"
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          aria-hidden="true"
+        >
+          <path
+            fill="#cfe3f7"
+            d="M287.034,40.933C391.664,56.002 472.175,146.119 472.175,254.892C472.175,374.203 375.31,471.067 256,471.067C136.69,471.067 39.825,374.203 39.825,254.892C39.825,146.119 120.336,56.002 224.966,40.933L224.966,71.109C136.86,85.903 69.639,162.609 69.639,254.892C69.639,357.748 153.145,441.253 256,441.253C358.855,441.253 442.361,357.748 442.361,254.892C442.361,162.609 375.14,85.903 287.034,71.109L287.034,40.933Z"
+          />
+          <path
+            fill="#8fc3ec"
+            d="M287.034,105.392C356.432,119.746 408.663,181.268 408.663,254.892C408.663,339.149 340.257,407.555 256,407.555C171.743,407.555 103.337,339.149 103.337,254.892C103.337,181.268 155.568,119.746 224.966,105.392L224.966,133.08C170.589,146.911 130.32,196.236 130.32,254.892C130.32,324.257 186.635,380.573 256,380.573C325.365,380.573 381.68,324.257 381.68,254.892C381.68,196.236 341.411,146.911 287.034,133.08L287.034,105.392Z"
+          />
+          <path
+            fill="#3a9ee0"
+            d="M287.034,165.117C324.23,177.988 350.97,213.342 350.97,254.892C350.97,307.308 308.416,349.863 256,349.863C203.584,349.863 161.03,307.308 161.03,254.892C161.03,213.342 187.77,177.988 224.966,165.117L224.966,196.789C204.242,207.891 190.132,229.757 190.132,254.892C190.132,291.246 219.647,320.76 256,320.76C292.353,320.76 321.868,291.246 321.868,254.892C321.868,229.757 307.758,207.891 287.034,196.789L287.034,165.117Z"
+          />
+          <circle fill="#06a4f2" cx="256" cy="254.892" r="36.492" />
+        </svg>
+        welldot <span class="docs">docs</span>
+      </div>
+
+      <div class="eyebrow">.WELL · OPEN FORMAT · v2.4</div>
+      <h1>The record of<br />a water well,<br /><em>as data.</em></h1>
+      <p class="sub">
+        An open JSON format, its specification, and the TypeScript libraries to
+        read, validate, analyze and draw it.
+      </p>
+
+      <div class="foot">
+        <span><b>docs.welldot.org</b></span>
+        <span>Apache 2.0</span>
+        <span>JSON Schema</span>
+      </div>
+    </div>
+
+    <!-- prettier-ignore -->
+    <div class="card"><div class="bar"><i></i><i></i><i></i><span>PT-01.well</span></div><span class="p">{</span>
+  <span class="k">"well_depth"</span><span class="p">:</span> <span class="n">100</span><span class="p">,</span>
+  <span class="k">"lithology"</span><span class="p">: [</span>
+    <span class="p">{</span> <span class="k">"from"</span><span class="p">:</span> <span class="n">3</span><span class="p">,</span> <span class="k">"to"</span><span class="p">:</span> <span class="n">22</span><span class="p">,</span>
+      <span class="k">"description"</span><span class="p">:</span> <span class="s">"Sandy clay"</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="k">"from"</span><span class="p">:</span> <span class="n">22</span><span class="p">,</span> <span class="k">"to"</span><span class="p">:</span> <span class="n">56</span><span class="p">,</span>
+      <span class="k">"description"</span><span class="p">:</span> <span class="s">"Fine sand"</span> <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="k">"well_screen"</span><span class="p">: [</span>
+    <span class="p">{</span> <span class="k">"from"</span><span class="p">:</span> <span class="n">40</span><span class="p">,</span> <span class="k">"to"</span><span class="p">:</span> <span class="n">54</span> <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="k">"bore_hole"</span><span class="p">:</span> <span class="p">[</span> <span class="p">…</span> <span class="p">]</span>
+<span class="p">}</span></div>
+  </body>
+</html>

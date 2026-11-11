@@ -84,7 +84,10 @@ pnpm --filter docs check:examples
 pnpm --filter docs check:links       # after generate
 pnpm --filter docs check:touched     # reads changed file names on stdin
 pnpm --filter docs check:translations
+pnpm --filter docs generate:og          # re-render public/og-image.png
 ```
+
+- **Social card.** `public/og-image.png` (1200×630) is rendered from `scripts/og-image/og-image.html` by `generate:og` (Playwright, system Chrome as fallback) and committed; it is not part of the build. Its depths and the JSON excerpt match each other, keep them in sync when editing. Site-wide og/twitter meta is in `app/app.vue`, per-page titles and descriptions in `app/pages/[...slug].vue`, both using `runtimeConfig.public.siteUrl`.
 
 (`pnpm docs` is a pnpm built-in; use `pnpm --filter docs …`.)
 
