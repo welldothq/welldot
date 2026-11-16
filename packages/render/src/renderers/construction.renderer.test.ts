@@ -37,7 +37,7 @@ beforeAll(() => {
 /** Lets the zero-duration transitions run. */
 const flush = () => new Promise(r => setTimeout(r, 50));
 
-async function drawPanels(zoom = false) {
+async function drawPanels(zoom = false, constructionLabels = false) {
   document.body.innerHTML = '<svg id="p0"></svg><svg id="p1"></svg>';
   const panel = (selector: string, depthRange: [number, number]) => ({
     selector,
@@ -53,6 +53,7 @@ async function drawPanels(zoom = false) {
         zoom,
         pan: false,
         animation: { duration: 0 },
+        ...(constructionLabels && { constructionLabels: { active: true } }),
       },
     },
   );
@@ -130,5 +131,20 @@ describe('drawConstructive across panels', () => {
     expect(Number(casing.getAttribute('height'))).toBeGreaterThan(600);
     expect(yExtent(slab().getAttribute('d')!)).toBeCloseTo(before);
     expect(before).toBe(6);
+  });
+});
+
+describe('pipes without material (v2.5)', () => {
+  it('labels casing and screen sections without a type and never prints "undefined"', async () => {
+    await drawPanels(false, true);
+    const text = Array.from(
+      document.querySelectorAll(
+        `#p0 .${classes.constructionLabels.group} text`,
+      ),
+      t => t.textContent ?? '',
+    ).join(' | ');
+    expect(text).toMatch(/219/);
+    expect(text).not.toMatch(/undefined/);
+    expect(document.body.innerHTML).not.toMatch(/undefined/);
   });
 });

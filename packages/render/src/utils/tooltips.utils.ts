@@ -124,14 +124,14 @@ export const populateTooltips = (
               <span class="${customClasses.tooltip.secondaryInfo}">
                 <strong>${labels.common.diameter}</strong> ${esc(formatDiameter(d.diameter, units.diameter, locale))} ${esc(getDiameterUnit(units.diameter, locale))}
               </span>
-              <span class="${customClasses.tooltip.secondaryInfo}"><strong>${labels.common.type}</strong> ${esc(material(d.type))}</span>
+              ${d.type ? `<span class="${customClasses.tooltip.secondaryInfo}"><strong>${labels.common.type}</strong> ${esc(material(d.type))}</span>` : ''}
           `,
     wellScreen: (_: unknown, d: WellScreen) => `
           <span class="${customClasses.tooltip.title}">${labels.wellScreen.title}</span>
               <span class="${customClasses.tooltip.primaryInfo}">${labels.common.from} ${esc(formatLength(d.from, units.length, locale))} ${esc(getLengthUnit(units.length))} ${labels.common.to} ${esc(formatLength(d.to, units.length, locale))} ${esc(getLengthUnit(units.length))}</span>
               <span class="${customClasses.tooltip.secondaryInfo}">
                 <strong>${labels.common.diameter}</strong> ${esc(formatDiameter(d.diameter, units.diameter, locale))} ${esc(getDiameterUnit(units.diameter, locale))}</span>
-              <span class="${customClasses.tooltip.secondaryInfo}"><strong>${labels.wellScreen.material}</strong> ${esc(material(d.type))}</span>
+              ${d.type ? `<span class="${customClasses.tooltip.secondaryInfo}"><strong>${labels.wellScreen.material}</strong> ${esc(material(d.type))}</span>` : ''}
               ${d.slot_type ? `<span class="${customClasses.tooltip.secondaryInfo}"><strong>${labels.wellScreen.slotType}</strong> ${esc(getVocabLabel(SCREEN_SLOT_TYPES, d.slot_type, locale))}</span>` : ''}
               <span class="${customClasses.tooltip.secondaryInfo}">
                 <strong>${labels.wellScreen.slot}</strong> ${esc(formatNumber(d.screen_slot, { maximumFractionDigits: 2, locale }))} mm
@@ -143,7 +143,7 @@ export const populateTooltips = (
               <span class="${customClasses.tooltip.secondaryInfo}">
                 <strong>${labels.common.diameter}</strong> ${esc(formatDiameter(d.diam_from, units.diameter, locale))} → ${esc(formatDiameter(d.diam_to, units.diameter, locale))} ${esc(getDiameterUnit(units.diameter, locale))}
               </span>
-              <span class="${customClasses.tooltip.secondaryInfo}"><strong>${labels.common.type}</strong> ${esc(material(d.type))}</span>
+              ${d.type ? `<span class="${customClasses.tooltip.secondaryInfo}"><strong>${labels.common.type}</strong> ${esc(material(d.type))}</span>` : ''}
           `,
     centralizer: (_: unknown, d: Centralizer & { depth: number }) => `
           <span class="${customClasses.tooltip.title}">${labels.centralizer.title}</span>
