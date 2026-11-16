@@ -188,7 +188,6 @@
         "required": [
           "from",
           "to",
-          "type",
           "diameter"
         ],
         "additionalProperties": false
@@ -219,8 +218,7 @@
           "from",
           "to",
           "diam_from",
-          "diam_to",
-          "type"
+          "diam_to"
         ],
         "additionalProperties": false
       }
@@ -252,7 +250,6 @@
         "required": [
           "from",
           "to",
-          "type",
           "diameter",
           "screen_slot"
         ],

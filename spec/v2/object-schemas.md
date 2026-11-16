@@ -1,10 +1,10 @@
-# `.well` File Format Specification — Version 2.4: Object Schemas
+# `.well` File Format Specification — Version 2.5: Object Schemas
 
 **See also:** [overview.md](./overview.md) · [format-reference.md](./format-reference.md) · [interoperability.md](./interoperability.md) · [water-quality.md](./water-quality.md)
 
 ## Overview
 
-This part of the `.well` v2.4 specification defines the records inside each top-level block: the common types (`Attachment`, date durations), the construction and geology objects, the `hydrodynamic_events` ledger and its supporting objects, `aquifer_analysis`, `history_logs`, and the operational blocks added in v2.3 (`pump_installations`, `permits`, `meters`, `production`, `operating_regime`). It ends with a complete example file. Water samples are specified in [water-quality.md](./water-quality.md); units and cross-reference rules in [format-reference.md](./format-reference.md).
+This part of the `.well` v2.5 specification defines the records inside each top-level block: the common types (`Attachment`, date durations), the construction and geology objects, the `hydrodynamic_events` ledger and its supporting objects, `aquifer_analysis`, `history_logs`, and the operational blocks added in v2.3 (`pump_installations`, `permits`, `meters`, `production`, `operating_regime`). It ends with a complete example file. Water samples are specified in [water-quality.md](./water-quality.md); units and cross-reference rules in [format-reference.md](./format-reference.md).
 
 ## Table of contents
 
@@ -151,12 +151,12 @@ A drilled interval of the borehole. Multiple entries describe a telescoping bore
 
 Steel or plastic casing installed inside the borehole.
 
-| Field      | Type   | Required | Description                                                                                                |
-| ---------- | ------ | -------- | ---------------------------------------------------------------------------------------------------------- |
-| `from`     | number | yes      | Start depth in meters.                                                                                     |
-| `to`       | number | yes      | End depth in meters.                                                                                       |
-| `type`     | string | yes      | Casing material. Open vocabulary: see [format-reference.md](format-reference.md) § Construction materials. |
-| `diameter` | number | yes      | Casing outer diameter in millimeters.                                                                      |
+| Field      | Type   | Required | Description                                                                                                                                                             |
+| ---------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `from`     | number | yes      | Start depth in meters.                                                                                                                                                  |
+| `to`       | number | yes      | End depth in meters.                                                                                                                                                    |
+| `type`     | string | no       | Casing material. Open vocabulary: see [format-reference.md](format-reference.md) § Construction materials. Absent when the material is unknown _(optional since v2.5)_. |
+| `diameter` | number | yes      | Casing outer diameter in millimeters.                                                                                                                                   |
 
 ---
 
@@ -164,13 +164,13 @@ Steel or plastic casing installed inside the borehole.
 
 A transition piece connecting two casing or screen sections of different diameters.
 
-| Field       | Type   | Required | Description                                                                                                 |
-| ----------- | ------ | -------- | ----------------------------------------------------------------------------------------------------------- |
-| `from`      | number | yes      | Start depth in meters.                                                                                      |
-| `to`        | number | yes      | End depth in meters.                                                                                        |
-| `diam_from` | number | yes      | Diameter at top in millimeters.                                                                             |
-| `diam_to`   | number | yes      | Diameter at bottom in millimeters.                                                                          |
-| `type`      | string | yes      | Reducer material. Open vocabulary: see [format-reference.md](format-reference.md) § Construction materials. |
+| Field       | Type   | Required | Description                                                                                                                                                              |
+| ----------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `from`      | number | yes      | Start depth in meters.                                                                                                                                                   |
+| `to`        | number | yes      | End depth in meters.                                                                                                                                                     |
+| `diam_from` | number | yes      | Diameter at top in millimeters.                                                                                                                                          |
+| `diam_to`   | number | yes      | Diameter at bottom in millimeters.                                                                                                                                       |
+| `type`      | string | no       | Reducer material. Open vocabulary: see [format-reference.md](format-reference.md) § Construction materials. Absent when the material is unknown _(optional since v2.5)_. |
 
 ---
 
@@ -178,14 +178,14 @@ A transition piece connecting two casing or screen sections of different diamete
 
 Slotted or wire-wound screen section.
 
-| Field         | Type   | Required | Description                                                                                                                                       |
-| ------------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `from`        | number | yes      | Start depth in meters.                                                                                                                            |
-| `to`          | number | yes      | End depth in meters.                                                                                                                              |
-| `type`        | string | yes      | Screen material. Open vocabulary: see [format-reference.md](format-reference.md) § Construction materials. The screen design goes in `slot_type`. |
-| `diameter`    | number | yes      | Screen outer diameter in millimeters.                                                                                                             |
-| `screen_slot` | number | yes      | Slot opening size in millimeters.                                                                                                                 |
-| `slot_type`   | string | no       | Screen design _(since v2.3)_. Open vocabulary: see [format-reference.md](format-reference.md) § `well_screen[].slot_type`.                        |
+| Field         | Type   | Required | Description                                                                                                                                                                                                    |
+| ------------- | ------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `from`        | number | yes      | Start depth in meters.                                                                                                                                                                                         |
+| `to`          | number | yes      | End depth in meters.                                                                                                                                                                                           |
+| `type`        | string | no       | Screen material. Open vocabulary: see [format-reference.md](format-reference.md) § Construction materials. The screen design goes in `slot_type`. Absent when the material is unknown _(optional since v2.5)_. |
+| `diameter`    | number | yes      | Screen outer diameter in millimeters.                                                                                                                                                                          |
+| `screen_slot` | number | yes      | Slot opening size in millimeters.                                                                                                                                                                              |
+| `slot_type`   | string | no       | Screen design _(since v2.3)_. Open vocabulary: see [format-reference.md](format-reference.md) § `well_screen[].slot_type`.                                                                                     |
 
 > **v1 migration:** v1's `screen_slot_mm` field is renamed to `screen_slot` in v2. The value is in millimeters before and after — no conversion needed. See § Units for the rule that screen slot is always in millimeters regardless of any application's display preference.
 
@@ -1089,7 +1089,7 @@ A ledger of water samples, each with its field and laboratory results. The full 
 {
   "$schema": "https://welldot.org/schema/v2/well.schema.json",
   "@context": "https://welldot.org/context/v2.jsonld",
-  "version": "2.4",
+  "version": "2.5",
   "well_type": "tubular",
   "well_purpose": ["production"],
   "name": "Poço PP-01",
@@ -1702,4 +1702,4 @@ A ledger of water samples, each with its field and laboratory results. The full 
 
 ---
 
-_`.well` Format Specification v2.4_
+_`.well` Format Specification v2.5_

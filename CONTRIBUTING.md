@@ -96,7 +96,7 @@ Within a major version (`"version": 2`), changes must be **additive and optional
 
 - ✅ Adding an optional field
 - ✅ Adding a new enum member to an open vocabulary
-- ✅ Loosening a constraint
+- ✅ Loosening a constraint (including making a required field optional, as v2.5 did for the pipe material; it bumps the minor, because a reader of the previous minor rejects a file that leaves the field out)
 - ❌ Renaming or removing a field
 - ❌ Making an optional field required
 - ❌ Changing a field's type or unit

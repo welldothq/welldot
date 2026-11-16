@@ -1,14 +1,14 @@
-# `.well` File Format Specification — Version 2.4: Format Reference
+# `.well` File Format Specification — Version 2.5: Format Reference
 
 **See also:** [overview.md](./overview.md) · [object-schemas.md](./object-schemas.md) · [interoperability.md](./interoperability.md) · [water-quality.md](./water-quality.md)
 
 ## Overview
 
-This part of the `.well` v2.4 specification defines the file as a whole: the top-level structure and fields, how versions and deprecations work, datetime conventions, the recommended values of every open vocabulary, `well_id` and `location`, the canonical units and which unit each field uses, `profiles`, the `x-` extension rules, cross-reference and uniqueness rules, and precision fields. The objects inside each block are specified in [object-schemas.md](./object-schemas.md).
+This part of the `.well` v2.5 specification defines the file as a whole: the top-level structure and fields, how versions and deprecations work, datetime conventions, the recommended values of every open vocabulary, `well_id` and `location`, the canonical units and which unit each field uses, `profiles`, the `x-` extension rules, cross-reference and uniqueness rules, and precision fields. The objects inside each block are specified in [object-schemas.md](./object-schemas.md).
 
 ## Table of contents
 
-- [`.well` File Format Specification — Version 2.4: Format Reference](#well-file-format-specification--version-24-format-reference)
+- [`.well` File Format Specification — Version 2.5: Format Reference](#well-file-format-specification--version-25-format-reference)
   - [Overview](#overview)
   - [Table of contents](#table-of-contents)
   - [Top-level Structure](#top-level-structure)
@@ -95,7 +95,7 @@ This part of the `.well` v2.4 specification defines the file as a whole: the top
 
 ```json
 {
-  "version": "2.4",
+  "version": "2.5",
   "@context": "https://welldot.org/context/v2.jsonld",
 
   "well_id": [ ... ],
@@ -153,6 +153,7 @@ Readers accept `null` in `aquifer_analysis[].storativity` only in files whose `v
 | `1`     | Initial release — constructive and geologic data only                                                                                                                                                                                                                 |
 | `2`     | Adds location, well_id (array), profiles, texture object, hydrodynamic_events, aquifer_analysis, history_logs, optional @context, \*\_precision fields, and extensibility conventions. Tightens unit semantics: all values are canonical SI, no per-file declaration. |
 | `"2.4"` | Version written as the string `"M.m"` (_since v2.4_). Read as v2; the integer `2` means v2.0 to v2.3.                                                                                                                                                                 |
+| `"2.5"` | Pipe material (`well_case[].type`, `well_screen[].type`, `reduction[].type`) becomes optional.                                                                                                                                                                        |
 
 Minor revisions (`2.1`, `2.3`, …) are additive. Up to v2.3 they did not change the `version` integer: a v2.3 document declares `"version": 2`. A v2.0 parser reading a v2.1 document sees the v2.1 fields (`well_purpose`, `centralizers`) as unrecognized members without the `x-` prefix. Per § Extensibility it MUST preserve them and MUST NOT reject the file, and it SHOULD emit a warning.
 
@@ -161,6 +162,8 @@ The same rule applies to v2.3: a v2.0 or v2.1 parser reading a v2.3 document see
 _(since v2.4)_ The version is written as the string `"M.m"` (for example `"2.4"`). Versions are compared as two integers, never as text: `"2.10"` is greater than `"2.9"`. Patch levels (`"2.4.1"`) are not allowed. The integer `2` means v2.0 to v2.3 with the revision unknown, and it remains valid for reading. There is no separate `spec_version` field.
 
 **Intentional break.** A parser of `@welldot/core` 0.4.0 or earlier rejects `"2.4"` files because it only accepts the integers `1` and `2`. This is the one intentional exception to the minor-revision compatibility rule above. Upgrade readers before writing v2.4 files.
+
+**Relaxed requirements** _(since v2.5)_. A minor revision may also turn a required field into an optional one, as v2.5 does for the pipe material. Every document valid under the previous minor stays valid, but a document that uses the relaxation (a `well_case` entry without `type`) is rejected by a parser of the previous minor, which still requires the field. Upgrade readers (`@welldot/core` 0.8.0 or later) before writing such files.
 
 ### Parser version handling
 
@@ -235,7 +238,7 @@ Each minor revision of this spec MUST include a "Deprecations" subsection in its
 
 | Field               | Type              | Required | Description                                                                                                                                                                                                                                     |
 | ------------------- | ----------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `version`           | integer \| string | yes      | Format version. v2.4 files write `"2.4"`.                                                                                                                                                                                                       |
+| `version`           | integer \| string | yes      | Format version. v2.5 files write `"2.5"`.                                                                                                                                                                                                       |
 | `well_type`         | string            | yes      | Construction method of the well. See vocabulary below.                                                                                                                                                                                          |
 | `name`              | string            | no       | Well name or local identifier.                                                                                                                                                                                                                  |
 | `well_driller`      | string            | no       | Name of the drilling company or individual.                                                                                                                                                                                                     |
@@ -404,6 +407,8 @@ Non-canonical values SHOULD use the `x-` prefix (e.g. `x-radial_collector`).
 ## Construction materials — Recommended values _(since v2.3)_
 
 Shared by `well_case[].type`, `well_screen[].type`, `reduction[].type` and `pump_installations[].riser_material`. The last four values are lining materials, used mainly for the `well_case` of a `hand_dug` well _(since v2.4)_. An unlined interval has no `well_case` entry.
+
+All four fields are optional. When the source does not say which material a section is made of, the field is omitted _(since v2.5 for `well_case`, `well_screen` and `reduction`)_. Producers MUST NOT write an empty string or a placeholder value (`unknown`, `x-unspecified`, …) to mean an unknown material; an absent field already means unknown (§ Absent values). Consumers show an absent material as unknown and MUST NOT infer one from the diameter or from other sections.
 
 | Value                    | English                | Portuguese (BR)                          |
 | ------------------------ | ---------------------- | ---------------------------------------- |
@@ -1006,7 +1011,7 @@ Top-level blocks not defined in this spec MUST use the `x-` prefix. For applicat
 
 ```json
 {
-  "version": "2.4",
+  "version": "2.5",
   "x-gas_monitoring": [ ... ],
   "x-geophysical_logs": [ ... ]
 }
@@ -1161,4 +1166,4 @@ Laboratory reports usually give an expanded uncertainty U with a coverage factor
 
 ---
 
-_`.well` Format Specification v2.4_
+_`.well` Format Specification v2.5_
