@@ -610,7 +610,7 @@
         "to": "Até",
         "diameter": "Diâm.",
         "type": "Tipo / Material",
-        "typeInfo": "Material do revestimento que reveste o poço e sustenta as paredes do furo, ex.: PVC, PVC geomecânico, aço carbono ou aço inox. Poços escavados são revestidos com tijolo, alvenaria de pedra ou concreto (anéis pré-moldados ou moldado in loco).",
+        "typeInfo": "Material do revestimento que reveste o poço e sustenta as paredes do furo, ex.: PVC, PVC geomecânico, aço carbono ou aço inox. Poços escavados são revestidos com tijolo, alvenaria de pedra ou concreto (anéis pré-moldados ou moldado in loco). Deixe em branco se o material não for conhecido.",
         "typeFreeText": "Este campo é livre: se o material não estiver na lista, basta digitá-lo (ex.: PEAD, tubo de aço liso) e ele será salvo como escrito.",
         "addRow": "Adicionar revestimento"
       },
@@ -622,7 +622,7 @@
         "diamFrom": "Diâm. De",
         "diamTo": "Diâm. Até",
         "type": "Tipo",
-        "typeInfo": "Material ou formato da redução que faz a transição entre os dois diâmetros, ex.: PVC, PVC geomecânico, aço carbono, cônica ou escalonada.",
+        "typeInfo": "Material ou formato da redução que faz a transição entre os dois diâmetros, ex.: PVC, PVC geomecânico, aço carbono, cônica ou escalonada. Deixe em branco se o material não for conhecido.",
         "typeFreeText": "Este campo é livre: se o material não estiver na lista, basta digitá-lo (ex.: cônica, escalonada) e ele será salvo como escrito.",
         "addRow": "Adicionar redução"
       },
@@ -649,7 +649,7 @@
         "diameter": "Diâm.",
         "screenSlot": "Abertura (mm)",
         "type": "Material",
-        "typeInfo": "Material do filtro por onde a água entra no poço, ex.: PVC, PVC geomecânico, aço carbono ou aço inox.",
+        "typeInfo": "Material do filtro por onde a água entra no poço, ex.: PVC, PVC geomecânico, aço carbono ou aço inox. Deixe em branco se o material não for conhecido.",
         "typeFreeText": "Este campo é livre: se o material não estiver na lista, basta digitá-lo e ele será salvo como escrito.",
         "slotType": "Tipo",
         "slotTypeInfo": "Tipo construtivo do filtro, ex.: espiralado (tipo Johnson), ranhurado, tipo ponte, veneziana, perfurado ou tipo Nold.",
