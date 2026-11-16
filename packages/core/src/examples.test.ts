@@ -3,6 +3,7 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import { WELL_FORMAT_VERSION } from './utils/version.utils';
 import { serializeWell } from './utils/well.utils';
 import { parseWell } from './validators/well.validators';
 
@@ -42,12 +43,12 @@ describe('examples', () => {
     },
   );
 
-  it('every example declares version "2.4"', () => {
+  it('every example declares the current format version', () => {
     for (const entry of index.examples) {
       const raw = JSON.parse(
         readFileSync(join(EXAMPLES_DIR, entry.file), 'utf-8'),
       ) as { version: unknown };
-      expect(raw.version, entry.slug).toBe('2.4');
+      expect(raw.version, entry.slug).toBe(WELL_FORMAT_VERSION);
     }
   });
 
@@ -68,7 +69,7 @@ describe('examples', () => {
     }
   });
 
-  it('the Complete Example in object-schemas.md parses as v2.4', () => {
+  it('the Complete Example in object-schemas.md parses as the current version', () => {
     const doc = readFileSync(
       join(__dirname, '..', '..', '..', 'spec', 'v2', 'object-schemas.md'),
       'utf-8',
@@ -77,7 +78,7 @@ describe('examples', () => {
     const match = /```json\n([\s\S]*?)\n```/.exec(after);
     expect(match).not.toBeNull();
     const well = parseWell(match![1]);
-    expect(well.version).toBe('2.4');
+    expect(well.version).toBe(WELL_FORMAT_VERSION);
   });
 
   it('no .well file writes a null value', () => {

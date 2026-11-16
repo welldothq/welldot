@@ -307,7 +307,7 @@ describe('serializeWell', () => {
 
     it('includes the current format version', () => {
       const parsed = JSON.parse(serializeWell(emptyWell()));
-      expect(parsed.version).toBe('2.4');
+      expect(parsed.version).toBe('2.5');
     });
 
     it('includes all required array fields even when empty', () => {
@@ -1166,7 +1166,7 @@ describe('v2 serialize', () => {
     const reparsed = deserializeWell(reserialized)!;
     expect(reparsed.location).toEqual(deserialized.location);
     expect(reparsed.well_screen[0].screen_slot).toBe(0.5);
-    expect(JSON.parse(reserialized).version).toBe('2.4');
+    expect(JSON.parse(reserialized).version).toBe('2.5');
     expect(JSON.parse(reserialized)).not.toHaveProperty('lat');
     expect(JSON.parse(reserialized)).not.toHaveProperty('lng');
     expect(JSON.parse(reserialized)).not.toHaveProperty('elevation');
@@ -3015,11 +3015,12 @@ describe('v2.4 version', () => {
   const doc = (version: unknown, extra: Record<string, unknown> = {}) =>
     JSON.stringify({ version, ...base, ...extra });
 
-  it('serializeWell writes "2.4"', () => {
-    expect(JSON.parse(serializeWell(emptyWell())).version).toBe('2.4');
+  it('serializeWell writes "2.5"', () => {
+    expect(JSON.parse(serializeWell(emptyWell())).version).toBe('2.5');
   });
 
-  it('parseWell reads "2.4", 2, 1 and a future minor "2.9"', () => {
+  it('parseWell reads "2.5", "2.4", 2, 1 and a future minor "2.9"', () => {
+    expect(parseWell(doc('2.5')).version).toBe('2.5');
     expect(parseWell(doc('2.4')).version).toBe('2.4');
     expect(parseWell(doc(2)).version).toBe(2);
     expect(parseWell(doc(1)).version).toBe(2);
@@ -3062,6 +3063,54 @@ describe('v2.4 version', () => {
     );
     expect(result!.version).toBe('2.4');
     expect(result!.hydrodynamic_events).toHaveLength(1);
+  });
+});
+
+describe('v2.5 optional pipe material', () => {
+  const doc = (extra: Record<string, unknown>) =>
+    JSON.stringify({
+      version: '2.5',
+      well_type: 'tubular',
+      bore_hole: [],
+      well_case: [],
+      reduction: [],
+      well_screen: [],
+      surface_case: [],
+      hole_fill: [],
+      lithology: [],
+      fractures: [],
+      caves: [],
+      ...extra,
+    });
+
+  it('parseWell accepts well_case, reduction and well_screen without type', () => {
+    const well = parseWell(
+      doc({
+        well_case: [{ from: 0, to: 40, diameter: 152 }],
+        reduction: [{ from: 40, to: 40.5, diam_from: 152, diam_to: 101 }],
+        well_screen: [{ from: 40.5, to: 52, diameter: 101, screen_slot: 0.75 }],
+      }),
+    );
+    expect(well.well_case[0]!.type).toBeUndefined();
+    expect(well.reduction[0]!.type).toBeUndefined();
+    expect(well.well_screen[0]!.type).toBeUndefined();
+  });
+
+  it('round-trips a pipe without type and does not write the member', () => {
+    const well = parseWell(
+      doc({ well_case: [{ from: 0, to: 40, diameter: 152 }] }),
+    );
+    const out = JSON.parse(serializeWell(well));
+    expect(out.well_case[0]).toEqual({ from: 0, to: 40, diameter: 152 });
+    expect('type' in out.well_case[0]).toBe(false);
+  });
+
+  it('still rejects a non-string type', () => {
+    expect(() =>
+      parseWell(
+        doc({ well_case: [{ from: 0, to: 40, diameter: 152, type: 3 }] }),
+      ),
+    ).toThrow();
   });
 });
 

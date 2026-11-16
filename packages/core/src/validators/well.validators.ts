@@ -116,7 +116,7 @@ export const BoreHoleSchema = z.object({
 export const WellCaseSchema = z.object({
   from: z.number(),
   to: z.number(),
-  type: z.string(),
+  type: z.string().optional(),
   diameter: z.number(),
 });
 
@@ -125,13 +125,13 @@ export const ReductionSchema = z.object({
   to: z.number(),
   diam_from: z.number(),
   diam_to: z.number(),
-  type: z.string(),
+  type: z.string().optional(),
 });
 
 export const WellScreenSchema = z.object({
   from: z.number(),
   to: z.number(),
-  type: z.string(),
+  type: z.string().optional(),
   diameter: z.number(),
   screen_slot: z.number(),
   slot_type: z.string().optional(),

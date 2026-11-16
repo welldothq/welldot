@@ -261,7 +261,7 @@ Parses a raw JSON string and validates it against `WellSchema`. Throws a `ZodErr
 
 #### `serializeWell(well: Well): string`
 
-Serializes a `Well` object to a versioned `.well` JSON string (`"version": "2.4"`, `WELL_FORMAT_VERSION`). Omits `null` members outside `x-` fields and `@context`. Emits `location` when set; does not emit deprecated flat `lat`/`lng`/`elevation` or other legacy v1 keys. Omits `undefined` optional fields. Root members the spec does not define (`x-` fields and blocks, foreign members) are written unchanged after the spec blocks, as the spec requires.
+Serializes a `Well` object to a versioned `.well` JSON string (`"version": "2.5"`, `WELL_FORMAT_VERSION`). Omits `null` members outside `x-` fields and `@context`. Emits `location` when set; does not emit deprecated flat `lat`/`lng`/`elevation` or other legacy v1 keys. Omits `undefined` optional fields. Root members the spec does not define (`x-` fields and blocks, foreign members) are written unchanged after the spec blocks, as the spec requires.
 
 #### `deserializeWell(jsonString: string): Well | null`
 
@@ -279,7 +279,7 @@ Returns `null` if the parsed data is empty. Throws on unrecognized version numbe
 
 | Export                                | Description                                                                                                                       |
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `WELL_FORMAT_VERSION`                 | The version `serializeWell` writes: `"2.4"`.                                                                                      |
+| `WELL_FORMAT_VERSION`                 | The version `serializeWell` writes: `"2.5"`.                                                                                      |
 | `parseFormatVersion(value)`           | Parses `2` or `"M.m"` into a `FormatVersion` (`{ major, minor }`); `undefined` for `2.4`, `"2.4.1"`, `"v2.4"` and other values.   |
 | `compareFormatVersions(a, b)`         | Compares two `"M.m"` strings as two integers (`"2.10"` is after `"2.9"`); throws on malformed input.                              |
 | `isIanaTimeZone(value)`               | Whether `value` is an IANA time zone name (`America/Belem`), for `location.properties.timezone`. Offsets are not valid.           |
@@ -466,11 +466,11 @@ See [fgdc-textures.md](https://docs.welldot.org/format/spec/reference/fgdc-textu
 
 All depths are in **meters** from ground level (0 = surface). All diameters are in **millimeters**. Geographic coordinates use WGS84 decimal degrees. The MIME type is `application/vnd.well+json`.
 
-A minimal v2.4 `.well` document:
+A minimal v2.5 `.well` document:
 
 ```json
 {
-  "version": "2.4",
+  "version": "2.5",
   "well_type": "tubular",
   "name": "PP-01",
   "location": { "lat": -1.4558, "lng": -48.5039, "elevation": 12.5 },

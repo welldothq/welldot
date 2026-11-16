@@ -111,8 +111,11 @@ export type WellCase = {
   from: number;
   /** End depth in meters from ground level. */
   to: number;
-  /** Casing material. Recommended values: {@link CONSTRUCTION_MATERIALS}. */
-  type: OpenVocab<ConstructionMaterial>;
+  /**
+   * Casing material. Recommended values: {@link CONSTRUCTION_MATERIALS}.
+   * Optional since v2.5: absent means the material is unknown.
+   */
+  type?: OpenVocab<ConstructionMaterial>;
   /** Casing outer diameter in millimeters. */
   diameter: number;
 };
@@ -127,8 +130,11 @@ export type Reduction = {
   diam_from: number;
   /** Diameter at the bottom of the reducer in millimeters. */
   diam_to: number;
-  /** Reducer material. Recommended values: {@link CONSTRUCTION_MATERIALS}. */
-  type: OpenVocab<ConstructionMaterial>;
+  /**
+   * Reducer material. Recommended values: {@link CONSTRUCTION_MATERIALS}.
+   * Optional since v2.5: absent means the material is unknown.
+   */
+  type?: OpenVocab<ConstructionMaterial>;
 };
 
 /** Slotted or wire-wound screen section that allows water to enter the well. */
@@ -137,8 +143,11 @@ export type WellScreen = {
   from: number;
   /** End depth in meters from ground level. */
   to: number;
-  /** Screen material. Recommended values: {@link CONSTRUCTION_MATERIALS}. */
-  type: OpenVocab<ConstructionMaterial>;
+  /**
+   * Screen material. Recommended values: {@link CONSTRUCTION_MATERIALS}.
+   * Optional since v2.5: absent means the material is unknown.
+   */
+  type?: OpenVocab<ConstructionMaterial>;
   /** Screen outer diameter in millimeters. */
   diameter: number;
   /** Slot opening size in millimeters. */
