@@ -72,7 +72,7 @@ The format is human-readable JSON with full, descriptive key names. It is easy t
 
 ```json
 {
-  "version": "2.4",
+  "version": "2.5",
   "well_type": "tubular",
   "name": "Poço PP-01",
   "well_driller": "Perfuradora XYZ",
@@ -284,9 +284,11 @@ The v2.3 revision (shipped in `@welldot/core` v0.4.0) adds the operational block
 - **Water quality** — a `water_samples` ledger: each sample carries its field and laboratory results, sampling point and depth, purge and stabilization readings, laboratory and chain of custody, field QA/QC (duplicates, splits, blanks), filtration, lab flags and data validation. Parameters use a versioned vocabulary of 98 `welldot` codes plus CAS numbers, with units fixed by code. Limits stay out of the file: WHO, EU and Brazilian limit sets ship as data in `@welldot/core`
 - **Ledger corrections** — `hydrodynamic_events[].corrects`, `production[].corrects` and `water_samples[].corrects` retract an erroneous entry without editing it
 
+The v2.5 revision (shipped in `@welldot/core` v0.8.0) makes the material (`type`) of `well_case`, `well_screen` and `reduction` sections optional: absent means unknown, the common case in old drilling reports. Parsers up to `@welldot/core` 0.7 reject a file that leaves it out.
+
 The v2.4 revision (shipped in `@welldot/core` v0.5.0) changes how a file declares its version and adds continuous level series. Parsers up to `@welldot/core` 0.4.0 reject v2.4 files:
 
-- **Version as a string** — files write `"version": "2.4"`; readers also accept the integer `1` and `2`
+- **Version as a string** — files write `"version": "2.5"`; readers also accept the integer `1` and `2`
 - **Time zone** — `location.properties.timezone` (IANA) fixes the local date of an instant, so permit deadlines no longer change with the offset a tool writes
 - **Logger series** — the `logger_series` event type for datalogger exports, with `LevelReading.datetime`
 - **Offline packaging** — an optional `.wellz` ZIP with the `.well` file and its attachments, for regulators and archiving

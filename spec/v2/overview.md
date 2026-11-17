@@ -1,12 +1,12 @@
-# `.well` File Format Specification — Version 2.4: Overview
+# `.well` File Format Specification — Version 2.5: Overview
 
-**Version:** 2.4 **Extension:** `.well` **Encoding:** UTF-8 **Base format:** JSON **MIME type:** `application/vnd.well+json` **JSON Schema:** `https://welldot.org/schema/v2/well.schema.json` **JSON Schema draft:** 2020-12 **JSON-LD Context (optional):** `https://welldot.org/context/v2.jsonld` **Status:** v2.0 ratified — shipped in `@welldot/core` v0.2.0 · v2.1 shipped in `@welldot/core` v0.3.0 · v2.3 shipped in `@welldot/core` v0.4.0 · v2.4 shipped in `@welldot/core` v0.5.0
+**Version:** 2.4 **Extension:** `.well` **Encoding:** UTF-8 **Base format:** JSON **MIME type:** `application/vnd.well+json` **JSON Schema:** `https://welldot.org/schema/v2/well.schema.json` **JSON Schema draft:** 2020-12 **JSON-LD Context (optional):** `https://welldot.org/context/v2.jsonld` **Status:** v2.0 ratified — shipped in `@welldot/core` v0.2.0 · v2.1 shipped in `@welldot/core` v0.3.0 · v2.3 shipped in `@welldot/core` v0.4.0 · v2.4 shipped in `@welldot/core` v0.5.0 · v2.5 shipped in `@welldot/core` v0.8.0
 
 **See also:** [format-reference.md](./format-reference.md) · [object-schemas.md](./object-schemas.md) · [interoperability.md](./interoperability.md) · [water-quality.md](./water-quality.md)
 
 ## Overview
 
-The `.well` v2 specification is split into five documents. This one gives the context: what changed in each revision (v2.4, v2.3, v2.1 and from v1), why the format exists, the design principles the other parts follow, and the known limitations. The other four are:
+The `.well` v2 specification is split into five documents. This one gives the context: what changed in each revision (v2.5, v2.4, v2.3, v2.1 and from v1), why the format exists, the design principles the other parts follow, and the known limitations. The other four are:
 
 - [format-reference.md](./format-reference.md) — the top-level fields, versioning and deprecation, datetimes, recommended vocabularies, `well_id`, `location`, units, profiles, extensibility, cross-reference rules and precision.
 - [object-schemas.md](./object-schemas.md) — every object schema, the `hydrodynamic_events` ledger, `aquifer_analysis`, `history_logs`, the operational blocks (pumps, permits, meters, production, operating regime) and a complete example.
@@ -15,15 +15,36 @@ The `.well` v2 specification is split into five documents. This one gives the co
 
 ## Table of contents
 
-- [Changes in v2.4](#changes-in-v24)
+- [Changes in v2.5](#changes-in-v25)
   - [Deprecations](#deprecations)
+- [Changes in v2.4](#changes-in-v24)
+  - [Deprecations](#deprecations-1)
 - [Changes in v2.3](#changes-in-v23)
 - [Changes in v2.1](#changes-in-v21)
-  - [Deprecations](#deprecations-1)
+  - [Deprecations](#deprecations-2)
 - [Changes from v1](#changes-from-v1)
 - [Purpose](#purpose)
 - [Design Principles](#design-principles)
 - [Known Limitations of v2](#known-limitations-of-v2)
+
+---
+
+## Changes in v2.5
+
+v2.5 files write `"version": "2.5"`. Every valid v2.4 document stays valid when its `version` is rewritten. The revision relaxes one requirement, so a v2.5 document that omits a pipe material is rejected by parsers up to `@welldot/core` 0.7 (see [format-reference.md](./format-reference.md) § Versioning).
+
+```
+v2.5 changes:
+- well_case[].type, well_screen[].type and reduction[].type are
+  optional. Absent means the material is unknown, the usual case for
+  sections transcribed from old drilling reports. Producers omit the
+  field instead of writing an empty string or a placeholder such as
+  x-unspecified; consumers show the material as unknown
+```
+
+### Deprecations
+
+None.
 
 ---
 
@@ -293,7 +314,7 @@ The `.well` format is an open standard for representing water well data. It is d
 - **Derived values are never stored raw** — `s/Q`, `Q/s`, drawdown `s`, and any other value computable from stored fields must not appear as stored fields. Applications compute them on demand.
 - **Jurisdiction neutrality** — the file records what was measured, never what it means under a given rule. Water quality limits, exceedances and national requirements are not stored and no field names a national standard; limit sets (WHO, EU, Brazil, …) are versioned data in `@welldot/core`, chosen by the consumer at display time, and local obligations (required parameters, sampling frequencies) enter through profiles.
 - **Interpreted results are versioned** — `aquifer_analysis` records which method was used, who performed the analysis, and which events were used as input. Multiple analyses may coexist.
-- **Graceful incompleteness** — a record with only a flow rate and a dynamic level is valid. A record with only a static level measurement is valid. Validators must not reject incomplete events.
+- **Graceful incompleteness** — a record with only a flow rate and a dynamic level is valid. A record with only a static level measurement is valid. Validators must not reject incomplete events. The same holds for construction: a casing, screen or reduction section whose material is unknown is valid without it _(since v2.5)_. A field is required only when the record means nothing without it (an interval needs `from` and `to`).
 - **Mutable operational log with edit traceability** — `history_logs` entries are editable to allow correction of field errors. Each entry carries a separate `updated_at` timestamp that records when the entry itself was last modified, distinct from the `datetime` field that records when the logged event occurred.
 - **Preserve unknown members** — parsers must preserve and pass through any unrecognized fields or top-level blocks without modification, following the GeoJSON foreign members convention. This ensures forward compatibility.
 
@@ -311,4 +332,4 @@ The following are recognized limitations of this version, reserved for future ve
 
 ---
 
-_`.well` Format Specification v2.4_
+_`.well` Format Specification v2.5_

@@ -7,7 +7,7 @@ import {
 
 describe('format version', () => {
   it('is 2.4', () => {
-    expect(WELL_FORMAT_VERSION).toBe('2.4');
+    expect(WELL_FORMAT_VERSION).toBe('2.5');
   });
   it('parses integers and M.m strings', () => {
     expect(parseFormatVersion(1)).toEqual({ major: 1, minor: undefined });

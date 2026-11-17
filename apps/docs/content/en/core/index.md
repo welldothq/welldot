@@ -28,7 +28,7 @@ import { parseWell, serializeWell } from '@welldot/core';
 
 const well = parseWell(text); // validated and typed; v1 files are upgraded
 well.name = 'PT-01';
-const out = serializeWell(well); // "version": "2.4", unknown members kept
+const out = serializeWell(well); // "version": "2.5", unknown members kept
 ```
 
 ## What it contains

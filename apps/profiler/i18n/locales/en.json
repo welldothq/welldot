@@ -34,8 +34,8 @@
     }
   },
   "footer": {
-    "version": "welldot · v2.4",
-    "spec": ".well spec v2.4",
+    "version": "welldot · v2.5",
+    "spec": ".well spec v2.5",
     "docs": "Documentation",
     "license": "Open · Apache 2.0"
   },
@@ -248,7 +248,7 @@
     "headline1": "The",
     "headlineEm": "future",
     "headline2": ".",
-    "intro": "v2.4 covers geological, construction and hydrodynamic profiles — pump tests, aquifer analysis, continuous level logger series, pump installations, meters, production and operating regime, water-use permits and their conditions, water quality, general attachments and operational history. The specification evolves openly, and these are the gaps already mapped for the next versions.",
+    "intro": "v2.5 covers geological, construction and hydrodynamic profiles — pump tests, aquifer analysis, continuous level logger series, pump installations, meters, production and operating regime, water-use permits and their conditions, water quality, general attachments and operational history. The specification evolves openly, and these are the gaps already mapped for the next versions.",
     "props": [
       {
         "num": "§ 7.1",
@@ -610,7 +610,7 @@
         "to": "To",
         "diameter": "Diam.",
         "type": "Type / Material",
-        "typeInfo": "Material of the casing that lines the well and holds the bore hole walls, e.g. PVC, geomechanical PVC, carbon steel or stainless steel. Dug wells are lined with brick, stone masonry or concrete (precast rings or cast in place).",
+        "typeInfo": "Material of the casing that lines the well and holds the bore hole walls, e.g. PVC, geomechanical PVC, carbon steel or stainless steel. Dug wells are lined with brick, stone masonry or concrete (precast rings or cast in place). Leave it blank if the material is unknown.",
         "typeFreeText": "This field is free text: if the material is not in the list, just type it (e.g. HDPE, blank steel pipe) and it will be saved as-is.",
         "addRow": "Add casing"
       },
@@ -622,7 +622,7 @@
         "diamFrom": "Diam. From",
         "diamTo": "Diam. To",
         "type": "Type",
-        "typeInfo": "Material or shape of the reducer that connects the two diameters, e.g. PVC, geomechanical PVC, carbon steel, conical or stepped.",
+        "typeInfo": "Material or shape of the reducer that connects the two diameters, e.g. PVC, geomechanical PVC, carbon steel, conical or stepped. Leave it blank if the material is unknown.",
         "typeFreeText": "This field is free text: if the material is not in the list, just type it (e.g. conical, stepped) and it will be saved as-is.",
         "addRow": "Add reduction"
       },
@@ -649,7 +649,7 @@
         "diameter": "Diam.",
         "screenSlot": "Slot (mm)",
         "type": "Material",
-        "typeInfo": "Material of the screen that lets water into the well, e.g. PVC, geomechanical PVC, carbon steel or stainless steel.",
+        "typeInfo": "Material of the screen that lets water into the well, e.g. PVC, geomechanical PVC, carbon steel or stainless steel. Leave it blank if the material is unknown.",
         "typeFreeText": "This field is free text: if the material is not in the list, just type it and it will be saved as-is.",
         "slotType": "Type",
         "slotTypeInfo": "Screen design, e.g. continuous slot (Johnson, wire-wrapped), slotted, bridge slot, louver, perforated or Nold type.",

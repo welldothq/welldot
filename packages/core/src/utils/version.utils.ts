@@ -1,5 +1,5 @@
 /** The `.well` format version written by this library (`"M.m"`). */
-export const WELL_FORMAT_VERSION = '2.4' as const;
+export const WELL_FORMAT_VERSION = '2.5' as const;
 
 /** A parsed `.well` format version. `minor` is `undefined` for the integer forms (`1`, `2`). */
 export type FormatVersion = { major: number; minor: number | undefined };
@@ -8,7 +8,7 @@ const VERSION_PATTERN = /^(\d+)\.(\d+)$/;
 
 /**
  * Parses a `.well` `version` value: a non-negative integer (`2`) or an `"M.m"`
- * string (`"2.4"`). Returns `undefined` for anything else (`2.4`, `"2.4.1"`,
+ * string (`"2.5"`). Returns `undefined` for anything else (`2.4`, `"2.4.1"`,
  * `"v2.4"`, `"2"`, negatives, non-numbers).
  */
 export function parseFormatVersion(value: unknown): FormatVersion | undefined {

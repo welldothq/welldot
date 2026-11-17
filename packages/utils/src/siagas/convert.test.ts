@@ -205,6 +205,20 @@ describe('siagasToWell on a page', () => {
   });
 });
 
+describe('pipe material', () => {
+  it('omits type when the casing or screen has no material (v2.5)', () => {
+    const { well } = convert({
+      casings: [[0, 40, '', 6, 168.3]],
+      screens: [[40, 52, '', 6, 168.3, 0.75]],
+    });
+    expect(well.well_case).toHaveLength(1);
+    expect(well.well_screen).toHaveLength(1);
+    expect('type' in well.well_case[0]!).toBe(false);
+    expect('type' in well.well_screen[0]!).toBe(false);
+    expect(WellSchema.safeParse(well).success).toBe(true);
+  });
+});
+
 describe('zero and negative values by field', () => {
   it('keeps a layer that starts at 0 m', () => {
     const { well } = siagasToWell(

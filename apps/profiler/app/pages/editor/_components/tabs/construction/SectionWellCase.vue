@@ -43,7 +43,7 @@ const wellCaseColumns = computed<WellGridColumn[]>(() => [
 ]);
 
 function addWellCase() {
-  profileStore.well.well_case.push({ from: 0, to: 0, diameter: 0, type: '' });
+  profileStore.well.well_case.push({ from: 0, to: 0, diameter: 0 });
 }
 
 function deleteWellCase(index: number) {
@@ -51,7 +51,10 @@ function deleteWellCase(index: number) {
 }
 
 function updateWellCase(index: number, prop: string, value: unknown) {
-  (profileStore.well.well_case[index] as Record<string, unknown>)[prop] = value;
+  const row = profileStore.well.well_case[index] as Record<string, unknown>;
+  // Material is optional (v2.5): a cleared cell drops the field.
+  if (prop === 'type' && !value) delete row.type;
+  else row[prop] = value;
 }
 
 function reorderWellCase(from: number, to: number) {

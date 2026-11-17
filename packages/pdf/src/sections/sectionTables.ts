@@ -168,7 +168,7 @@ function buildWellCaseSection(well: Well, ctx: PdfContext): Content | null {
 
   items.forEach((item, index) => {
     body.push([
-      vocab(CONSTRUCTION_MATERIALS, item.type),
+      item.type ? vocab(CONSTRUCTION_MATERIALS, item.type) : '—',
       rightCell(formatDiameter(item.diameter)),
       rightCell(formatLength(item.from)),
       rightCell(formatLength(item.to)),
@@ -232,7 +232,7 @@ function buildReductionSection(well: Well, ctx: PdfContext): Content | null {
 
   for (const item of items) {
     body.push([
-      vocab(CONSTRUCTION_MATERIALS, item.type),
+      item.type ? vocab(CONSTRUCTION_MATERIALS, item.type) : '—',
       rightCell(formatDiameter(item.diam_from)),
       rightCell(formatDiameter(item.diam_to)),
       rightCell(formatLength(item.from)),
@@ -280,7 +280,7 @@ function buildWellScreenSection(well: Well, ctx: PdfContext): Content | null {
 
   items.forEach((item, index) => {
     body.push([
-      vocab(CONSTRUCTION_MATERIALS, item.type),
+      item.type ? vocab(CONSTRUCTION_MATERIALS, item.type) : '—',
       item.slot_type ? vocab(SCREEN_SLOT_TYPES, item.slot_type) : '—',
       rightCell(formatDiameter(item.diameter)),
       rightCell(formatDiameter(item.screen_slot)),

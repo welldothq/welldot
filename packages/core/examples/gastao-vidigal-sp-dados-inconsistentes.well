@@ -1,6 +1,6 @@
 {
   "$schema": "https://welldot.org/schema/v2/well.schema.json",
-  "version": "2.4",
+  "version": "2.5",
   "x-welldot-example": {
     "illustrative": true,
     "based_on": "https://siagasweb.sgb.gov.br/layout/detalhe.php?ponto=3500001375"
@@ -77,7 +77,6 @@
     {
       "from": 26,
       "to": 32,
-      "type": "x-unspecified",
       "diameter": 219
     }
   ],

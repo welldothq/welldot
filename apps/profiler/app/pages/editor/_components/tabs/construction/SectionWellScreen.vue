@@ -61,7 +61,6 @@ function addWellScreen() {
     to: 0,
     diameter: 0,
     screen_slot: 0,
-    type: '',
   });
 }
 
@@ -70,8 +69,10 @@ function deleteWellScreen(index: number) {
 }
 
 function updateWellScreen(index: number, prop: string, value: unknown) {
-  (profileStore.well.well_screen[index] as Record<string, unknown>)[prop] =
-    value;
+  const row = profileStore.well.well_screen[index] as Record<string, unknown>;
+  // Material is optional (v2.5): a cleared cell drops the field.
+  if (prop === 'type' && !value) delete row.type;
+  else row[prop] = value;
 }
 
 function reorderWellScreen(from: number, to: number) {

@@ -296,8 +296,11 @@ export function siagasToWell(
   const materialOf = (value: string | undefined) => {
     const mapped = mapPipeMaterial(value);
     noteMaterial('Material', value, mapped);
-    return mapped ?? value ?? '';
+    // Pipe material is optional (v2.5): an unknown material is omitted.
+    return mapped ?? (value || undefined);
   };
+
+  const withType = (type: string | undefined) => (type ? { type } : {});
 
   const well_case: WellCase[] = pipe(
     clean(record.casings, 'well_case'),
@@ -305,7 +308,7 @@ export function siagasToWell(
   ).map(r => ({
     from: r.from,
     to: r.to,
-    type: materialOf(r.material),
+    ...withType(materialOf(r.material)),
     diameter: diameterMm(r)!,
   }));
 
@@ -319,7 +322,7 @@ export function siagasToWell(
     return {
       from: r.from,
       to: r.to,
-      type: materialOf(r.material),
+      ...withType(materialOf(r.material)),
       diameter: diameterMm(r)!,
       screen_slot: r.slot !== undefined && r.slot > 0 ? r.slot : 0,
       ...(slotType && { slot_type: slotType }),

@@ -58,7 +58,6 @@ function addReduction() {
     to: 0,
     diam_from: 0,
     diam_to: 0,
-    type: '',
   });
 }
 
@@ -67,7 +66,10 @@ function deleteReduction(index: number) {
 }
 
 function updateReduction(index: number, prop: string, value: unknown) {
-  (profileStore.well.reduction[index] as Record<string, unknown>)[prop] = value;
+  const row = profileStore.well.reduction[index] as Record<string, unknown>;
+  // Material is optional (v2.5): a cleared cell drops the field.
+  if (prop === 'type' && !value) delete row.type;
+  else row[prop] = value;
 }
 
 function reorderReduction(from: number, to: number) {
