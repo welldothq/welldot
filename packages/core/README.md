@@ -257,11 +257,11 @@ Each schema validates its corresponding type at runtime. All schemas are Zod obj
 
 #### `parseWell(json: string): Well`
 
-Parses a raw JSON string and validates it against `WellSchema`. Throws a `ZodError` on validation failure. Unknown members (`x-` fields and blocks) are kept at every level, including inside array items. Does not handle legacy formats — use `deserializeWell` for that.
+Parses a raw JSON string and validates it against `WellSchema`. Throws a `ZodError` on validation failure. Unknown members (`x-` fields and blocks) are kept at every level, including inside array items. Placeholders from older writers are read as absent: a blank (empty or whitespace-only) `type` on `well_case`, `well_screen` and `reduction` items, and a `cement_pad` whose members are all blank or zero. `version` is kept as written. Does not handle legacy formats — use `deserializeWell` for that.
 
 #### `serializeWell(well: Well): string`
 
-Serializes a `Well` object to a versioned `.well` JSON string (`"version": "2.5"`, `WELL_FORMAT_VERSION`). Omits `null` members outside `x-` fields and `@context`. Emits `location` when set; does not emit deprecated flat `lat`/`lng`/`elevation` or other legacy v1 keys. Omits `undefined` optional fields. Root members the spec does not define (`x-` fields and blocks, foreign members) are written unchanged after the spec blocks, as the spec requires.
+Serializes a `Well` object to a versioned `.well` JSON string (`"version": "2.5"`, `WELL_FORMAT_VERSION`). Omits `null` members outside `x-` fields and `@context`. Emits `location` when set; does not emit deprecated flat `lat`/`lng`/`elevation` or other legacy v1 keys. Omits `undefined` optional fields. Root members the spec does not define (`x-` fields and blocks, foreign members) are written unchanged after the spec blocks, as the spec requires. Never writes placeholders: a blank `type` on `well_case`, `well_screen` and `reduction` items is omitted (unknown material), and so is a `cement_pad` whose members are all blank or zero.
 
 #### `deserializeWell(jsonString: string): Well | null`
 
@@ -272,8 +272,9 @@ Parses and normalizes a JSON string into a `Well`. Handles multiple formats:
 - Legacy formats with `constructive` / `geologic` sub-objects
 - Legacy `diam_pol` inch diameters → `diameter` mm conversion (`× 25.4`)
 - Typo `bole_hole` → `bore_hole` compatibility
+- Placeholders, in every version: a blank `type` on `well_case`, `well_screen` and `reduction` items is dropped, and so is a `cement_pad` whose members are all blank or zero (an absent `cement_pad` is left absent)
 
-Returns `null` if the parsed data is empty. Throws on unrecognized version numbers.
+A v2 file keeps its `version` as written (`2`, `"2.4"`, …); `serializeWell` always writes the current version. Returns `null` if the parsed data is empty. Throws on unrecognized version numbers.
 
 #### Format version and time zone _(v2.4)_
 

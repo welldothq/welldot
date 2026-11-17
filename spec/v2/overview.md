@@ -1,6 +1,6 @@
 # `.well` File Format Specification — Version 2.5: Overview
 
-**Version:** 2.4 **Extension:** `.well` **Encoding:** UTF-8 **Base format:** JSON **MIME type:** `application/vnd.well+json` **JSON Schema:** `https://welldot.org/schema/v2/well.schema.json` **JSON Schema draft:** 2020-12 **JSON-LD Context (optional):** `https://welldot.org/context/v2.jsonld` **Status:** v2.0 ratified — shipped in `@welldot/core` v0.2.0 · v2.1 shipped in `@welldot/core` v0.3.0 · v2.3 shipped in `@welldot/core` v0.4.0 · v2.4 shipped in `@welldot/core` v0.5.0 · v2.5 shipped in `@welldot/core` v0.8.0
+**Version:** 2.5 **Extension:** `.well` **Encoding:** UTF-8 **Base format:** JSON **MIME type:** `application/vnd.well+json` **JSON Schema:** `https://welldot.org/schema/v2/well.schema.json` **JSON Schema draft:** 2020-12 **JSON-LD Context (optional):** `https://welldot.org/context/v2.jsonld` **Status:** v2.0 ratified — shipped in `@welldot/core` v0.2.0 · v2.1 shipped in `@welldot/core` v0.3.0 · v2.3 shipped in `@welldot/core` v0.4.0 · v2.4 shipped in `@welldot/core` v0.5.0 · v2.5 shipped in `@welldot/core` v0.8.0
 
 **See also:** [format-reference.md](./format-reference.md) · [object-schemas.md](./object-schemas.md) · [interoperability.md](./interoperability.md) · [water-quality.md](./water-quality.md)
 
@@ -40,6 +40,10 @@ v2.5 changes:
   sections transcribed from old drilling reports. Producers omit the
   field instead of writing an empty string or a placeholder such as
   x-unspecified; consumers show the material as unknown
+- readers treat an empty or whitespace-only material as absent, since
+  files written before v2.5 used "" for an unknown material
+- a cement_pad whose members are all zero or blank means no pad:
+  producers omit cement_pad, readers treat such a pad as absent
 ```
 
 ### Deprecations
