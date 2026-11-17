@@ -126,9 +126,9 @@ v2.3 additions:
   test_report, lab_report, invoice)
 - pump_installations (optional PumpInstallation[]): pump installation
   history, with nameplate, intake depth, riser and electrical data
-- permits (optional Permit[]): legal instruments governing abstraction
-  (outorga, dispensa, cadastro) with validity, granted flow, daily
-  operating time, volume limits, monthly schedule and conditions
+- permits (optional Permit[]): legal instruments that authorize, exempt or register the
+  well or its use (drilling, abstraction, dewatering), with validity,
+  granted flow, daily operating time, volume limits, monthly schedule and conditions
   (condicionantes) whose deadlines are derived from ISO 8601 date
   durations; renewals are linked with supersedes. Each permit carries
   its identifier and/or request_identifier (verbatim, any format), a

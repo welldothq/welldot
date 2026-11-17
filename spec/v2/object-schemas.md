@@ -768,7 +768,7 @@ Renderers draw the current pump ending at `intake_depth` and its riser from the 
 
 ## `permits[]` _(since v2.3)_
 
-A mutable record block: each entry transcribes one legal instrument governing abstraction from the well (outorga, dispensa, cadastro), from its request on. Entries are edited in place, and `updated_at` records the last edit. The attached document is authoritative. The administrative `status` set by the authority is stored; the validity status and condition deadlines are always derived, never stored.
+A mutable record block: each entry transcribes one legal instrument that authorizes, exempts or registers the well or its use (drilling, abstraction, dewatering), from its request on. Entries are edited in place, and `updated_at` records the last edit. The attached document is authoritative. The administrative `status` set by the authority is stored; the validity status and condition deadlines are always derived, never stored.
 
 ### `Permit`
 

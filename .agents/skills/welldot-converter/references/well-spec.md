@@ -556,7 +556,7 @@ retracts); `aquifer_analysis[]` entries may carry `attachments` (v2.3).
 
 ## `permits[]` (v2.3, optional — omit entirely if the report has no permit data)
 
-One entry per legal instrument (outorga, dispensa, cadastro). Status and condition deadlines are
+One entry per legal instrument (drilling or abstraction permit, exemption, registration). Status and condition deadlines are
 derived by applications — never store them.
 
 | Field                                | Type     | Required | Notes                                                                                                                                                        |

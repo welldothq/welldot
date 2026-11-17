@@ -268,7 +268,7 @@ Each minor revision of this spec MUST include a "Deprecations" subsection in its
 | -------------------- | -------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `attachments`        | `Attachment[]`       | no       | Documents about the well as a whole, not tied to any record. See object-schemas.md § Attachment.                                      |
 | `pump_installations` | `PumpInstallation[]` | no       | Pump installation history (installation block). See object-schemas.md § `pump_installations[]`.                                       |
-| `permits`            | `Permit[]`           | no       | Legal instruments governing abstraction (mutable record block). See object-schemas.md § `permits[]`.                                  |
+| `permits`            | `Permit[]`           | no       | Legal instruments that authorize, exempt or register the well or its use (mutable record block). See object-schemas.md § `permits[]`. |
 | `meters`             | `Meter[]`            | no       | Totalizer (hidrômetro) installation history (installation block). See object-schemas.md § `meters[]`.                                 |
 | `production`         | `ProductionEntry[]`  | no       | Ledger of meter readings and declared volumes (ledger block). See object-schemas.md § `production[]`.                                 |
 | `operating_regime`   | `OperatingRegime[]`  | no       | Declared operating regimes, each in force from `effective_from` (mutable record block). See object-schemas.md § `operating_regime[]`. |
@@ -664,7 +664,7 @@ The well's current status is the `status` of the `status_change` entry with the 
 | `as_built_drawing`   | Perfil construtivo as-built                 | Root                                  |
 | `registry_record`    | Ficha cadastral (SIAGAS, CNARH)             | Root                                  |
 | `photo`              | Fotografia                                  | Any                                   |
-| `permit_document`    | Portaria / certificado de outorga           | `permits`                             |
+| `permit_document`    | Portaria / licença                          | `permits`                             |
 | `condition_evidence` | Comprovante de cumprimento de condicionante | `permits[].conditions[].fulfillments` |
 | `pump_curve`         | Curva da bomba                              | `pump_installations`                  |
 | `field_sheet`        | Planilha de campo                           | `hydrodynamic_events`                 |
