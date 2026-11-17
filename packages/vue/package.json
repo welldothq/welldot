@@ -1,6 +1,6 @@
 {
   "name": "@welldot/vue",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Vue 3 + PrimeVue base components, theme and composables for .well water well editors",
   "license": "Apache-2.0",
   "keywords": [

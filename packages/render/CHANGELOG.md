@@ -1,5 +1,15 @@
 # @welldot/render
 
+## 0.4.5
+
+### Patch Changes
+
+- 449bb60: Handle pipe sections without a material (`.well` v2.5). The SIAGAS converter omits `type` when a casing or screen has no material, instead of writing an empty string. The renderer leaves the material out of construction labels and tooltips instead of printing "undefined". The PDF casing, reduction and screen tables show "—".
+- Updated dependencies [449bb60]
+- Updated dependencies [449bb60]
+  - @welldot/utils@0.5.4
+  - @welldot/core@0.8.0
+
 ## 0.4.4
 
 ### Patch Changes
