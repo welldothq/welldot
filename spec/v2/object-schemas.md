@@ -248,6 +248,8 @@ Concrete wellhead pad. **All dimensions are in meters**.
 | `thickness` | number | yes      | Thickness in meters.                                                                                                                                                |
 | `length`    | number | yes      | Length in meters.                                                                                                                                                   |
 
+When the well has no pad, `cement_pad` is omitted. A `cement_pad` whose members are all `0` or empty strings (`{ "type": "", "width": 0, "thickness": 0, "length": 0 }`, written by older editors to mean "no pad") is not a pad: producers MUST NOT write it, and readers treat it as absent _(since v2.5)_.
+
 > Note: A typical residential cement pad has dimensions on the order of `1.0` meter. Applications presenting these values in non-metric units (e.g. feet for US users) must convert `cement_pad` dimensions along with all other length fields.
 
 ---

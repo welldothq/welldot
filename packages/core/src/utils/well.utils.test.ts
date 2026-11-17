@@ -352,18 +352,13 @@ describe('serializeWell', () => {
       expect(parsed).not.toHaveProperty('cement_pad');
     });
 
-    it('includes cement_pad when it has zero-value properties (object is truthy)', () => {
+    it('omits the placeholder cement_pad (all members blank or zero)', () => {
       const w = {
         ...emptyWell(),
         cement_pad: { type: '', width: 0, thickness: 0, length: 0 },
       };
       const parsed = JSON.parse(serializeWell(w));
-      expect(parsed.cement_pad).toEqual({
-        type: '',
-        width: 0,
-        thickness: 0,
-        length: 0,
-      });
+      expect(parsed).not.toHaveProperty('cement_pad');
     });
   });
 
@@ -539,14 +534,9 @@ describe('deserializeWell', () => {
       expect(result!.caves).toEqual([]);
     });
 
-    it('uses default cement_pad when absent from v1 payload', () => {
+    it('leaves cement_pad absent when absent from v1 payload', () => {
       const result = deserializeWell(JSON.stringify({ version: 1 }));
-      expect(result!.cement_pad).toEqual({
-        type: '',
-        width: 0,
-        thickness: 0,
-        length: 0,
-      });
+      expect(result).not.toHaveProperty('cement_pad');
     });
 
     it('uses provided cement_pad from v1 payload', () => {
@@ -885,16 +875,11 @@ describe('deserializeWell', () => {
       expect(result!.cement_pad).toEqual(pad);
     });
 
-    it('uses default empty cement_pad when absent from legacy payload', () => {
+    it('leaves cement_pad absent when absent from legacy payload', () => {
       const result = deserializeWell(
         JSON.stringify({ bore_hole: [makeBoreHole()] }),
       );
-      expect(result!.cement_pad).toEqual({
-        type: '',
-        width: 0,
-        thickness: 0,
-        length: 0,
-      });
+      expect(result).not.toHaveProperty('cement_pad');
     });
   });
 

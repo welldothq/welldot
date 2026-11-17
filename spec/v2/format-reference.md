@@ -408,7 +408,7 @@ Non-canonical values SHOULD use the `x-` prefix (e.g. `x-radial_collector`).
 
 Shared by `well_case[].type`, `well_screen[].type`, `reduction[].type` and `pump_installations[].riser_material`. The last four values are lining materials, used mainly for the `well_case` of a `hand_dug` well _(since v2.4)_. An unlined interval has no `well_case` entry.
 
-All four fields are optional. When the source does not say which material a section is made of, the field is omitted _(since v2.5 for `well_case`, `well_screen` and `reduction`)_. Producers MUST NOT write an empty string or a placeholder value (`unknown`, `x-unspecified`, …) to mean an unknown material; an absent field already means unknown (§ Absent values). Consumers show an absent material as unknown and MUST NOT infer one from the diameter or from other sections.
+All four fields are optional. When the source does not say which material a section is made of, the field is omitted _(since v2.5 for `well_case`, `well_screen` and `reduction`)_. Producers MUST NOT write an empty string or a placeholder value (`unknown`, `x-unspecified`, …) to mean an unknown material; an absent field already means unknown (§ Absent values). Files written before v2.5 used `""` because the field was required, so readers treat an empty or whitespace-only `well_case`, `well_screen` or `reduction` `type` as absent, in files of any version. Consumers show an absent material as unknown and MUST NOT infer one from the diameter or from other sections.
 
 | Value                    | English                | Portuguese (BR)                          |
 | ------------------------ | ---------------------- | ---------------------------------------- |

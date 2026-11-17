@@ -1,6 +1,7 @@
 import { createDefu } from 'defu';
 import { z } from 'zod';
 import type { Well } from '../types/well.types';
+import { dropPlaceholders } from '../utils/placeholders.utils';
 import { isIanaTimeZone } from '../utils/timezone.utils';
 import { parseFormatVersion } from '../utils/version.utils';
 import {
@@ -874,7 +875,11 @@ function normalizeV1Fields(
 }
 
 export function parseWell(json: string): Well {
-  const raw = JSON.parse(json) as Record<string, unknown>;
+  const parsedJson: unknown = JSON.parse(json);
+  // A non-object (array, null, number) is left for the schema to reject.
+  const raw = (
+    isPlainObject(parsedJson) ? dropPlaceholders(parsedJson) : parsedJson
+  ) as Record<string, unknown>;
 
   if (raw.version === undefined) {
     // version absent — normalize to v2

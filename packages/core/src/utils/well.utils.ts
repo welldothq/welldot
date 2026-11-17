@@ -11,6 +11,7 @@ import {
   WellVisibility,
 } from '../types/well.types';
 import { WellSchema, mergeWell } from '../validators/well.validators';
+import { dropPlaceholders } from './placeholders.utils';
 import { WELL_FORMAT_VERSION, parseFormatVersion } from './version.utils';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -91,7 +92,6 @@ const EMPTY_WELL: Well = {
   well_screen: [],
   surface_case: [],
   hole_fill: [],
-  cement_pad: { type: '', width: 0, thickness: 0, length: 0 },
   lithology: [],
   fractures: [],
   caves: [],
@@ -382,10 +382,17 @@ function omitNulls(value: unknown): unknown {
  * members travel inside their objects. Legacy v1 keys (`lat`, `lng`,
  * `elevation`, …) are never written.
  *
+ * Always writes the current {@link WELL_FORMAT_VERSION}, whatever
+ * `well.version` holds. Placeholders are not written: a blank (empty or
+ * whitespace-only) `type` on `well_case`, `well_screen` and `reduction` items
+ * is omitted (an absent material means unknown), and so is a `cement_pad`
+ * whose members are all blank or zero.
+ *
  * @param well - The well profile to serialize.
  * @returns A JSON string containing the versioned well payload.
  */
 export function serializeWell(well: Well): string {
+  well = dropPlaceholders(well as unknown as RawJSON) as unknown as Well;
   const payload: Record<string, unknown> = {
     version: WELL_FORMAT_VERSION,
     ...(well['@context'] !== undefined && { '@context': well['@context'] }),
@@ -613,6 +620,14 @@ export function redactWell(
  * - Legacy `diam_pol` inch diameters → `diameter` mm conversion
  * - Typo `bole_hole` → `bore_hole` compatibility
  * - v1→v2 normalizations: `fgdc_texture`, `screen_slot_mm`, `lat/lng/elevation → location`
+ * - Placeholders, in every version: a blank (empty or whitespace-only) `type`
+ *   on `well_case`, `well_screen` and `reduction` items is dropped (absent
+ *   means the material is unknown), and so is a `cement_pad` whose members
+ *   are all blank or zero
+ *
+ * A v2 file keeps its `version` as written (`2`, `"2.4"`, …), so the result
+ * tells which revision the file followed; {@link serializeWell} always writes
+ * the current version.
  *
  * @param jsonString - Raw JSON string to parse.
  * @returns A normalized {@link Well}, or `null` if the parsed data is empty.
@@ -630,6 +645,8 @@ export function deserializeWell(jsonString: string): Well | null {
   if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
     throw new Error('Invalid profile format');
   }
+
+  raw = dropPlaceholders(raw);
 
   if (raw.version !== undefined) {
     const parsed = parseFormatVersion(raw.version);
