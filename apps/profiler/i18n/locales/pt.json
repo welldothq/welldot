@@ -34,8 +34,8 @@
     }
   },
   "footer": {
-    "version": "welldot · v2.4",
-    "spec": ".well spec v2.4",
+    "version": "welldot · v2.5",
+    "spec": ".well spec v2.5",
     "docs": "Documentação",
     "license": "Aberto · Apache 2.0"
   },
@@ -248,7 +248,7 @@
     "headline1": "O",
     "headlineEm": "futuro",
     "headline2": ".",
-    "intro": "A v2.4 cobre perfis geológicos, construtivos e hidrodinâmicos — testes de bombeamento, análise de aquífero, séries contínuas de nível de dataloggers, instalações de bomba, hidrômetros, produção e regime de operação, licenças e suas condicionantes, qualidade da água, anexos gerais e histórico operacional. A especificação evolui de forma aberta, e estas são as lacunas já mapeadas para as próximas versões.",
+    "intro": "A v2.5 cobre perfis geológicos, construtivos e hidrodinâmicos — testes de bombeamento, análise de aquífero, séries contínuas de nível de dataloggers, instalações de bomba, hidrômetros, produção e regime de operação, licenças e suas condicionantes, qualidade da água, anexos gerais e histórico operacional. A especificação evolui de forma aberta, e estas são as lacunas já mapeadas para as próximas versões.",
     "props": [
       {
         "num": "§ 7.1",
