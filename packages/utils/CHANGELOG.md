@@ -1,5 +1,12 @@
 # @welldot/utils
 
+## 0.5.5
+
+### Patch Changes
+
+- Updated dependencies [9726621]
+  - @welldot/core@0.8.1
+
 ## 0.5.4
 
 ### Patch Changes
