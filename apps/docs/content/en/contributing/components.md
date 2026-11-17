@@ -221,7 +221,7 @@ Put a complete document in a `well` fence inside the component.
 
 ```well
 {
-  "version": "2.4",
+  "version": "2.5",
   "name": "Demo well, sandstone aquifer",
   "well_type": "tubular",
   "bore_hole": [
@@ -253,7 +253,7 @@ Put a complete document in a `well` fence inside the component.
 ````mdc
 ::well-preview
 ```well
-{ "version": "2.4", "name": "…", … }
+{ "version": "2.5", "name": "…", … }
 ```
 ::
 ````
@@ -266,7 +266,7 @@ When the source does not validate, the preview lists the errors with their paths
 
 ```json
 {
-  "version": "2.4",
+  "version": "2.5",
   "name": "Half-written well",
   "bore_hole": [{ "from": 0, "to": "sixty", "diameter": 254 }]
 }

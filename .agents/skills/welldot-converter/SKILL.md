@@ -95,8 +95,8 @@ See `README.md` next to this file for per-client setup.
 **Always consult the latest spec before extracting or validating data.** The `.well` format may
 evolve; anything in this SKILL.md is secondary to the live spec.
 
-This skill targets **spec version 2.4** — write `"version": "2.4"` (a string). welldot.org / `@welldot/core`
-do not accept `version: 1` files for new conversions, and `@welldot/core` up to 0.4.0 rejects `"2.4"` files.
+This skill targets **spec version 2.5** — write `"version": "2.5"` (a string). welldot.org / `@welldot/core`
+do not accept `version: 1` files for new conversions, and `@welldot/core` up to 0.4.0 rejects `"2.x"` files, and up to 0.7 rejects a pipe section without `type`.
 
 | Doc              | URL                                                          |
 | ---------------- | ------------------------------------------------------------ |
@@ -219,7 +219,8 @@ transcribe the report's own phrase verbatim, in its own language:
   (construction materials): pvc, geomechanical_pvc, carbon_steel, galvanized_steel, stainless_steel,
   fiberglass; lining materials of dug wells: brick, stone_masonry, precast_concrete,
   cast_in_place_concrete — never invent others (`steel`, `hdpe`, `wire_wound`); keep the report's phrase when it
-  carries more (standard, wall class)
+  carries more (standard, wall class). When the report gives no material for a section, OMIT `type`
+  (optional since v2.5) — never write `""`, `unknown` or an `x-` placeholder, and never guess one
 - `well_screen[].slot_type` (screen design, since v2.3): continuous_slot (espiralado / Johnson /
   wire-wound), slotted (ranhurado), bridge_slot (tipo ponte), louver (veneziana), perforated (perfurado),
   nold (filtro tipo Nold).
@@ -450,7 +451,7 @@ debris, or partial backfill reduced the depth; SIAGAS-style records with a separ
 Validate the output with the welldot MCP `validate_well` tool when it is available
 (`https://docs.welldot.org/mcp`); it runs the same `parseWell` check as `@welldot/core`.
 
-1. `"version": "2.4"` present (a string), and no optional field written as `null`
+1. `"version": "2.5"` present (a string), and no optional field written as `null`
 2. All required fields present per object type (per spec from Step 1)
 3. Depth consistency: `from < to` for all interval objects
 4. Diameter sanity: boreholes 100–600 mm typical; casings smaller than borehole

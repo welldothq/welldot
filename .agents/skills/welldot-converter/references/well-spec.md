@@ -86,7 +86,7 @@ operational and water quality blocks. A complete example and common `aquifer_uni
 
 ```json
 {
-  "version": "2.4",
+  "version": "2.5",
   "well_type": "tubular",
   "well_purpose": ["production"],
   "name": "...",
@@ -116,7 +116,7 @@ operational and water quality blocks. A complete example and common `aquifer_uni
 }
 ```
 
-`version` is the string `"M.m"` (`"2.4"`), never a number. `properties.timezone` (v2.4, optional) is the IANA
+`version` is the string `"M.m"` (`"2.5"`), never a number. `properties.timezone` (v2.4, optional) is the IANA
 zone of the well site (e.g. `America/Belem`, `America/Sao_Paulo`); set it from the well's state when the
 report gives a location, and always when `permits` carry condition fulfillments. **Never write `null`** in
 an optional field: omit it (a v2.4 file with `null` is malformed).
@@ -181,11 +181,11 @@ canonical term just to have a canonical value.
 
 ### `well_case[]`
 
-| Field        | Type        | Required | Notes                                           |
-| ------------ | ----------- | -------- | ----------------------------------------------- |
-| `from`, `to` | number (m)  | yes      |                                                 |
-| `type`       | string      | yes      | **Tier 1 — construction materials.** See below. |
-| `diameter`   | number (mm) | yes      |                                                 |
+| Field        | Type        | Required | Notes                                                                                                |
+| ------------ | ----------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| `from`, `to` | number (m)  | yes      |                                                                                                      |
+| `type`       | string      | no       | **Tier 1 — construction materials.** See below. Omit when the report gives no material (since v2.5). |
+| `diameter`   | number (mm) | yes      |                                                                                                      |
 
 **Tier 1 field — construction materials (since v2.3).** Recommended values, shared by `well_case.type`,
 `reduction.type`, `well_screen.type` and `pump_installations[].riser_material`: `pvc`, `geomechanical_pvc`, `carbon_steel`, `galvanized_steel`, `stainless_steel`, `fiberglass`, and the lining materials `brick`, `stone_masonry`, `precast_concrete` (manilhas / anéis pré-moldados), `cast_in_place_concrete` (concreto moldado in loco), used mainly for the `well_case` of a `hand_dug` well.
@@ -201,14 +201,14 @@ enum values (`steel`, `hdpe`, `wire_wound`…). A screen construction ("espirala
 | ---------------------- | ----------- | -------- | ------------------------------------------------------------------- |
 | `from`, `to`           | number (m)  | yes      |                                                                     |
 | `diam_from`, `diam_to` | number (mm) | yes      |                                                                     |
-| `type`                 | string      | yes      | **Tier 1 — construction materials**, same rule as `well_case.type`. |
+| `type`                 | string      | no       | **Tier 1 — construction materials**, same rule as `well_case.type`. |
 
 ### `well_screen[]`
 
 | Field         | Type        | Required | Notes                                                                                                                      |
 | ------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `from`, `to`  | number (m)  | yes      |                                                                                                                            |
-| `type`        | string      | yes      | **Tier 1 — construction materials**, same rule as `well_case.type`. Material only — the screen design goes in `slot_type`. |
+| `type`        | string      | no       | **Tier 1 — construction materials**, same rule as `well_case.type`. Material only — the screen design goes in `slot_type`. |
 | `diameter`    | number (mm) | yes      |                                                                                                                            |
 | `screen_slot` | number (mm) | yes      | v2 name — **not** `screen_slot_mm`. Value and unit unchanged from v1, only the field name changed.                         |
 | `slot_type`   | string      | no       | **Tier 1 — screen design (since v2.3).** See below.                                                                        |
@@ -801,7 +801,7 @@ are in Bq/L.
 
 ```json
 {
-  "version": "2.4",
+  "version": "2.5",
   "well_type": "tubular",
   "name": "Poço PP-01",
   "well_driller": "Perfuradora XYZ",
