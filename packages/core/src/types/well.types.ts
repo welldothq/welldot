@@ -646,11 +646,11 @@ export type PermitHistoryEntry = {
 };
 
 /**
- * One legal instrument governing abstraction from the well (outorga,
- * dispensa, cadastro), from its request on. A mutable record: the attached
- * document is authoritative. The administrative `status` is stored; the
- * validity status and condition deadlines are derived. A renewal is a new
- * permit whose `supersedes` points to the previous one. Since v2.3.
+ * One legal instrument that authorizes, exempts or registers the well or its
+ * use (drilling, abstraction, dewatering), from its request on. A mutable
+ * record: the attached document is authoritative. The administrative
+ * `status` is stored; the validity status and condition deadlines are
+ * derived. A renewal is a new permit whose `supersedes` points to the previous one. Since v2.3.
  */
 export type Permit = {
   /** Unique within `permits`. UUID v4 recommended. */
@@ -1090,7 +1090,7 @@ export type Well = {
   attachments?: Attachment[];
   /** Pump installation history. Since v2.3. */
   pump_installations?: PumpInstallation[];
-  /** Legal instruments governing abstraction (outorgas). Since v2.3. */
+  /** Legal instruments that authorize, exempt or register the well or its use. Since v2.3. */
   permits?: Permit[];
   /** Totalizer (hidrômetro) installation history. Since v2.3. */
   meters?: Meter[];

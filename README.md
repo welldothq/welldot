@@ -68,7 +68,7 @@ The `.well` format is designed to serve three purposes:
 
 The format is human-readable JSON with full, descriptive key names. It is easy to inspect, diff, and version-control without tooling.
 
-**Example `.well` file (v2.4):**
+**Example `.well` file (v2.5):**
 
 ```json
 {
@@ -174,7 +174,7 @@ The format captures:
 | Aquifer analysis    | `aquifer_analysis[]`                                                                       | Interpreted transmissivity, specific capacity, storativity, Jacob coefficients                        |
 | Operational history | `history_logs[]`                                                                           | Timestamped log of maintenance, inspections, incidents and status changes                             |
 | Pump installations  | `pump_installations[]`                                                                     | Pump history with nameplate, intake depth, riser and electrical data (v2.3)                           |
-| Permits             | `permits[]`                                                                                | Outorgas with validity, granted flow and volumes, and conditions with derived deadlines (v2.3)        |
+| Permits             | `permits[]`                                                                                | Drilling, abstraction and other permits with validity, granted flow, volumes and conditions (v2.3)    |
 | Meters              | `meters[]`                                                                                 | Totalizer (hidrômetro) installation history: type, serial, nominal diameter, register capacity (v2.3) |
 | Production          | `production[]`                                                                             | Ledger of readings and volumes, editable, corrected via `corrects`; volumes derived (v2.3)            |
 | Operating regime    | `operating_regime[]`                                                                       | Declared flow rate, daily operating time and days per week, in force from a given instant (v2.3)      |
@@ -276,7 +276,7 @@ The following were delivered in `.well` v2.0 (shipped in `@welldot/core` v0.2.0)
 The v2.3 revision (shipped in `@welldot/core` v0.4.0) adds the operational blocks and water quality:
 
 - **Pump installations** — installation history with nameplate, intake depth, riser and electrical data; the current pump is drawn on the profile
-- **Permits** — outorgas with validity, granted flow, daily operating time and volumes, and conditions (condicionantes) whose deadlines are derived from ISO 8601 date durations and whose fulfillments are recorded on the condition; an administrative status (requested, suspended, revoked…) and an administrative history (filing, notifications, fees)
+- **Permits** — drilling and abstraction permits, exemptions and registrations, with validity, granted flow, daily operating time and volumes, and conditions (condicionantes) whose deadlines are derived from ISO 8601 date durations and whose fulfillments are recorded on the condition; an administrative status (requested, suspended, revoked…) and an administrative history (filing, notifications, fees)
 - **Meters and production** — totalizer installation history plus a production ledger of meter readings and declared volumes; volumes are derived with rollover handling and are never stored as totals
 - **Operating regime** — declared flow rate, daily operating time and days per week, each entry in force from `effective_from`
 - **Structured history logs** — `maintenance` entries reference the pump, meter or event they concern (`maintenance_type`, `pump_installation_id`, `meter_id`, `event_id`); the new `status_change` category records the well's operating status

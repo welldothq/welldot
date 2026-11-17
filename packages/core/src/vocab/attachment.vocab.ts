@@ -17,7 +17,7 @@ export const DOCUMENT_TYPES = [
   { value: 'photo', label: { en: 'Photo', pt: 'Fotografia' } },
   {
     value: 'permit_document',
-    label: { en: 'Permit document', pt: 'Portaria / outorga' },
+    label: { en: 'Permit document', pt: 'Portaria / licença' },
   },
   {
     value: 'condition_evidence',
