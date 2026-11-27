@@ -1,5 +1,5 @@
 /** The `.well` format version written by this library (`"M.m"`). */
-export const WELL_FORMAT_VERSION = '2.5' as const;
+export const WELL_FORMAT_VERSION = '2.6' as const;
 
 /** A parsed `.well` format version. `minor` is `undefined` for the integer forms (`1`, `2`). */
 export type FormatVersion = { major: number; minor: number | undefined };

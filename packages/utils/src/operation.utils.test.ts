@@ -18,6 +18,7 @@ import {
   getCurrentWellStatus,
   getCurrentWellStatusEntry,
   getEffectiveProduction,
+  getFlowReadings,
   getMeterIntervals,
   getOperationWarnings,
   getProductionByPeriod,
@@ -1298,5 +1299,102 @@ describe('getOperationWarnings — logger_series (v2.4)', () => {
     expect(codes(well, 'analysis_uses_retracted_event')).toEqual([
       { code: 'analysis_uses_retracted_event', ids: ['an-1', 'ls-1'] },
     ]);
+  });
+});
+
+// ─── flow_reading (v2.6) ──────────────────────────────────────────────────────
+
+const flow = (
+  id: string,
+  datetime: string,
+  flow_rate: number,
+  patch: Record<string, unknown> = {},
+): ProductionEntry =>
+  ({
+    id,
+    type: 'flow_reading',
+    datetime,
+    flow_rate,
+    ...patch,
+  }) as ProductionEntry;
+
+describe('getFlowReadings', () => {
+  it('returns only flow readings, oldest first, ties by sequence', () => {
+    const well = makeWell({
+      meters: [meter()],
+      production: [
+        reading('r1', '2025-02-01T00:00:00Z', 5),
+        flow('f2', '2025-03-01T00:00:00Z', 10),
+        flow('f1', '2025-02-01T00:00:00Z', 12),
+        flow('f4', '2025-04-01T00:00:00Z', 9, { sequence: 2 }),
+        flow('f3', '2025-04-01T00:00:00Z', 8, { sequence: 1 }),
+      ],
+    });
+    expect(getFlowReadings(well).map(f => f.id)).toEqual([
+      'f1',
+      'f2',
+      'f3',
+      'f4',
+    ]);
+  });
+
+  it('omits a retracted entry', () => {
+    const well = makeWell({
+      production: [
+        flow('f1', '2025-02-01T00:00:00Z', 12),
+        flow('f2', '2025-02-01T00:00:00Z', 11, { corrects: 'f1' }),
+      ],
+    });
+    expect(getFlowReadings(well).map(f => f.id)).toEqual(['f2']);
+  });
+
+  it('returns [] without production', () => {
+    expect(getFlowReadings(makeWell())).toEqual([]);
+  });
+
+  it('leaves volume derivations unchanged', () => {
+    const base = specExample();
+    const total = getProductionTotal(base);
+    const byMonth = getProductionByPeriod(base, 'month');
+    const withFlow = specExample();
+    withFlow.production!.push(
+      flow('fx', '2025-03-01T00:00:00Z', 50),
+      flow('fy', '2026-03-01T00:00:00Z', 60, { meter_id: 'hm-01' }),
+    );
+    expect(getProductionTotal(withFlow)).toEqual(total);
+    expect(getProductionByPeriod(withFlow, 'month')).toEqual(byMonth);
+  });
+});
+
+describe('getOperationWarnings — flow_reading', () => {
+  it('flags an unknown meter_id', () => {
+    const well = makeWell({
+      meters: [meter()],
+      production: [flow('f1', '2025-02-01T00:00:00Z', 5, { meter_id: 'nope' })],
+    });
+    const w = getOperationWarnings(well, TODAY).find(
+      x => x.code === 'reading_meter_unresolved',
+    );
+    expect(w?.ids).toEqual(['f1', 'nope']);
+  });
+
+  it('flags a reading before the meter was installed', () => {
+    const well = makeWell({
+      meters: [meter()],
+      production: [
+        flow('f1', '2024-02-01T00:00:00Z', 5, { meter_id: 'hm-01' }),
+      ],
+    });
+    const w = getOperationWarnings(well, TODAY).find(
+      x => x.code === 'reading_outside_installation',
+    );
+    expect(w?.ids).toEqual(['f1', 'hm-01']);
+  });
+
+  it('does not warn without meter_id', () => {
+    const well = makeWell({
+      production: [flow('f1', '2025-02-01T00:00:00Z', 5)],
+    });
+    expect(codes(well)).toEqual([]);
   });
 });

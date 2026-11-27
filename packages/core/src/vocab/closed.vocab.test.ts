@@ -135,6 +135,12 @@ describe('closed vocabulary labels', () => {
 
   it('works with getVocabLabel and keeps unknown values as-is', () => {
     expect(getVocabLabel(WELL_STATUSES, 'inactive', 'pt')).toBe('Paralisado');
+    expect(getVocabLabel(PRODUCTION_ENTRY_TYPES, 'flow_reading', 'en')).toBe(
+      'Flow reading',
+    );
+    expect(getVocabLabel(PRODUCTION_ENTRY_TYPES, 'flow_reading', 'pt')).toBe(
+      'Leitura de vazão',
+    );
     expect(getVocabLabel(RESULT_FRACTIONS, 'dissolved', 'en')).toBe(
       'Dissolved',
     );

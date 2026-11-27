@@ -13,6 +13,7 @@ export type {
   Constructive,
   EstimatedVolume,
   Filtration,
+  FlowReading,
   Fracture,
   Geologic,
   HistoryLogEntry,
@@ -72,6 +73,7 @@ export type {
 export type {
   DiameterUnits,
   FlowUnits,
+  HeadUnits,
   LengthUnits,
   PowerUnits,
   Units,
@@ -92,6 +94,7 @@ export {
   ConstantRateEventSchema,
   EstimatedVolumeSchema,
   FiltrationSchema,
+  FlowReadingSchema,
   FractureSchema,
   HistoryLogEntrySchema,
   HoleFillSchema,
@@ -322,6 +325,7 @@ export type { Well as Profile } from './types/well.types';
 
 // Units conversion utilities
 export {
+  METER_OF_WATER_KPA,
   concentrationFromCanonical,
   concentrationToCanonical,
   cubicFeetToCubicMeters,
@@ -337,6 +341,8 @@ export {
   feetToMeters,
   flowFromCanonical,
   flowToCanonical,
+  headFromCanonical,
+  headToCanonical,
   hoursToMinutes,
   hpToKilowatts,
   inchesToMm,

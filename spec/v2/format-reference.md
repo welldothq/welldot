@@ -1,14 +1,14 @@
-# `.well` File Format Specification — Version 2.5: Format Reference
+# `.well` File Format Specification — Version 2.6: Format Reference
 
 **See also:** [overview.md](./overview.md) · [object-schemas.md](./object-schemas.md) · [interoperability.md](./interoperability.md) · [water-quality.md](./water-quality.md)
 
 ## Overview
 
-This part of the `.well` v2.5 specification defines the file as a whole: the top-level structure and fields, how versions and deprecations work, datetime conventions, the recommended values of every open vocabulary, `well_id` and `location`, the canonical units and which unit each field uses, `profiles`, the `x-` extension rules, cross-reference and uniqueness rules, and precision fields. The objects inside each block are specified in [object-schemas.md](./object-schemas.md).
+This part of the `.well` v2.6 specification defines the file as a whole: the top-level structure and fields, how versions and deprecations work, datetime conventions, the recommended values of every open vocabulary, `well_id` and `location`, the canonical units and which unit each field uses, `profiles`, the `x-` extension rules, cross-reference and uniqueness rules, and precision fields. The objects inside each block are specified in [object-schemas.md](./object-schemas.md).
 
 ## Table of contents
 
-- [`.well` File Format Specification — Version 2.5: Format Reference](#well-file-format-specification--version-25-format-reference)
+- [`.well` File Format Specification — Version 2.6: Format Reference](#well-file-format-specification--version-26-format-reference)
   - [Overview](#overview)
   - [Table of contents](#table-of-contents)
   - [Top-level Structure](#top-level-structure)
@@ -95,7 +95,7 @@ This part of the `.well` v2.5 specification defines the file as a whole: the top
 
 ```json
 {
-  "version": "2.5",
+  "version": "2.6",
   "@context": "https://welldot.org/context/v2.jsonld",
 
   "well_id": [ ... ],
@@ -154,6 +154,7 @@ Readers accept `null` in `aquifer_analysis[].storativity` only in files whose `v
 | `2`     | Adds location, well_id (array), profiles, texture object, hydrodynamic_events, aquifer_analysis, history_logs, optional @context, \*\_precision fields, and extensibility conventions. Tightens unit semantics: all values are canonical SI, no per-file declaration. |
 | `"2.4"` | Version written as the string `"M.m"` (_since v2.4_). Read as v2; the integer `2` means v2.0 to v2.3.                                                                                                                                                                 |
 | `"2.5"` | Pipe material (`well_case[].type`, `well_screen[].type`, `reduction[].type`) becomes optional.                                                                                                                                                                        |
+| `"2.6"` | Adds the `flow_reading` production entry type: an instantaneous flow rate with an optional discharge head.                                                                                                                                                            |
 
 Minor revisions (`2.1`, `2.3`, …) are additive. Up to v2.3 they did not change the `version` integer: a v2.3 document declares `"version": 2`. A v2.0 parser reading a v2.1 document sees the v2.1 fields (`well_purpose`, `centralizers`) as unrecognized members without the `x-` prefix. Per § Extensibility it MUST preserve them and MUST NOT reject the file, and it SHOULD emit a warning.
 
@@ -238,7 +239,7 @@ Each minor revision of this spec MUST include a "Deprecations" subsection in its
 
 | Field               | Type              | Required | Description                                                                                                                                                                                                                                     |
 | ------------------- | ----------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `version`           | integer \| string | yes      | Format version. v2.5 files write `"2.5"`.                                                                                                                                                                                                       |
+| `version`           | integer \| string | yes      | Format version. v2.6 files write `"2.6"`.                                                                                                                                                                                                       |
 | `well_type`         | string            | yes      | Construction method of the well. See vocabulary below.                                                                                                                                                                                          |
 | `name`              | string            | no       | Well name or local identifier.                                                                                                                                                                                                                  |
 | `well_driller`      | string            | no       | Name of the drilling company or individual.                                                                                                                                                                                                     |
@@ -554,9 +555,9 @@ Non-canonical values SHOULD use the `x-` prefix.
 
 ## `production[]` — Recommended values _(since v2.3)_
 
-**`type`** — the entry discriminator: `meter_reading` (a totalizer register value) or `estimated_volume` (a volume estimated for a period, without a meter). Non-canonical entry types SHOULD use the `x-` prefix; parsers preserve them and exclude them from volume derivations.
+**`type`** — the entry discriminator: `meter_reading` (a totalizer register value), `estimated_volume` (a volume estimated for a period, without a meter) or `flow_reading` (an instantaneous flow rate, with an optional discharge head; excluded from volume derivations) _(since v2.6)_. Non-canonical entry types SHOULD use the `x-` prefix; parsers preserve them and exclude them from volume derivations.
 
-**`source`** (`meter_reading`):
+**`source`** (`meter_reading`, `flow_reading` _(since v2.6)_):
 
 | Value       | Portuguese (BR) |
 | ----------- | --------------- |
@@ -828,6 +829,7 @@ UCUM is the **Unified Code for Units of Measure**, the international machine-par
 - `location.elevation`, `location.properties.elevation_precision`
 - `pump_installations[].intake_depth`, `rated_head`, `electrical.cable_length` _(since v2.3)_
 - `water_samples[].sampling_point.depth`, `depth_precision`, `from`, `to` _(since v2.3)_
+- `production[].discharge_head`, `discharge_head_precision` (`flow_reading`) _(since v2.6)_
 
 **Millimeter (`mm`)** — all diameters and slot openings:
 
@@ -850,6 +852,7 @@ UCUM is the **Unified Code for Units of Measure**, the international machine-par
 - `permits[].flow_rate`, `permits[].monthly_schedule[].flow_rate` _(since v2.3)_
 - `operating_regime[].flow_rate` _(since v2.3)_
 - `water_samples[].purge.flow_rate` _(since v2.3)_
+- `production[].flow_rate`, `flow_rate_precision` (`flow_reading`) _(since v2.6)_
 
 **Minute (`min`)** — all elapsed times and durations:
 
@@ -945,7 +948,7 @@ An interchange format with configurable units multiplies the number of valid enc
 
 Producers receiving non-SI source data (imperial drilling reports, US gpm flow measurements, inch casing designations, slot-number screens) MUST convert to SI before writing. Consumers presenting the data to users in non-SI units MUST convert on read.
 
-Conversion utilities for the common transformations are provided in `@welldot/core` under the `units` module — m ↔ ft, mm ↔ in, m³/h ↔ L/s, m³/h ↔ US gpm, m²/s ↔ m²/d, DD ↔ DMS, slot-number ↔ mm, cv/hp ↔ kW, L / ft³ / US gal ↔ m³, µg/L ↔ mg/L, mS/m ↔ µS/cm, and similar.
+Conversion utilities for the common transformations are provided in `@welldot/core` under the `units` module — m ↔ ft, mm ↔ in, m³/h ↔ L/s, m³/h ↔ US gpm, kPa / bar / psi / kgf/cm² / ft ↔ m of head, m²/s ↔ m²/d, DD ↔ DMS, slot-number ↔ mm, cv/hp ↔ kW, L / ft³ / US gal ↔ m³, µg/L ↔ mg/L, mS/m ↔ µS/cm, and similar.
 
 ---
 
@@ -1011,7 +1014,7 @@ Top-level blocks not defined in this spec MUST use the `x-` prefix. For applicat
 
 ```json
 {
-  "version": "2.5",
+  "version": "2.6",
   "x-gas_monitoring": [ ... ],
   "x-geophysical_logs": [ ... ]
 }
@@ -1143,18 +1146,20 @@ The precision field name is the measurement field name suffixed with `_precision
 
 ### Supported precision fields
 
-| Measurement     | Precision field           | Defined on                            |
-| --------------- | ------------------------- | ------------------------------------- |
-| `lat`           | `lat_precision`           | `LocationProperties`                  |
-| `lng`           | `lng_precision`           | `LocationProperties`                  |
-| `elevation`     | `elevation_precision`     | `LocationProperties`                  |
-| `static_level`  | `static_level_precision`  | events, `AquiferAnalysis`             |
-| `dynamic_level` | `dynamic_level_precision` | `AquiferAnalysis`                     |
-| `depth`         | `depth_precision`         | `LevelReading`, `Fracture`            |
-| `rate`          | `rate_precision`          | `PumpingStep`                         |
-| `flow_rate`     | `flow_rate_precision`     | `AquiferAnalysis`                     |
-| `depth`         | `depth_precision`         | `SamplingPoint` _(since v2.3)_        |
-| `value`         | `value_precision`         | water quality `Result` _(since v2.3)_ |
+| Measurement      | Precision field            | Defined on                            |
+| ---------------- | -------------------------- | ------------------------------------- |
+| `lat`            | `lat_precision`            | `LocationProperties`                  |
+| `lng`            | `lng_precision`            | `LocationProperties`                  |
+| `elevation`      | `elevation_precision`      | `LocationProperties`                  |
+| `static_level`   | `static_level_precision`   | events, `AquiferAnalysis`             |
+| `dynamic_level`  | `dynamic_level_precision`  | `AquiferAnalysis`                     |
+| `depth`          | `depth_precision`          | `LevelReading`, `Fracture`            |
+| `rate`           | `rate_precision`           | `PumpingStep`                         |
+| `flow_rate`      | `flow_rate_precision`      | `AquiferAnalysis`                     |
+| `flow_rate`      | `flow_rate_precision`      | `FlowReading` _(since v2.6)_          |
+| `discharge_head` | `discharge_head_precision` | `FlowReading` _(since v2.6)_          |
+| `depth`          | `depth_precision`          | `SamplingPoint` _(since v2.3)_        |
+| `value`          | `value_precision`          | water quality `Result` _(since v2.3)_ |
 
 All precision fields are optional. When omitted, the measurement value carries no documented precision. Precision is the one-sigma standard deviation in the same unit as the measurement.
 
@@ -1166,4 +1171,4 @@ Laboratory reports usually give an expanded uncertainty U with a coverage factor
 
 ---
 
-_`.well` Format Specification v2.5_
+_`.well` Format Specification v2.6_

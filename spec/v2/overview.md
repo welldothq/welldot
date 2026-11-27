@@ -1,12 +1,12 @@
-# `.well` File Format Specification — Version 2.5: Overview
+# `.well` File Format Specification — Version 2.6: Overview
 
-**Version:** 2.5 **Extension:** `.well` **Encoding:** UTF-8 **Base format:** JSON **MIME type:** `application/vnd.well+json` **JSON Schema:** `https://welldot.org/schema/v2/well.schema.json` **JSON Schema draft:** 2020-12 **JSON-LD Context (optional):** `https://welldot.org/context/v2.jsonld` **Status:** v2.0 ratified — shipped in `@welldot/core` v0.2.0 · v2.1 shipped in `@welldot/core` v0.3.0 · v2.3 shipped in `@welldot/core` v0.4.0 · v2.4 shipped in `@welldot/core` v0.5.0 · v2.5 shipped in `@welldot/core` v0.8.0
+**Version:** 2.6 **Extension:** `.well` **Encoding:** UTF-8 **Base format:** JSON **MIME type:** `application/vnd.well+json` **JSON Schema:** `https://welldot.org/schema/v2/well.schema.json` **JSON Schema draft:** 2020-12 **JSON-LD Context (optional):** `https://welldot.org/context/v2.jsonld` **Status:** v2.0 ratified — shipped in `@welldot/core` v0.2.0 · v2.1 shipped in `@welldot/core` v0.3.0 · v2.3 shipped in `@welldot/core` v0.4.0 · v2.4 shipped in `@welldot/core` v0.5.0 · v2.5 shipped in `@welldot/core` v0.8.0 · v2.6 shipped in `@welldot/core` v0.9.0
 
 **See also:** [format-reference.md](./format-reference.md) · [object-schemas.md](./object-schemas.md) · [interoperability.md](./interoperability.md) · [water-quality.md](./water-quality.md)
 
 ## Overview
 
-The `.well` v2 specification is split into five documents. This one gives the context: what changed in each revision (v2.5, v2.4, v2.3, v2.1 and from v1), why the format exists, the design principles the other parts follow, and the known limitations. The other four are:
+The `.well` v2 specification is split into five documents. This one gives the context: what changed in each revision (v2.6, v2.5, v2.4, v2.3, v2.1 and from v1), why the format exists, the design principles the other parts follow, and the known limitations. The other four are:
 
 - [format-reference.md](./format-reference.md) — the top-level fields, versioning and deprecation, datetimes, recommended vocabularies, `well_id`, `location`, units, profiles, extensibility, cross-reference rules and precision.
 - [object-schemas.md](./object-schemas.md) — every object schema, the `hydrodynamic_events` ledger, `aquifer_analysis`, `history_logs`, the operational blocks (pumps, permits, meters, production, operating regime) and a complete example.
@@ -15,17 +15,50 @@ The `.well` v2 specification is split into five documents. This one gives the co
 
 ## Table of contents
 
-- [Changes in v2.5](#changes-in-v25)
+- [Changes in v2.6](#changes-in-v26)
   - [Deprecations](#deprecations)
-- [Changes in v2.4](#changes-in-v24)
+- [Changes in v2.5](#changes-in-v25)
   - [Deprecations](#deprecations-1)
+- [Changes in v2.4](#changes-in-v24)
+  - [Deprecations](#deprecations-2)
 - [Changes in v2.3](#changes-in-v23)
 - [Changes in v2.1](#changes-in-v21)
-  - [Deprecations](#deprecations-2)
+  - [Deprecations](#deprecations-3)
 - [Changes from v1](#changes-from-v1)
 - [Purpose](#purpose)
 - [Design Principles](#design-principles)
 - [Known Limitations of v2](#known-limitations-of-v2)
+
+---
+
+## Changes in v2.6
+
+v2.6 files write `"version": "2.6"`. The revision is additive: every valid v2.5 document stays valid when its `version` is rewritten. A parser of an earlier minor reads a `flow_reading` entry as an unknown production type: it keeps the entry and excludes it from volume derivations, as v2.3 already requires.
+
+```
+v2.6 additions:
+- flow_reading (production entry type): an instantaneous flow rate
+  observed at an instant (telemetry or SCADA snapshot, the flow shown
+  by an electromagnetic meter, a spot reading with a portable meter).
+  Requires datetime and flow_rate (m3/h, zero or greater); optional
+  flow_rate_precision, discharge_head, discharge_head_precision,
+  meter_id and source (manual, telemetry, x-...)
+- discharge_head: the gauge pressure at the wellhead discharge, stored
+  in meters of head like pump_installations[].rated_head (1 mca = 1 m);
+  it may be negative (vacuum at the gauge). Producers convert kPa, bar,
+  psi, kgf/cm2 and ft before writing
+- flow_reading entries are never part of a volume derivation;
+  integrating them over time is an estimate, written as an
+  estimated_volume with method flow_time
+- a flow_rate of 0 records that nothing was flowing at that instant;
+  it is not a status (a stopped well is still a status_change log)
+- warnings: a flow_reading meter_id that does not resolve, and a
+  flow_reading outside its meter's installation window
+```
+
+### Deprecations
+
+None.
 
 ---
 
@@ -336,4 +369,4 @@ The following are recognized limitations of this version, reserved for future ve
 
 ---
 
-_`.well` Format Specification v2.5_
+_`.well` Format Specification v2.6_

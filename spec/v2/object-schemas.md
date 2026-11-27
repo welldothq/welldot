@@ -1,10 +1,10 @@
-# `.well` File Format Specification — Version 2.5: Object Schemas
+# `.well` File Format Specification — Version 2.6: Object Schemas
 
 **See also:** [overview.md](./overview.md) · [format-reference.md](./format-reference.md) · [interoperability.md](./interoperability.md) · [water-quality.md](./water-quality.md)
 
 ## Overview
 
-This part of the `.well` v2.5 specification defines the records inside each top-level block: the common types (`Attachment`, date durations), the construction and geology objects, the `hydrodynamic_events` ledger and its supporting objects, `aquifer_analysis`, `history_logs`, and the operational blocks added in v2.3 (`pump_installations`, `permits`, `meters`, `production`, `operating_regime`). It ends with a complete example file. Water samples are specified in [water-quality.md](./water-quality.md); units and cross-reference rules in [format-reference.md](./format-reference.md).
+This part of the `.well` v2.6 specification defines the records inside each top-level block: the common types (`Attachment`, date durations), the construction and geology objects, the `hydrodynamic_events` ledger and its supporting objects, `aquifer_analysis`, `history_logs`, and the operational blocks added in v2.3 (`pump_installations`, `permits`, `meters`, `production`, `operating_regime`). It ends with a complete example file. Water samples are specified in [water-quality.md](./water-quality.md); units and cross-reference rules in [format-reference.md](./format-reference.md).
 
 ## Table of contents
 
@@ -71,6 +71,7 @@ This part of the `.well` v2.5 specification defines the records inside each top-
   - [Common fields](#common-fields)
   - [`meter_reading`](#meter_reading)
   - [`estimated_volume`](#estimated_volume)
+  - [`flow_reading` _(since v2.6)_](#flow_reading-since-v26)
   - [Volume derivation (normative)](#volume-derivation-normative)
   - [Precedence](#precedence)
   - [Derived values](#derived-values-1)
@@ -980,7 +981,7 @@ The register values at installation and removal are recorded as ordinary `meter_
 
 - `removed_at` earlier than or equal to `installed_at`.
 - More than one entry without `removed_at`.
-- A `production` reading for this meter outside its installation window.
+- A `production` reading for this meter (`meter_reading`, or `flow_reading` with a `meter_id` _(since v2.6)_) outside its installation window.
 
 ---
 
@@ -990,13 +991,13 @@ A ledger: the record of water produced by the well, which grows by appending. En
 
 ### Common fields
 
-| Field      | Type    | Required | Description                                                                            |
-| ---------- | ------- | -------- | -------------------------------------------------------------------------------------- |
-| `id`       | string  | yes      | Unique within `production`. UUID v4 recommended.                                       |
-| `type`     | string  | yes      | `meter_reading` or `estimated_volume`. Non-canonical types SHOULD use the `x-` prefix. |
-| `corrects` | string  | no       | `production[].id` of the entry this one retracts.                                      |
-| `sequence` | integer | no       | Tie-breaker for identical instants, lower first.                                       |
-| `notes`    | string  | no       |                                                                                        |
+| Field      | Type    | Required | Description                                                                                                           |
+| ---------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| `id`       | string  | yes      | Unique within `production`. UUID v4 recommended.                                                                      |
+| `type`     | string  | yes      | `meter_reading`, `estimated_volume` or `flow_reading` _(since v2.6)_. Non-canonical types SHOULD use the `x-` prefix. |
+| `corrects` | string  | no       | `production[].id` of the entry this one retracts.                                                                     |
+| `sequence` | integer | no       | Tie-breaker for identical instants, lower first.                                                                      |
+| `notes`    | string  | no       |                                                                                                                       |
 
 An entry of a known `type` that lacks its required fields is rejected. Entries of unknown (`x-`) types are preserved with their extra members and are excluded from volume derivations.
 
@@ -1022,6 +1023,24 @@ A volume produced in a period, estimated without a meter (e.g. before a meter wa
 | `volume`       | number           | yes      | m³   | Volume produced in the period.                                                           |
 | `method`       | string           | no       |      | Basis of the estimate: `flow_time`, `energy`, `user_statement`, `x-…`. Descriptive only. |
 
+### `flow_reading` _(since v2.6)_
+
+An instantaneous flow rate observed at an instant, with an optional discharge head: a telemetry or SCADA snapshot, the instantaneous flow shown by an electromagnetic meter, or a spot reading with a portable meter. It is an observation, not a volume.
+
+| Field                      | Type             | Required | Unit | Description                                                                                                  |
+| -------------------------- | ---------------- | -------- | ---- | ------------------------------------------------------------------------------------------------------------ |
+| `datetime`                 | string (instant) | yes      |      | RFC 3339 instant of the reading, with UTC offset.                                                            |
+| `flow_rate`                | number           | yes      | m³/h | Instantaneous flow rate. Zero or greater.                                                                    |
+| `flow_rate_precision`      | number           | no       | m³/h | One-sigma precision of `flow_rate`. Zero or greater.                                                         |
+| `discharge_head`           | number           | no       | m    | Gauge pressure at the wellhead discharge, expressed as head of water. May be negative (vacuum at the gauge). |
+| `discharge_head_precision` | number           | no       | m    | One-sigma precision of `discharge_head`. Zero or greater.                                                    |
+| `meter_id`                 | string           | no       |      | `meters[].id` of the meter that reported the flow, when it came from an installed meter.                     |
+| `source`                   | string           | no       |      | `manual`, `telemetry`, `x-…` (same vocabulary as `meter_reading.source`).                                    |
+
+`discharge_head` is the reading of the gauge on the discharge pipe at the wellhead, relative to the gauge's own height. "Discharge" is the pump-industry term for the outlet side, not a flow rate. It is stored in meters of head, the unit of `pump_installations[].rated_head`: 1 mca (meter of water column) = 1 m. Producers MUST convert readings in kPa, bar, psi, kgf/cm² or feet before writing: see [format-reference.md](format-reference.md) § Units.
+
+A `flow_rate` of `0` is an observation that nothing was flowing at that instant. It is not a status: a stopped well is still recorded with a `history_logs` `status_change`.
+
 ### Volume derivation (normative)
 
 Corrected entries are ignored throughout. Readings of each meter are ordered by instant, then `sequence`.
@@ -1031,6 +1050,8 @@ Corrected entries are ignored throughout. Readings of each meter are ordered by 
 3. If r₂ < r₁ and there is no `max_reading`, the interval is unknown and a warning is emitted. It is never negative.
 4. Volume is never computed across two different meters. When readings exist at the removal and installation instants, coverage is complete up to the removal and from the installation; the gap between them is unmetered and not counted. Without those readings, the volume between the two meters is unknown.
 5. Production before a meter's first reading is unknown, not zero.
+
+`flow_reading` entries are never part of a volume derivation; integrating them over time is an estimate, written as `estimated_volume` with `method: flow_time` _(since v2.6)_.
 
 ### Precedence
 
@@ -1043,7 +1064,9 @@ Volume per period (day, month, year), prorated linearly by time across period bo
 
 ### Validation (warnings, never rejection)
 
-- A reading outside its meter's installation window, or a `meter_id` that does not resolve.
+- A `meter_reading` outside its meter's installation window, or a `meter_id` that does not resolve.
+- A `flow_reading` whose `meter_id` does not resolve _(since v2.6)_.
+- A `flow_reading` outside the installation window of its `meter_id` _(since v2.6)_.
 - A decreasing reading on a meter without `max_reading` (unknown interval).
 - An `estimated_volume` overlapping metered time.
 - An `estimated_volume` whose `period_end` is not later than `period_start`.
@@ -1091,7 +1114,7 @@ A ledger of water samples, each with its field and laboratory results. The full 
 {
   "$schema": "https://welldot.org/schema/v2/well.schema.json",
   "@context": "https://welldot.org/context/v2.jsonld",
-  "version": "2.5",
+  "version": "2.6",
   "well_type": "tubular",
   "well_purpose": ["production"],
   "name": "Poço PP-01",
@@ -1484,6 +1507,15 @@ A ledger of water samples, each with its field and laboratory results. The full 
       "source": "manual",
       "corrects": "p-0004",
       "notes": "Corrige erro de digitação na leitura p-0004."
+    },
+    {
+      "id": "p-0006",
+      "type": "flow_reading",
+      "datetime": "2026-06-30T17:00:00-03:00",
+      "flow_rate": 296,
+      "discharge_head": 24.9,
+      "meter_id": "7c8d9e0f-a1b2-4c3d-8e4f-5a6b7c8d9e0f",
+      "source": "telemetry"
     }
   ],
 
@@ -1704,4 +1736,4 @@ A ledger of water samples, each with its field and laboratory results. The full 
 
 ---
 
-_`.well` Format Specification v2.5_
+_`.well` Format Specification v2.6_

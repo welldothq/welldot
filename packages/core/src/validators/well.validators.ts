@@ -559,12 +559,28 @@ export const EstimatedVolumeSchema = ProductionEntryBaseSchema.extend({
   method: z.string().optional(),
 });
 
-const PRODUCTION_TYPES = ['meter_reading', 'estimated_volume'];
+// Since v2.6.
+export const FlowReadingSchema = ProductionEntryBaseSchema.extend({
+  type: z.literal('flow_reading'),
+  datetime: rfc3339(),
+  flow_rate: z.number().nonnegative(),
+  flow_rate_precision: z.number().nonnegative().optional(),
+  discharge_head: z.number().optional(),
+  discharge_head_precision: z.number().nonnegative().optional(),
+  meter_id: z.string().optional(),
+  source: z.string().optional(),
+});
+
+const PRODUCTION_TYPES = ['meter_reading', 'estimated_volume', 'flow_reading'];
 
 // Unknown (`x-`) entry types fall back to the base schema with passthrough;
 // known types must satisfy their own schema.
 export const ProductionEntrySchema = z
-  .discriminatedUnion('type', [MeterReadingSchema, EstimatedVolumeSchema])
+  .discriminatedUnion('type', [
+    MeterReadingSchema,
+    EstimatedVolumeSchema,
+    FlowReadingSchema,
+  ])
   .or(
     ProductionEntryBaseSchema.passthrough().refine(
       e => !PRODUCTION_TYPES.includes(e.type),

@@ -61,7 +61,7 @@ describe('placeholders: blank pipe material and empty cement pad', () => {
       const out = serializeWell(deserializeWell(json)!);
       expect(out).not.toMatch(/"type":"\s*"/);
       expect(JSON.parse(out)).not.toHaveProperty('cement_pad');
-      expect(JSON.parse(out).version).toBe('2.5');
+      expect(JSON.parse(out).version).toBe('2.6');
     });
   });
 

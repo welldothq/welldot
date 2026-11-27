@@ -63,7 +63,7 @@ export const VOLUME_LIMIT_PERIODS = closedVocab<VolumeLimit['period']>()([
   { value: 'annual', label: { en: 'Annual', pt: 'Anual' } },
 ]);
 
-/** `production[].type` (since v2.3). */
+/** `production[].type` (since v2.3; `flow_reading` since v2.6). */
 export const PRODUCTION_ENTRY_TYPES = closedVocab<ProductionEntry['type']>()([
   {
     value: 'meter_reading',
@@ -72,6 +72,10 @@ export const PRODUCTION_ENTRY_TYPES = closedVocab<ProductionEntry['type']>()([
   {
     value: 'estimated_volume',
     label: { en: 'Estimated volume', pt: 'Volume estimado' },
+  },
+  {
+    value: 'flow_reading',
+    label: { en: 'Flow reading', pt: 'Leitura de vazão' },
   },
 ]);
 

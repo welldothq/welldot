@@ -1,4 +1,9 @@
-import type { FlowUnits, PowerUnits, VolumeUnits } from '../types/units.types';
+import type {
+  FlowUnits,
+  HeadUnits,
+  PowerUnits,
+  VolumeUnits,
+} from '../types/units.types';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -124,6 +129,31 @@ export function flowToCanonical(value: number, unit: FlowUnits): number {
   if (unit === 'L/s') return litersPerSecondToCubicMeterPerHour(value);
   if (unit === 'gpm') return usGallonsPerMinuteToCubicMeterPerHour(value);
   return value;
+}
+
+/** kPa per metre of water (conventional). */
+export const METER_OF_WATER_KPA = 9.806_65;
+const KPA_PER_PSI = 6.894_757_293_168;
+
+/** Metres of water per one `unit`. */
+const HEAD_METERS_PER_UNIT: Record<HeadUnits, number> = {
+  m: 1,
+  mca: 1,
+  ft: METERS_PER_FOOT,
+  kPa: 1 / METER_OF_WATER_KPA,
+  bar: 100 / METER_OF_WATER_KPA,
+  psi: KPA_PER_PSI / METER_OF_WATER_KPA,
+  'kgf/cm2': 10,
+};
+
+/** Converts a canonical head (metres of water) to `unit`. */
+export function headFromCanonical(m: number, unit: HeadUnits): number {
+  return m / HEAD_METERS_PER_UNIT[unit];
+}
+
+/** Converts a head expressed in `unit` back to canonical metres of water. */
+export function headToCanonical(value: number, unit: HeadUnits): number {
+  return value * HEAD_METERS_PER_UNIT[unit];
 }
 
 /** Converts a canonical power (kW) to `unit`. */

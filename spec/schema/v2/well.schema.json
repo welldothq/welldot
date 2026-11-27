@@ -1724,6 +1724,59 @@
                   "volume"
                 ],
                 "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/properties/production/items/anyOf/0/anyOf/0/properties/id"
+                  },
+                  "type": {
+                    "type": "string",
+                    "const": "flow_reading"
+                  },
+                  "corrects": {
+                    "$ref": "#/properties/production/items/anyOf/0/anyOf/0/properties/corrects"
+                  },
+                  "sequence": {
+                    "$ref": "#/properties/production/items/anyOf/0/anyOf/0/properties/sequence"
+                  },
+                  "notes": {
+                    "$ref": "#/properties/production/items/anyOf/0/anyOf/0/properties/notes"
+                  },
+                  "datetime": {
+                    "type": "string",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$"
+                  },
+                  "flow_rate": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "flow_rate_precision": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "discharge_head": {
+                    "type": "number"
+                  },
+                  "discharge_head_precision": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "meter_id": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "type",
+                  "datetime",
+                  "flow_rate"
+                ],
+                "additionalProperties": false
               }
             ]
           },

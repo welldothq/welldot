@@ -1,5 +1,6 @@
 import type {
   EstimatedVolume,
+  FlowReading,
   HistoryLogEntry,
   LoggerSeriesEvent,
   Meter,
@@ -37,6 +38,21 @@ function isMeterReading(entry: ProductionEntry): entry is MeterReading {
     typeof entry.reading === 'number' &&
     Number.isFinite(toTime(entry.datetime))
   );
+}
+
+/** Orders entries by instant, then `sequence` (lower first, absent first), then file order. */
+function sortByInstant<T extends { datetime?: string; sequence?: number }>(
+  entries: T[],
+): T[] {
+  return entries
+    .map((e, i) => ({ e, i, t: toTime(e.datetime) }))
+    .sort(
+      (a, b) =>
+        a.t - b.t ||
+        (a.e.sequence ?? -Infinity) - (b.e.sequence ?? -Infinity) ||
+        a.i - b.i,
+    )
+    .map(x => x.e);
 }
 
 function isEstimatedVolume(entry: ProductionEntry): entry is EstimatedVolume {
@@ -116,6 +132,20 @@ export function getEffectiveProduction(well: Well): ProductionEntry[] {
 }
 
 /**
+ * Returns the non-retracted `flow_reading` entries (.well v2.6), oldest first
+ * (ties by `sequence`, then file order). Flow readings are instantaneous
+ * observations and never enter a volume derivation.
+ */
+export function getFlowReadings(well: Well): FlowReading[] {
+  return sortByInstant(
+    getEffectiveProduction(well).filter(
+      (e): e is FlowReading =>
+        e.type === 'flow_reading' && Number.isFinite(toTime(e.datetime)),
+    ),
+  );
+}
+
+/**
  * Returns the meters currently installed: entries without `removed_at`,
  * newest `installed_at` first. Several open meters are allowed (secondary
  * meters).
@@ -179,15 +209,7 @@ export function getMeterIntervals(well: Well): MeterInterval[] {
   const intervals: MeterInterval[] = [];
   for (const [meterId, readings] of byMeter) {
     const maxReading = meters.get(meterId)?.max_reading;
-    const ordered = readings
-      .map((r, i) => ({ r, i, t: toTime(r.datetime) }))
-      .sort(
-        (a, b) =>
-          a.t - b.t ||
-          (a.r.sequence ?? -Infinity) - (b.r.sequence ?? -Infinity) ||
-          a.i - b.i,
-      )
-      .map(x => x.r);
+    const ordered = sortByInstant(readings);
     for (let k = 1; k < ordered.length; k++) {
       const r1 = ordered[k - 1]!;
       const r2 = ordered[k]!;
@@ -557,8 +579,9 @@ function hasField(log: HistoryLogEntry, field: keyof HistoryLogEntry): boolean {
  * - `duplicate_meter_id` — ids: [meter id].
  *
  * Production (effective entries only, except for ids and `corrects`):
- * - `reading_meter_unresolved` — ids: [production, meter_id].
- * - `reading_outside_installation` — reading before `installed_at` or after
+ * - `reading_meter_unresolved` — a `meter_reading`, or a `flow_reading` with
+ *   a `meter_id`. ids: [production, meter_id].
+ * - `reading_outside_installation` — same entries, before `installed_at` or after
  *   `removed_at` (equal is fine). ids: [production, meter].
  * - `reading_rollover_unknown` — r₂ < r₁ without `max_reading`. ids:
  *   [r₁ production, r₂ production, meter].
@@ -677,13 +700,19 @@ export function getOperationWarnings(
   );
 
   for (const p of getEffectiveProduction(well)) {
-    if (isMeterReading(p)) {
-      const meter = meterById.get(p.meter_id);
+    const metered: MeterReading | FlowReading | undefined = isMeterReading(p)
+      ? p
+      : p.type === 'flow_reading' && typeof p.meter_id === 'string'
+        ? (p as FlowReading)
+        : undefined;
+    if (metered) {
+      const meterId = metered.meter_id as string;
+      const meter = meterById.get(meterId);
       if (!meter) {
-        push('reading_meter_unresolved', [p.id, p.meter_id]);
+        push('reading_meter_unresolved', [p.id, meterId]);
         continue;
       }
-      const t = toTime(p.datetime);
+      const t = toTime(metered.datetime);
       if (
         t < toTime(meter.installed_at) ||
         (meter.removed_at !== undefined && t > toTime(meter.removed_at))
