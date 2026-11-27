@@ -55,3 +55,18 @@ describe('resolvePdfContext: profile format', () => {
     ).toEqual(['permits', 'lithology', 'caves', 'fractures']);
   });
 });
+
+describe('resolvePdfContext: head unit', () => {
+  it('follows the length unit when no head unit is set', () => {
+    expect(resolvePdfContext().units.head).toBe('m');
+    expect(resolvePdfContext({ units: { length: 'ft' } }).units.head).toBe(
+      'ft',
+    );
+  });
+
+  it('keeps an explicit head unit', () => {
+    expect(
+      resolvePdfContext({ units: { length: 'ft', head: 'bar' } }).units.head,
+    ).toBe('bar');
+  });
+});

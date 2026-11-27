@@ -52,7 +52,7 @@ function specFields(
     },
     p.rated_head != null && {
       label: fields.ratedHead,
-      value: fmt.formatLength(p.rated_head),
+      value: fmt.formatHead(p.rated_head, 2),
     },
     p.rated_power != null && {
       label: fields.ratedPower,

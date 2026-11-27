@@ -105,6 +105,7 @@ const UNIT_TYPES: readonly DisplayUnitType[] = [
   'flow',
   'power',
   'volume',
+  'head',
 ];
 
 /** Props RevoGrid hands to every editor (`EditorType`). */

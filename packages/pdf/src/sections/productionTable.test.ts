@@ -205,4 +205,84 @@ describe('buildProductionSection', () => {
     }
     expect(serialized).not.toContain('Invalid');
   });
+
+  describe('flow readings', () => {
+    const flow: ProductionEntry = {
+      id: 'f1',
+      type: 'flow_reading',
+      datetime: '2024-03-01T10:00:00-03:00',
+      flow_rate: 211,
+      discharge_head: 16.75,
+    };
+    const meterReading: ProductionEntry = {
+      id: 'r1',
+      type: 'meter_reading',
+      datetime: '2024-01-01T00:00:00-03:00',
+      meter_id: 'm1',
+      reading: 100,
+    };
+
+    it('lists the flow and head in the ledger', () => {
+      const serialized = JSON.stringify(
+        buildProductionSection(
+          baseWell({ meters: [meter], production: [meterReading, flow] }),
+          ctx,
+        ),
+      );
+      expect(serialized).toContain('211 m³/h');
+      expect(serialized).toContain('16.75 m"');
+      expect(serialized).toContain('Flow reading');
+      expect(serialized).toContain('dischargeHead');
+    });
+
+    it('formats the meter of a flow reading like a meter reading', () => {
+      const serialized = JSON.stringify(
+        buildProductionSection(
+          baseWell({
+            meters: [meter],
+            production: [{ ...flow, meter_id: 'm1' }],
+          }),
+          ctx,
+        ),
+      );
+      expect(serialized).toContain('S/N HM-1');
+    });
+
+    it('lists a newer flow reading before an older meter reading', () => {
+      const serialized = JSON.stringify(
+        buildProductionSection(
+          baseWell({ meters: [meter], production: [meterReading, flow] }),
+          ctx,
+        ),
+      );
+      expect(serialized.indexOf('Flow reading')).toBeGreaterThan(-1);
+      expect(serialized.indexOf('Flow reading')).toBeLessThan(
+        serialized.indexOf('Meter reading'),
+      );
+    });
+
+    it('shows the head in the chosen head unit', () => {
+      const mcaCtx = makeTestContext(
+        { units: { head: 'mca' } },
+        lastSegmentLabels,
+      );
+      const serialized = JSON.stringify(
+        buildProductionSection(baseWell({ production: [flow] }), mcaCtx),
+      );
+      expect(serialized).toContain('16.75 mca');
+    });
+
+    it('leaves the totals untouched', () => {
+      const totals = (production: ProductionEntry[]) =>
+        JSON.stringify(
+          (
+            buildProductionSection(
+              baseWell({ meters: [meter], production }),
+              ctx,
+            ) as { stack: { stack: unknown[] }[] }
+          ).stack[0],
+        );
+      expect(totals([meterReading, flow])).toBe(totals([meterReading]));
+    });
+  });
 });

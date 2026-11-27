@@ -1,3 +1,4 @@
+import { resolveHeadUnit } from '@welldot/utils';
 import { DEFAULT_BASE_URL, WELLDOT_BRANDING } from './configs/branding.configs';
 import { resolvePdfLabels } from './configs/labels.utils';
 import {
@@ -83,7 +84,7 @@ export function resolveBodyMargins(
   return [left, top + PAGE_CHROME.top, right, bottom + PAGE_CHROME.bottom];
 }
 
-/** Fills in default display units. Without `volume`, it follows the length system (`ft` → `ft3`). */
+/** Fills in default display units. Without `volume` or `head`, they follow the length system (`ft` → `ft3`, `ft`). */
 export function resolvePdfUnits(units: PdfUnits = {}): Required<PdfUnits> {
   const length = units.length ?? 'm';
   return {
@@ -92,6 +93,7 @@ export function resolvePdfUnits(units: PdfUnits = {}): Required<PdfUnits> {
     flow: units.flow ?? 'm3/h',
     power: units.power ?? 'kW',
     volume: units.volume ?? (length === 'ft' ? 'ft3' : 'm3'),
+    head: resolveHeadUnit({ length, head: units.head }),
   };
 }
 

@@ -1,5 +1,6 @@
 import type {
   EstimatedVolume,
+  FlowReading,
   MeterReading,
   ProductionEntry,
   Well,
@@ -35,6 +36,7 @@ import { packLabelValueRows } from './metadataTable';
  */
 function entryInstant(e: ProductionEntry): string | undefined {
   if (e.type === 'meter_reading') return (e as MeterReading).datetime;
+  if (e.type === 'flow_reading') return (e as FlowReading).datetime;
   if (e.type === 'estimated_volume') return (e as EstimatedVolume).period_end;
   const datetime = (e as { datetime?: unknown }).datetime;
   return typeof datetime === 'string' ? datetime : undefined;
@@ -148,21 +150,26 @@ function buildLedgerTable(
     ],
   ];
 
+  /** Meter label from the well's meters; the raw id when it doesn't resolve. */
+  const meterText = (meterId: string): string => {
+    const meter = well.meters?.find(m => m.id === meterId);
+    return meter
+      ? formatMeterLabel(meter, {
+          locale,
+          untypedLabel: labels.operation.meter.untyped,
+          dateFormat: dateFormats.date,
+        })
+      : meterId;
+  };
+
   entries.forEach(e => {
     const isRetracted = retracted.has(e.id);
     let details: string;
     let value: string;
     if (e.type === 'meter_reading') {
       const r = e as MeterReading;
-      const meter = well.meters?.find(m => m.id === r.meter_id);
       details = [
-        meter
-          ? formatMeterLabel(meter, {
-              locale,
-              untypedLabel: labels.operation.meter.untyped,
-              dateFormat: dateFormats.date,
-            })
-          : r.meter_id,
+        meterText(r.meter_id),
         r.source ? fmt.vocab(READING_SOURCES, r.source) : null,
       ]
         .filter(Boolean)
@@ -177,6 +184,18 @@ function buildLedgerTable(
         .filter(Boolean)
         .join(' · ');
       value = fmt.formatVolume(d.volume, 1);
+    } else if (e.type === 'flow_reading') {
+      const f = e as FlowReading;
+      details = [
+        f.discharge_head != null
+          ? `${fields.dischargeHead} ${fmt.formatHead(f.discharge_head)}`
+          : null,
+        f.meter_id ? meterText(f.meter_id) : null,
+        f.source ? fmt.vocab(READING_SOURCES, f.source) : null,
+      ]
+        .filter(Boolean)
+        .join(' · ');
+      value = fmt.formatFlow(f.flow_rate, 2, true);
     } else {
       details = '';
       value = '—';

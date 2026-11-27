@@ -228,7 +228,7 @@ The palette lives in plain CSS variables, so any app can rebrand `@welldot/vue` 
 app.use(
   createWelldot({
     locale: () => i18n.global.locale.value, // BCP-47 or 'en' | 'pt'
-    units: () => ({ length, diameter, flow, power, volume }),
+    units: () => ({ length, diameter, flow, power, volume, head }),
     coordinateFormat: () => ui.coordinateFormat, // 'DD' | 'DMS'
     components: { deleteButton: TrashButton }, // global part overrides
   }),
@@ -242,7 +242,7 @@ app.use(
 | `coordinateFormat` | `MaybeRefOrGetter<'DD' \| 'DMS'>`         | `'DD'`                                                                     | location inputs without a bound `format` |
 | `components`       | `MaybeRefOrGetter<WelldotComponents>`     | `{}`                                                                       | swappable parts (wrapped in `markRaw`)   |
 
-Every option takes a value, a ref or a getter. Getters keep the configuration reactive to any store or i18n instance without the package depending on either. Missing unit quantities fall back to SI. `.well` files always store SI; units only change what is shown and typed.
+Every option takes a value, a ref or a getter. Getters keep the configuration reactive to any store or i18n instance without the package depending on either. Missing unit quantities fall back to SI; a missing `head` follows `length` (m → m, ft → ft). `head` takes `m`, `mca`, `ft`, `kPa`, `bar`, `psi` or `kgf/cm2`. `.well` files always store SI; units only change what is shown and typed.
 
 `useWelldotConfig()` returns the active configuration (as getters) and falls back to the defaults when the plugin isn't installed.
 
@@ -383,11 +383,11 @@ PrimeVue `InputNumber` with the locale from the configuration (`en` → `en-US`,
 
 Number input bound to a canonical SI value, shown and edited in the configured display unit. `v-model: number | null`. Other attrs pass through to `WellInputNumber`; `maxFractionDigits` defaults to 4. Follows `unitType` / `unit` changes. A blur that leaves the shown value as it was emits nothing, so an untouched focus + blur never replaces the exact SI value with its rounded display (`1` m shown as `3.2808` ft stays `1`).
 
-| Prop                   | Type                                                      | Description                                  |
-| ---------------------- | --------------------------------------------------------- | -------------------------------------------- |
-| `unitType`             | `'length' \| 'diameter' \| 'flow' \| 'power' \| 'volume'` | Required                                     |
-| `unit`                 | unit of that quantity                                     | Overrides the configured unit for this input |
-| `min` / `max` / `step` | `number`                                                  | In SI; converted for display                 |
+| Prop                   | Type                                                                | Description                                  |
+| ---------------------- | ------------------------------------------------------------------- | -------------------------------------------- |
+| `unitType`             | `'length' \| 'diameter' \| 'flow' \| 'power' \| 'volume' \| 'head'` | Required                                     |
+| `unit`                 | unit of that quantity                                               | Overrides the configured unit for this input |
+| `min` / `max` / `step` | `number`                                                            | In SI; converted for display                 |
 
 ### `WellTextureSelect`
 
