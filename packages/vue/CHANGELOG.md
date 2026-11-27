@@ -1,5 +1,19 @@
 # @welldot/vue
 
+## 0.3.0
+
+### Minor Changes
+
+- 27b5ad9: Add an optional `head` display unit to `WelldotUnits` (`m`, `mca`, `ft`, `kPa`, `bar`, `psi`, `kgf/cm2`). It defaults to the length unit when unset, so existing configurations keep their output. `useWellUnits`, `WellUnitInput` and grid columns accept the `head` unit type, for pump rated head and the discharge head of flow readings.
+
+### Patch Changes
+
+- Updated dependencies [27b5ad9]
+- Updated dependencies [27b5ad9]
+  - @welldot/core@0.9.0
+  - @welldot/utils@0.6.0
+  - @welldot/render@0.4.8
+
 ## 0.2.3
 
 ### Patch Changes

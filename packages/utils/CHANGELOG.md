@@ -1,5 +1,16 @@
 # @welldot/utils
 
+## 0.6.0
+
+### Minor Changes
+
+- 27b5ad9: Support flow readings (`.well` v2.6). Adds `getFlowReadings`, which returns the flow readings of a well in time order, and `resolveHeadUnit` / `resolveHeadUnitLabel`, which resolve the display unit for heads: `units.head` when set, otherwise the length unit (`m` or `ft`). The meter warnings now also cover flow readings that carry a `meter_id`. Flow readings are never added to volume totals.
+
+### Patch Changes
+
+- Updated dependencies [27b5ad9]
+  - @welldot/core@0.9.0
+
 ## 0.5.6
 
 ### Patch Changes

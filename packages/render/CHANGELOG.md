@@ -1,5 +1,14 @@
 # @welldot/render
 
+## 0.4.8
+
+### Patch Changes
+
+- Updated dependencies [27b5ad9]
+- Updated dependencies [27b5ad9]
+  - @welldot/core@0.9.0
+  - @welldot/utils@0.6.0
+
 ## 0.4.7
 
 ### Patch Changes
