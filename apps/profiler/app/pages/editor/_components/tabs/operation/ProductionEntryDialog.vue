@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import type {
-  EstimatedVolume,
-  Meter,
-  MeterReading,
-  ProductionEntry,
-} from '@welldot/core';
+import type { Meter, ProductionEntry } from '@welldot/core';
 import { ESTIMATION_METHODS, READING_SOURCES } from '@welldot/core';
-import { formatISO } from 'date-fns';
 import { meterLabel } from '~/utils/operationVocab';
+import {
+  fromProductionForm,
+  isPeriodInvalid,
+  isProductionFormValid,
+  PRODUCTION_FORM_TYPES,
+  toProductionForm,
+} from './productionEntryForm';
 
 /**
  * The entry being corrected. `null` means "adding a new one". `production`
@@ -22,20 +23,14 @@ const emit = defineEmits<{ save: [entry: ProductionEntry] }>();
 const { t, locale } = useI18n();
 const { vocabOptions } = useVocab();
 const profileStore = useProfileStore();
-const { volumeUnit } = useUnitFormat();
+const { volumeUnit, flowUnit, headUnit } = useUnitFormat();
 
-type EntryType = 'meter_reading' | 'estimated_volume';
-
-const typeOptions = computed(() => [
-  {
-    value: 'meter_reading',
-    label: t('editor.operation.production.types.meter_reading'),
-  },
-  {
-    value: 'estimated_volume',
-    label: t('editor.operation.production.types.estimated_volume'),
-  },
-]);
+const typeOptions = computed(() =>
+  PRODUCTION_FORM_TYPES.map(value => ({
+    value,
+    label: t(`editor.operation.production.types.${value}`),
+  })),
+);
 
 const meters = computed<Meter[]>(() =>
   [...(profileStore.well.meters ?? [])].sort(
@@ -52,30 +47,14 @@ const meterOptions = computed(() =>
 const sourceOptions = computed(() => vocabOptions(READING_SOURCES));
 const methodOptions = computed(() => vocabOptions(ESTIMATION_METHODS));
 
-/** Local copy — nothing reaches the ledger until Save. */
-const form = reactive({
-  type: 'meter_reading' as EntryType,
-  datetime: null as Date | null,
-  meterId: null as string | null,
-  reading: null as number | null,
-  source: null as string | null,
-  periodStart: null as Date | null,
-  periodEnd: null as Date | null,
-  volume: null as number | null,
-  method: null as string | null,
-  notes: '',
-});
+/** Local copy — nothing reaches the ledger until Save. Numbers are canonical. */
+const form = reactive(toProductionForm(null, null));
 
-const periodInvalid = computed(
-  () =>
-    !!form.periodStart &&
-    !!form.periodEnd &&
-    form.periodEnd.getTime() <= form.periodStart.getTime(),
-);
+const periodInvalid = computed(() => isPeriodInvalid(form));
 
 /** Non-blocking: a reading outside the selected meter's installation window. */
 const readingOutsideInstallation = computed(() => {
-  if (form.type !== 'meter_reading' || !form.datetime || !form.meterId)
+  if (form.type === 'estimated_volume' || !form.datetime || !form.meterId)
     return false;
   const meter = meters.value.find(m => m.id === form.meterId);
   if (!meter) return false;
@@ -86,99 +65,28 @@ const readingOutsideInstallation = computed(() => {
   );
 });
 
-const isFormValid = computed(() =>
-  form.type === 'meter_reading'
-    ? !!form.datetime && !!form.meterId && form.reading != null
-    : !!form.periodStart &&
-      !!form.periodEnd &&
-      !periodInvalid.value &&
-      form.volume != null,
-);
+const isFormValid = computed(() => isProductionFormValid(form));
 
 // `immediate` so the dialog seeds when mounted already open (behind `v-if`).
 watch(
   visible,
   open => {
-    if (open) seedForm(model.value);
+    if (open)
+      Object.assign(
+        form,
+        toProductionForm(
+          model.value,
+          meters.value.find(m => !m.removed_at)?.id ?? null,
+        ),
+      );
   },
   { immediate: true },
 );
 
-function seedForm(e: ProductionEntry | null) {
-  const reading = e?.type === 'meter_reading' ? (e as MeterReading) : null;
-  const estimate =
-    e?.type === 'estimated_volume' ? (e as EstimatedVolume) : null;
-  form.type = estimate ? 'estimated_volume' : 'meter_reading';
-  form.datetime = reading ? new Date(reading.datetime) : new Date();
-  form.meterId =
-    reading?.meter_id ?? meters.value.find(m => !m.removed_at)?.id ?? null;
-  form.reading = reading?.reading ?? null;
-  form.source = reading?.source ?? null;
-  form.periodStart = estimate ? new Date(estimate.period_start) : null;
-  form.periodEnd = estimate ? new Date(estimate.period_end) : null;
-  form.volume = estimate?.volume ?? null;
-  form.method = estimate?.method ?? null;
-  form.notes = e?.notes ?? '';
-}
-
-// ─── Save ─────────────────────────────────────────────────────────────────────
-
-/** Drops `undefined` members so optional fields are absent, not `undefined`. */
-function compact<T extends object>(obj: T): T {
-  return Object.fromEntries(
-    Object.entries(obj).filter(([, v]) => v !== undefined),
-  ) as T;
-}
-
-const optionalText = (v: string | null) => v?.trim() || undefined;
-
-/** Fields owned by each entry type, stripped when the type changes. */
-const TYPE_FIELDS: Record<EntryType, string[]> = {
-  meter_reading: ['datetime', 'meter_id', 'reading', 'source'],
-  estimated_volume: ['period_start', 'period_end', 'volume', 'method'],
-};
-
-/**
- * Emits a NEW ledger entry. When correcting, the original is spread first so
- * members the form does not cover (e.g. `x-` members, `sequence`) carry over,
- * and `corrects` points to it.
- */
+/** Emits a NEW ledger entry (see `fromProductionForm`). */
 function save() {
   if (!isFormValid.value) return;
-
-  const base: Record<string, unknown> = { ...model.value };
-  const otherType: EntryType =
-    form.type === 'meter_reading' ? 'estimated_volume' : 'meter_reading';
-  for (const key of TYPE_FIELDS[otherType]) delete base[key];
-
-  // Instants keep the local offset: daily/monthly buckets use the date part
-  // of the instant as written.
-  const typed =
-    form.type === 'meter_reading'
-      ? {
-          type: 'meter_reading' as const,
-          datetime: formatISO(form.datetime!),
-          meter_id: form.meterId!,
-          reading: form.reading!,
-          source: optionalText(form.source),
-        }
-      : {
-          type: 'estimated_volume' as const,
-          period_start: formatISO(form.periodStart!),
-          period_end: formatISO(form.periodEnd!),
-          volume: form.volume!,
-          method: optionalText(form.method),
-        };
-
-  const next = compact({
-    ...base,
-    ...typed,
-    id: crypto.randomUUID(),
-    corrects: model.value?.id,
-    notes: optionalText(form.notes),
-  }) as ProductionEntry;
-
-  emit('save', next);
+  emit('save', fromProductionForm(form, model.value, crypto.randomUUID()));
   visible.value = false;
 }
 </script>
@@ -205,7 +113,7 @@ function save() {
         option-label="label"
         option-value="value"
         :allow-empty="false"
-        class="self-start"
+        class="self-start flex-wrap"
       />
 
       <!-- ── Meter reading ──────────────────────────────────────────────── -->
@@ -256,6 +164,87 @@ function save() {
               :suffix="` ${volumeUnit}`"
               class="w-full"
               :pt="{ pcInput: { root: 'w-full font-mono text-sm' } }"
+            />
+          </WellLabeledField>
+          <WellLabeledField
+            :label="t('editor.operation.production.fields.source')"
+          >
+            <WellComboSelect
+              v-model="form.source"
+              :options="sourceOptions"
+              option-label="label"
+              option-value="value"
+              :hint="t('editor.comboHint')"
+              show-clear
+              class="w-full"
+            />
+          </WellLabeledField>
+        </div>
+        <Message
+          v-if="readingOutsideInstallation"
+          severity="warn"
+          size="small"
+          variant="simple"
+        >
+          {{ t('editor.operation.warnings.reading_outside_installation') }}
+        </Message>
+      </template>
+
+      <!-- ── Flow reading ───────────────────────────────────────────────── -->
+      <template v-else-if="form.type === 'flow_reading'">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <WellLabeledField
+            :label="t('editor.operation.production.fields.datetime')"
+          >
+            <DatePicker
+              v-model="form.datetime"
+              show-time
+              hour-format="24"
+              date-format="dd/mm/yy"
+              class="w-full"
+              :pt="{ pcInput: { root: 'font-mono text-sm w-full' } }"
+            />
+          </WellLabeledField>
+          <WellLabeledField
+            :label="t('editor.operation.production.fields.flowRate')"
+          >
+            <WellUnitInput
+              v-model="form.flowRate"
+              unit-type="flow"
+              :min="0"
+              :max-fraction-digits="3"
+              :suffix="` ${flowUnit}`"
+              :invalid="form.flowRate == null"
+              class="w-full"
+              :pt="{ pcInput: { root: 'w-full font-mono text-sm' } }"
+            />
+          </WellLabeledField>
+          <WellLabeledField
+            :label="t('editor.operation.production.fields.dischargeHead')"
+            :info="t('editor.operation.production.fields.dischargeHeadInfo')"
+            :info-label="t('editor.fieldInfo')"
+          >
+            <WellUnitInput
+              v-model="form.dischargeHead"
+              unit-type="head"
+              :max-fraction-digits="3"
+              :suffix="` ${headUnit}`"
+              class="w-full"
+              :pt="{ pcInput: { root: 'w-full font-mono text-sm' } }"
+            />
+          </WellLabeledField>
+          <WellLabeledField
+            :label="t('editor.operation.production.fields.meter')"
+          >
+            <Select
+              v-model="form.meterId"
+              :options="meterOptions"
+              option-label="label"
+              option-value="value"
+              show-clear
+              :disabled="!meterOptions.length"
+              placeholder="—"
+              class="w-full"
             />
           </WellLabeledField>
           <WellLabeledField

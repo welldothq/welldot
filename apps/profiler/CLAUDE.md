@@ -74,7 +74,10 @@ app/                      ← srcDir
                              the browser's.
                              Operation (.well v2.3) = pump_installations, meters,
                              operating_regime and the production ledger (volumes shown
-                             in the volume display unit setting); Permits (.well v2.3)
+                             in the volume display unit setting; v2.6 flow readings show
+                             flow and discharge head in the head unit setting and never
+                             feed the totals; the entry dialog's form model, type switch
+                             and field stripping live in operation/productionEntryForm.ts); Permits (.well v2.3)
                              = permits (permits/: PermitsPanel cards; PermitDialog in
                              tabs — grant / ConditionEditor / PermitHistoryEditor;
                              ConditionEditor's ConditionScheduleDialog marks deadlines

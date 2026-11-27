@@ -14,7 +14,7 @@ import { EDITOR_TAB } from './navigate';
 const { t } = useI18n();
 const { vocabLabel } = useVocab();
 const profileStore = useProfileStore();
-const { formatLength, formatFlow, formatPower } = useUnitFormat();
+const { formatLength, formatFlow, formatHead, formatPower } = useUnitFormat();
 const { formatNumber } = useNumberFormat();
 
 const pump = computed(() => getCurrentPump(profileStore.well));
@@ -115,7 +115,7 @@ const regimeSummary = computed(() => {
         />
         <SummaryField
           :label="t('editor.summary.pump.ratedHead')"
-          :value="formatLength(pump.rated_head)"
+          :value="formatHead(pump.rated_head)"
           mono
         />
         <SummaryField

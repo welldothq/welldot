@@ -17,6 +17,11 @@ export function useUnitFormat() {
     unit: flowUnit,
   } = useUnitDisplay('flow');
   const {
+    toDisplay: headToDisplay,
+    toCanonical: headToCanonical,
+    unit: headUnit,
+  } = useUnitDisplay('head');
+  const {
     toDisplay: powerToDisplay,
     toCanonical: powerToCanonical,
     unit: powerUnit,
@@ -76,6 +81,18 @@ export function useUnitFormat() {
     });
   }
 
+  /** Head (`rated_head`, `discharge_head`), canonically m of water, in the head display unit. */
+  function formatHead(
+    value: number | null | undefined,
+    fractionDigits = 2,
+  ): string {
+    if (value == null) return '—';
+    return formatNumber(headToDisplay(value), {
+      maximumFractionDigits: fractionDigits,
+      suffix: headUnit.value,
+    });
+  }
+
   function formatPower(
     value: number | null | undefined,
     fractionDigits = 2,
@@ -121,14 +138,18 @@ export function useUnitFormat() {
     toDiameter: diamToDisplay,
     toCanonicalDiameter: diamToCanonical,
     formatFlow,
+    formatHead,
     formatPower,
     formatSpecificCapacity,
     flowUnit,
+    headUnit,
     powerUnit,
     volumeUnit,
     specificCapacityUnit,
     toFlow: flowToDisplay,
     toCanonicalFlow: flowToCanonical,
+    toHead: headToDisplay,
+    toCanonicalHead: headToCanonical,
     toPower: powerToDisplay,
     toCanonicalPower: powerToCanonical,
     toVolume: volumeToDisplay,

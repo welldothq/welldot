@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type {
   EstimatedVolume,
+  FlowReading,
   MeterReading,
   Permit,
   ProductionEntry,
@@ -27,7 +28,7 @@ const { t, locale } = useI18n();
 const { vocabLabel } = useVocab();
 const confirm = useConfirm();
 const profileStore = useProfileStore();
-const { formatVolume } = useUnitFormat();
+const { formatVolume, formatFlow, formatHead } = useUnitFormat();
 const { formatNumber } = useNumberFormat();
 
 const PRODUCTION_WARNING_CODES: readonly OperationWarningCode[] = [
@@ -45,9 +46,16 @@ const PRODUCTION_WARNING_CODES: readonly OperationWarningCode[] = [
 
 /** Instant an entry is filed under: the reading time or the period end. */
 function entryInstant(e: ProductionEntry): string {
-  return e.type === 'meter_reading'
-    ? (e as MeterReading).datetime
-    : (e as EstimatedVolume).period_end;
+  return e.type === 'estimated_volume'
+    ? (e as EstimatedVolume).period_end
+    : (e as MeterReading | FlowReading).datetime;
+}
+
+/** Meter an entry refers to: always on a meter reading, optional on a flow reading. */
+function entryMeterId(e: ProductionEntry): string | undefined {
+  return e.type === 'meter_reading' || e.type === 'flow_reading'
+    ? (e as MeterReading | FlowReading).meter_id
+    : undefined;
 }
 
 const retractedIds = computed(() =>
@@ -81,11 +89,7 @@ const entries = computed<ProductionEntry[]>(() => {
   let list = [...all];
   if (hideRetracted.value) list = list.filter(e => !retracted.has(e.id));
   if (meterFilter.value) {
-    list = list.filter(
-      e =>
-        e.type === 'meter_reading' &&
-        (e as MeterReading).meter_id === meterFilter.value,
-    );
+    list = list.filter(e => entryMeterId(e) === meterFilter.value);
   }
   // Newest first. At the same instant, the entry in force sits above the
   // ones it retracts, and later additions above earlier ones.
@@ -269,10 +273,10 @@ function meterName(meterId: string): string {
 }
 
 function details(e: ProductionEntry): string {
-  if (e.type === 'meter_reading') {
-    const r = e as MeterReading;
+  if (e.type === 'meter_reading' || e.type === 'flow_reading') {
+    const r = e as MeterReading | FlowReading;
     return [
-      meterName(r.meter_id),
+      r.meter_id ? meterName(r.meter_id) : null,
       r.source ? vocabLabel(READING_SOURCES, r.source) : null,
     ]
       .filter(Boolean)
@@ -287,14 +291,36 @@ function details(e: ProductionEntry): string {
     .join(' · ');
 }
 
+/** Flow readings show flow and discharge head; they never feed the totals. */
 function value(e: ProductionEntry): string {
-  return e.type === 'meter_reading'
-    ? formatVolume((e as MeterReading).reading, 3)
-    : formatVolume((e as EstimatedVolume).volume, 1);
+  switch (e.type) {
+    case 'meter_reading':
+      return formatVolume((e as MeterReading).reading, 3);
+    case 'estimated_volume':
+      return formatVolume((e as EstimatedVolume).volume, 1);
+    case 'flow_reading': {
+      const f = e as FlowReading;
+      return [
+        formatFlow(f.flow_rate),
+        f.discharge_head != null ? formatHead(f.discharge_head) : null,
+      ]
+        .filter(Boolean)
+        .join(' · ');
+    }
+    default:
+      return '';
+  }
 }
 
+const TYPE_SEVERITY: Partial<Record<string, 'info' | 'contrast'>> = {
+  meter_reading: 'info',
+  flow_reading: 'contrast',
+};
+
 function typeLabel(e: ProductionEntry): string {
-  return e.type === 'meter_reading' || e.type === 'estimated_volume'
+  return e.type === 'meter_reading' ||
+    e.type === 'estimated_volume' ||
+    e.type === 'flow_reading'
     ? t(`editor.operation.production.types.${e.type}`)
     : // Unknown (`x-…`) entry types are kept and shown raw.
       (e as { type: string }).type;
@@ -559,7 +585,7 @@ function actions(e: ProductionEntry): RecordAction[] {
           <template #tags>
             <Tag
               :value="typeLabel(e)"
-              :severity="e.type === 'meter_reading' ? 'info' : 'secondary'"
+              :severity="TYPE_SEVERITY[e.type] ?? 'secondary'"
               class="text-[11px]"
             />
             <Tag

@@ -21,7 +21,7 @@ const { t } = useI18n();
 const { vocabLabel } = useVocab();
 const confirm = useConfirm();
 const profileStore = useProfileStore();
-const { formatLength, formatDiameter, formatFlow, formatPower } =
+const { formatLength, formatDiameter, formatFlow, formatHead, formatPower } =
   useUnitFormat();
 
 function riserMaterial(p: PumpInstallation): string | null {
@@ -128,7 +128,7 @@ function specs(p: PumpInstallation) {
     },
     {
       label: t('editor.operation.pump.fields.ratedHead'),
-      value: p.rated_head != null ? formatLength(p.rated_head) : null,
+      value: p.rated_head != null ? formatHead(p.rated_head) : null,
     },
     {
       label: t('editor.operation.pump.fields.ratedPower'),

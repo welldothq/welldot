@@ -201,7 +201,7 @@ const incompleteStages = computed(() =>
 
 const incompleteJson = computed(() => {
   const oldReport = {
-    version: '2.5',
+    version: '2.6',
     name: 'Poço 03',
     well_type: 'tubular',
     well_depth: 84,
@@ -258,7 +258,7 @@ const incompleteRules = computed(() =>
 // stage only adds keys at the end, where the viewer scrolls on change.
 
 const EXT_BASE = {
-  version: '2.5',
+  version: '2.6',
   name: 'Poço 03',
   well_type: 'tubular',
   well_depth: 84,
@@ -432,7 +432,7 @@ const toolCards = computed(() =>
             class="flex flex-wrap gap-5.5 pt-5 border-t border-surface-200 font-mono text-[11px] text-content-500 tracking-[0.04em]"
           >
             <span
-              ><b class="text-content-0 font-medium">v2.5</b>
+              ><b class="text-content-0 font-medium">v2.6</b>
               {{ t('hero.badgeSpec') }}</span
             >
             <span

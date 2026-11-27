@@ -3,6 +3,7 @@ import { useDark } from '@vueuse/core';
 import type {
   DiameterUnits,
   FlowUnits,
+  HeadUnits,
   LengthUnits,
   PowerUnits,
   VolumeUnits,
@@ -35,6 +36,13 @@ const flowUnitOptions = (['m3/h', 'L/s', 'gpm'] as FlowUnits[]).map(value => ({
   value,
   label: resolveFlowUnitLabel(value),
 }));
+// `null` = heads follow the length unit.
+const headUnitOptions = computed(() => [
+  { value: null, label: t('editor.settings.units.headSameAsLength') },
+  ...(['m', 'mca', 'ft', 'kPa', 'bar', 'psi', 'kgf/cm2'] as HeadUnits[]).map(
+    value => ({ value, label: resolveHeadUnitLabel(value) }),
+  ),
+]);
 const powerUnitOptions: PowerUnits[] = ['kW', 'cv', 'hp'];
 const volumeUnitOptions = (['m3', 'L', 'ft3', 'gal'] as VolumeUnits[]).map(
   value => ({ value, label: resolveVolumeUnitLabel(value) }),
@@ -109,6 +117,19 @@ const togglePt = {
             option-label="label"
             option-value="value"
             :allow-empty="false"
+          />
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <span class="text-sm text-content-0">
+            {{ t('editor.settings.units.head') }}
+          </span>
+          <Select
+            v-model="uiStore.headUnit"
+            :options="headUnitOptions"
+            option-label="label"
+            option-value="value"
+            :placeholder="t('editor.settings.units.headSameAsLength')"
+            class="min-w-44"
           />
         </div>
         <div class="flex items-center justify-between gap-2">

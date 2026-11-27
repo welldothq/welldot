@@ -2,5 +2,6 @@
 export {
   resolveDiameterUnitLabel,
   resolveFlowUnitLabel,
+  resolveHeadUnitLabel,
   resolveVolumeUnitLabel,
 } from '@welldot/utils';
