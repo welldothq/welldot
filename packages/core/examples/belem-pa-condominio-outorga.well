@@ -1,6 +1,6 @@
 {
   "$schema": "https://welldot.org/schema/v2/well.schema.json",
-  "version": "2.5",
+  "version": "2.6",
   "x-welldot-example": {
     "illustrative": true,
     "based_on": "https://siagasweb.sgb.gov.br/layout/detalhe.php?ponto=1500013505"
@@ -544,6 +544,16 @@
       "source": "manual"
     },
     {
+      "id": "flw-001",
+      "type": "flow_reading",
+      "datetime": "2025-03-05T09:15:00-03:00",
+      "flow_rate": 7.9,
+      "flow_rate_precision": 0.2,
+      "discharge_head": 34.5,
+      "source": "manual",
+      "notes": "Medidor ultrassônico portátil na visita de leitura; manômetro na saída do poço."
+    },
+    {
       "id": "prd-012",
       "type": "meter_reading",
       "datetime": "2025-04-05T09:00:00-03:00",
@@ -590,6 +600,16 @@
       "meter_id": "hid-1",
       "reading": 66027,
       "source": "manual"
+    },
+    {
+      "id": "flw-002",
+      "type": "flow_reading",
+      "datetime": "2025-09-05T09:15:00-03:00",
+      "flow_rate": 7.6,
+      "flow_rate_precision": 0.2,
+      "discharge_head": 35.2,
+      "source": "manual",
+      "notes": "Medidor ultrassônico portátil na visita de leitura."
     },
     {
       "id": "prd-018",
@@ -686,6 +706,15 @@
       "meter_id": "hid-1",
       "reading": 117068,
       "source": "manual"
+    },
+    {
+      "id": "flw-003",
+      "type": "flow_reading",
+      "datetime": "2026-09-05T08:00:00-03:00",
+      "flow_rate": 7.4,
+      "discharge_head": 35.8,
+      "source": "telemetry",
+      "notes": "Leitura do módulo de monitoramento remoto instalado no quadro da bomba."
     }
   ],
   "operating_regime": [

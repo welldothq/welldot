@@ -24,6 +24,7 @@ export default defineNuxtPlugin(nuxtApp => {
         length: ui.lengthUnit,
         diameter: ui.diameterUnit,
         flow: ui.flowUnit,
+        head: ui.headUnit ?? undefined,
         power: ui.powerUnit,
         volume: ui.volumeUnit,
       }),

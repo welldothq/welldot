@@ -19,7 +19,8 @@ const emit = defineEmits<{ save: [installation: PumpInstallation] }>();
 
 const { t } = useI18n();
 const { vocabOptions } = useVocab();
-const { lengthUnit, diameterUnit, flowUnit, powerUnit } = useUnitFormat();
+const { lengthUnit, diameterUnit, flowUnit, headUnit, powerUnit } =
+  useUnitFormat();
 
 const typeOptions = computed(() => vocabOptions(PUMP_TYPES));
 const powerSourceOptions = computed(() => vocabOptions(POWER_SOURCES));
@@ -321,9 +322,9 @@ function save() {
         <WellLabeledField :label="t('editor.operation.pump.fields.ratedHead')">
           <WellUnitInput
             v-model="form.ratedHead"
-            unit-type="length"
+            unit-type="head"
             :min="0"
-            :suffix="` ${lengthUnit}`"
+            :suffix="` ${headUnit}`"
             class="w-full"
             :pt="{ pcInput: { root: 'w-full font-mono text-sm' } }"
           />

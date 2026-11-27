@@ -7,7 +7,7 @@ navigation:
 
 The specification is the standard that defines the `.well` format. It is written as plain Markdown in the [`spec/` folder](https://github.com/welldothq/welldot/tree/main/spec) of the repository and rendered on this site as it is, with heading anchors and links adapted for the web. Everything else on this site explains it; when a guide and the spec seem to disagree, the spec is right.
 
-The current revision is **2.5**.
+The current revision is **2.6**.
 
 ## The documents
 

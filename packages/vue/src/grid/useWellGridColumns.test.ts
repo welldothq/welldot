@@ -149,6 +149,19 @@ describe('useWellGridColumns — unit columns', () => {
     ]);
   });
 
+  it('suffixes a head column: follows length, or the configured head unit', () => {
+    const head: WellGridColumn[] = [
+      { prop: 'h', label: 'Head', unitType: 'head' },
+    ];
+    expect(column(build(head), 'h').name).toBe('Head (m)');
+    expect(column(build(head, { units: { length: 'ft' } }), 'h').name).toBe(
+      'Head (ft)',
+    );
+    expect(column(build(head, { units: { head: 'kPa' } }), 'h').name).toBe(
+      'Head (kPa)',
+    );
+  });
+
   it.each([
     ['en', 'Diameter (in.)'],
     ['pt', 'Diameter (")'],

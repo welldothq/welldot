@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import type { Attachment, Meter, MeterReading } from '@welldot/core';
+import type {
+  Attachment,
+  FlowReading,
+  Meter,
+  MeterReading,
+} from '@welldot/core';
 import { METER_TYPES } from '@welldot/core';
 import {
   getCurrentMeters,
@@ -101,8 +106,11 @@ function upsertMeter(m: Meter) {
 }
 
 function deleteMeter(id: string) {
+  // Meter readings always name a meter; flow readings may.
   const hasReadings = (profileStore.well.production ?? []).some(
-    e => e.type === 'meter_reading' && (e as MeterReading).meter_id === id,
+    e =>
+      (e.type === 'meter_reading' || e.type === 'flow_reading') &&
+      (e as MeterReading | FlowReading).meter_id === id,
   );
   confirm.require({
     icon: 'ph:warning-duotone',

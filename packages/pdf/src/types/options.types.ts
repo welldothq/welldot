@@ -1,6 +1,7 @@
 import type {
   DiameterUnits,
   FlowUnits,
+  HeadUnits,
   LanguageText,
   LengthUnits,
   PowerUnits,
@@ -92,6 +93,8 @@ export interface PdfUnits {
   power?: PowerUnits;
   /** Defaults to `ft3` when `length` is `ft`, else `m3`. */
   volume?: VolumeUnits;
+  /** Defaults to the length unit (`m` → `m`, `ft` → `ft`). Used for pump rated head and flow-reading discharge head. */
+  head?: HeadUnits;
 }
 
 // ---------------------------------------------------------------------------

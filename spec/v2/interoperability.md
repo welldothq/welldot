@@ -1,10 +1,10 @@
-# `.well` File Format Specification — Version 2.5: Interoperability
+# `.well` File Format Specification — Version 2.6: Interoperability
 
 **See also:** [overview.md](./overview.md) · [format-reference.md](./format-reference.md) · [object-schemas.md](./object-schemas.md) · [water-quality.md](./water-quality.md)
 
 ## Overview
 
-This part of the `.well` v2.5 specification covers how `.well` connects to other standards and tools: the reserved JSON-LD `@context` and its publication plan, how the format maps onto the OGC GroundWaterML 2 (GWML2) model, and validating files against the published JSON Schema.
+This part of the `.well` v2.6 specification covers how `.well` connects to other standards and tools: the reserved JSON-LD `@context` and its publication plan, how the format maps onto the OGC GroundWaterML 2 (GWML2) model, and validating files against the published JSON Schema.
 
 ## Table of contents
 
@@ -205,7 +205,7 @@ Files MAY include a `$schema` field referencing this URL:
 ```json
 {
   "$schema": "https://welldot.org/schema/v2/well.schema.json",
-  "version": "2.5",
+  "version": "2.6",
   ...
 }
 ```
@@ -214,4 +214,4 @@ The schema is generated from the Zod validators in `@welldot/core` to prevent dr
 
 ---
 
-_`.well` Format Specification v2.5_
+_`.well` Format Specification v2.6_

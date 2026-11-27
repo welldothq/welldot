@@ -86,7 +86,7 @@ operational and water quality blocks. A complete example and common `aquifer_uni
 
 ```json
 {
-  "version": "2.5",
+  "version": "2.6",
   "well_type": "tubular",
   "well_purpose": ["production"],
   "name": "...",
@@ -116,7 +116,7 @@ operational and water quality blocks. A complete example and common `aquifer_uni
 }
 ```
 
-`version` is the string `"M.m"` (`"2.5"`), never a number. `properties.timezone` (v2.4, optional) is the IANA
+`version` is the string `"M.m"` (`"2.6"`), never a number. `properties.timezone` (v2.4, optional) is the IANA
 zone of the well site (e.g. `America/Belem`, `America/Sao_Paulo`); set it from the well's state when the
 report gives a location, and always when `permits` carry condition fulfillments. **Never write `null`** in
 an optional field: omit it (a v2.4 file with `null` is malformed).
@@ -633,7 +633,8 @@ totals, no average flow.
 | `type`            | Fields                                                                                                                                                                                                                                   |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `meter_reading`   | `datetime` (instant, required), `meter_id` (a `meters[].id`, required), `reading` (register value in **m³**, required — meters reading in liters are converted `÷ 1000`), `source` (`manual`, `telemetry`).                              |
-| `declared_volume` | `period_start`, `period_end` (instants, required; end later than start), `volume` (m³, required), `method` (`reported` = as declared to a regulator, never added to totals; `estimated` = flow × time or similar; absent = `estimated`). |
+| `estimated_volume` | `period_start`, `period_end` (instants, required; end later than start), `volume` (m³, required), `method` (`flow_time`, `energy`, `user_statement`, `x-…`; descriptive only). |
+| `flow_reading` _(v2.6)_ | `datetime` (instant, required), `flow_rate` (m³/h, ≥ 0, required), `flow_rate_precision` (≥ 0), `discharge_head` (m of head, any sign; kPa ÷ 9.80665, kgf/cm² × 10, bar × 10.1972, psi × 0.70307, ft × 0.3048), `discharge_head_precision` (≥ 0), `meter_id` (a `meters[].id`), `source` (`manual`, `telemetry`, `x-…`). Never part of a volume derivation. |
 
 Applications derive volumes from consecutive readings of the same meter (with rollover via
 `max_reading`); metered time wins over `estimated` volumes.
@@ -801,7 +802,7 @@ are in Bq/L.
 
 ```json
 {
-  "version": "2.5",
+  "version": "2.6",
   "well_type": "tubular",
   "name": "Poço PP-01",
   "well_driller": "Perfuradora XYZ",

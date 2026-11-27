@@ -1,6 +1,7 @@
 import type {
   DiameterUnits,
   FlowUnits,
+  HeadUnits,
   LengthUnits,
   PowerUnits,
   VolumeUnits,
@@ -27,6 +28,8 @@ export interface WelldotUnits {
   flow: FlowUnits;
   power: PowerUnits;
   volume: VolumeUnits;
+  /** Head / pressure. Absent: follows `length` (m → m, ft → ft). */
+  head?: HeadUnits;
 }
 
 /**

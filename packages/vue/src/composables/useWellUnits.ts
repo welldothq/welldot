@@ -2,6 +2,8 @@ import {
   feetToMeters,
   flowFromCanonical,
   flowToCanonical,
+  headFromCanonical,
+  headToCanonical,
   inchesToMm,
   metersToFeet,
   mmToInches,
@@ -10,7 +12,12 @@ import {
   volumeFromCanonical,
   volumeToCanonical,
 } from '@welldot/core';
-import { resolveFlowUnitLabel, resolveVolumeUnitLabel } from '@welldot/utils';
+import {
+  resolveFlowUnitLabel,
+  resolveHeadUnit,
+  resolveHeadUnitLabel,
+  resolveVolumeUnitLabel,
+} from '@welldot/utils';
 import {
   computed,
   toValue,
@@ -24,7 +31,7 @@ export type DisplayUnitType = keyof WelldotUnits;
 /**
  * Canonical ↔ display conversion for one quantity, following the configured
  * display unit (`createWelldot({ units })`). `.well` files always store SI
- * (m, mm, m³/h, kW, m³); this only changes what the UI shows and accepts.
+ * (m, mm, m³/h, kW, m³, m of head); this only changes what the UI shows and accepts.
  *
  * `unitType` is a value, ref or getter, so a component can pass
  * `() => props.unitType` and follow prop changes. `unitOverride` (a value,
@@ -35,7 +42,7 @@ export function useWellUnits<T extends DisplayUnitType>(
   unitType: MaybeRefOrGetter<T>,
   unitOverride?: MaybeRefOrGetter<WelldotUnits[T] | null | undefined>,
 ): {
-  /** Raw unit for length/diameter/power (`m`, `inches`, `kW`…); display label for flow/volume (`m³/h`, `m³`). */
+  /** Raw unit for length/diameter/power (`m`, `inches`, `kW`…); display label for flow/volume/head (`m³/h`, `m³`, `kPa`). */
   unit: ComputedRef<string>;
   toDisplay: (canonical: number) => number;
   toCanonical: (display: number) => number;
@@ -55,6 +62,7 @@ export function useWellUnits<T extends DisplayUnitType>(
     if (kind === 'length') return u.length;
     if (kind === 'diameter') return u.diameter;
     if (kind === 'flow') return resolveFlowUnitLabel(u.flow);
+    if (kind === 'head') return resolveHeadUnitLabel(resolveHeadUnit(u));
     if (kind === 'volume') return resolveVolumeUnitLabel(u.volume);
     return u.power;
   });
@@ -68,6 +76,8 @@ export function useWellUnits<T extends DisplayUnitType>(
         return u.diameter === 'inches' ? mmToInches(canonical) : canonical;
       case 'flow':
         return flowFromCanonical(canonical, u.flow);
+      case 'head':
+        return headFromCanonical(canonical, resolveHeadUnit(u));
       case 'power':
         return powerFromCanonical(canonical, u.power);
       default:
@@ -84,6 +94,8 @@ export function useWellUnits<T extends DisplayUnitType>(
         return u.diameter === 'inches' ? inchesToMm(display) : display;
       case 'flow':
         return flowToCanonical(display, u.flow);
+      case 'head':
+        return headToCanonical(display, resolveHeadUnit(u));
       case 'power':
         return powerToCanonical(display, u.power);
       default:

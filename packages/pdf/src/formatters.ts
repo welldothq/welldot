@@ -3,6 +3,7 @@ import {
   flowFromCanonical,
   formatVocabList,
   getVocabLabel,
+  headFromCanonical,
   metersToFeet,
   mmToInches,
   powerFromCanonical,
@@ -12,6 +13,7 @@ import {
   formatNumber,
   resolveDiameterUnitLabel,
   resolveFlowUnitLabel,
+  resolveHeadUnitLabel,
   resolveVolumeUnitLabel,
 } from '@welldot/utils';
 import type { PdfContext } from './types/options.types';
@@ -33,7 +35,14 @@ export interface PdfFormatters {
     _volumeM3: number | null | undefined,
     _fractionDigits?: number,
   ): string;
+  /** With `trim`, `fractionDigits` is a maximum (`211 m³/h`) instead of a fixed count. */
   formatFlow(
+    _value: number | null | undefined,
+    _fractionDigits?: number,
+    _trim?: boolean,
+  ): string;
+  /** Head (stored in m) in the display head unit, up to 2 decimals unless `fractionDigits` fixes them. */
+  formatHead(
     _value: number | null | undefined,
     _fractionDigits?: number,
   ): string;
@@ -69,6 +78,7 @@ export function createPdfFormatters(
     flow: flowUnit,
     power: powerUnit,
     volume: volumeUnit,
+    head: headUnit,
   } = ctx.units;
   const volumeUnitLabel = resolveVolumeUnitLabel(volumeUnit);
 
@@ -123,11 +133,27 @@ export function createPdfFormatters(
   function formatFlow(
     value: number | null | undefined,
     fractionDigits = 1,
+    trim = false,
   ): string {
     if (value == null) return '—';
     return formatNumber(flowFromCanonical(value, flowUnit), {
-      fractionDigits,
+      ...(trim
+        ? { maximumFractionDigits: fractionDigits }
+        : { fractionDigits }),
       suffix: resolveFlowUnitLabel(flowUnit),
+    });
+  }
+
+  function formatHead(
+    value: number | null | undefined,
+    fractionDigits?: number,
+  ): string {
+    if (value == null) return '—';
+    return formatNumber(headFromCanonical(value, headUnit), {
+      ...(fractionDigits === undefined
+        ? { maximumFractionDigits: 2 }
+        : { fractionDigits }),
+      suffix: resolveHeadUnitLabel(headUnit),
     });
   }
 
@@ -152,6 +178,7 @@ export function createPdfFormatters(
     formatDiameter,
     formatVolume,
     formatFlow,
+    formatHead,
     formatPower,
     lengthUnit,
     diameterUnit,

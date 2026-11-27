@@ -322,6 +322,10 @@ export const PDF_LABELS = {
           en: 'How the volume was estimated. Estimated volumes count only where no meter reading covers the period.',
           pt: 'Como o volume foi estimado. Volumes estimados só contam onde nenhuma leitura de hidrômetro cobre o período.',
         },
+        dischargeHead: {
+          en: 'Discharge head',
+          pt: 'Pressão na descarga',
+        },
         notes: { en: 'Notes', pt: 'Observações' },
       },
       ledger: { en: 'Ledger', pt: 'Registro' },

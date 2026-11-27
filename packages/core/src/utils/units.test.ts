@@ -13,6 +13,8 @@ import {
   feetToMeters,
   flowFromCanonical,
   flowToCanonical,
+  headFromCanonical,
+  headToCanonical,
   hoursToMinutes,
   hpToKilowatts,
   inchesToMm,
@@ -366,5 +368,35 @@ describe('water quality units', () => {
   it('divides expanded uncertainty by the coverage factor', () => {
     expect(expandedToStandardUncertainty(0.4)).toBeCloseTo(0.2);
     expect(expandedToStandardUncertainty(0.3, 3)).toBeCloseTo(0.1);
+  });
+});
+
+describe('head', () => {
+  it('treats m and mca as canonical', () => {
+    expect(headToCanonical(16.75, 'mca')).toBe(16.75);
+    expect(headToCanonical(16.75, 'm')).toBe(16.75);
+  });
+  it('converts pressure and length units to metres of water', () => {
+    expect(headToCanonical(98.0665, 'kPa')).toBeCloseTo(10);
+    expect(headToCanonical(1, 'kgf/cm2')).toBe(10);
+    expect(headToCanonical(1, 'bar')).toBeCloseTo(10.19716, 5);
+    expect(headToCanonical(1, 'psi')).toBeCloseTo(0.70307, 5);
+    expect(headToCanonical(10, 'ft')).toBeCloseTo(3.048);
+  });
+  it('round-trips every unit', () => {
+    for (const u of [
+      'm',
+      'mca',
+      'ft',
+      'kPa',
+      'bar',
+      'psi',
+      'kgf/cm2',
+    ] as const) {
+      expect(headFromCanonical(headToCanonical(12.3, u), u)).toBeCloseTo(
+        12.3,
+        10,
+      );
+    }
   });
 });

@@ -380,7 +380,9 @@
         "flow": "Vazão",
         "power": "Potência",
         "volume": "Volume",
-        "inches": "pol."
+        "inches": "pol.",
+        "head": "Pressão / altura manométrica",
+        "headSameAsLength": "Igual ao comprimento"
       },
       "coordinates": {
         "title": "Coordenadas",
@@ -1409,7 +1411,7 @@
       },
       "production": {
         "title": "Produção",
-        "intro": "Registro somente de inclusão da água produzida: leituras de hidrômetro e volumes declarados. Entradas nunca são editadas — uma correção é uma nova entrada que anula a original.",
+        "intro": "Registro somente de inclusão da água produzida: leituras de hidrômetro, volumes declarados e leituras instantâneas de vazão (estas nunca entram nos totais de volume). Entradas nunca são editadas — uma correção é uma nova entrada que anula a original.",
         "add": "Adicionar registro",
         "correct": "Corrigir",
         "correctInfo": "A correção é salva como uma nova entrada que anula esta. A original permanece no arquivo, mas deixa de contar.",
@@ -1420,7 +1422,8 @@
         "noMeters": "Adicione um hidrômetro antes de registrar leituras.",
         "types": {
           "meter_reading": "Leitura de hidrômetro",
-          "estimated_volume": "Volume estimado"
+          "estimated_volume": "Volume estimado",
+          "flow_reading": "Leitura de vazão"
         },
         "fields": {
           "type": "Tipo",
@@ -1436,7 +1439,10 @@
           "volume": "Volume",
           "method": "Método",
           "methodInfo": "Como o volume foi estimado (vazão × tempo, consumo de energia…). É só descritivo: volumes estimados contam apenas onde nenhuma leitura de hidrômetro cobre o período.",
-          "notes": "Observações"
+          "notes": "Observações",
+          "flowRate": "Vazão",
+          "dischargeHead": "Pressão na descarga",
+          "dischargeHeadInfo": "Leitura do manômetro na tubulação de descarga, na boca do poço, em altura de água. Não entra no cálculo de volumes."
         },
         "totals": {
           "total": "Total",

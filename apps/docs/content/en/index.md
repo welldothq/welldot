@@ -7,7 +7,7 @@ navigation: false
 
 ::u-page-hero{orientation="horizontal"}
 #headline
-:badge{label="Format v2.5 · Apache 2.0" variant="subtle" color="neutral"}
+:badge{label="Format v2.6 · Apache 2.0" variant="subtle" color="neutral"}
 
 #title
 The record of a water well, [as data]{.landing-em}.

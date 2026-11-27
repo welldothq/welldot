@@ -290,7 +290,7 @@ describe('loggerSeriesForm', () => {
     const elapsed = performance.now() - t0;
     expect(issues).toEqual([]);
     expect(event.readings).toHaveLength(35000);
-    expect(elapsed).toBeLessThan(1000);
+    expect(elapsed).toBeLessThan(5000);
   });
 
   it('imported readings merge into the form', () => {

@@ -15,6 +15,8 @@ import {
   VISIBILITY_TREE,
 } from './well.utils';
 
+import { WELL_FORMAT_VERSION } from './version.utils';
+
 import { parseWell } from '../validators/well.validators';
 
 import type {
@@ -307,7 +309,7 @@ describe('serializeWell', () => {
 
     it('includes the current format version', () => {
       const parsed = JSON.parse(serializeWell(emptyWell()));
-      expect(parsed.version).toBe('2.5');
+      expect(parsed.version).toBe('2.6');
     });
 
     it('includes all required array fields even when empty', () => {
@@ -1151,7 +1153,7 @@ describe('v2 serialize', () => {
     const reparsed = deserializeWell(reserialized)!;
     expect(reparsed.location).toEqual(deserialized.location);
     expect(reparsed.well_screen[0].screen_slot).toBe(0.5);
-    expect(JSON.parse(reserialized).version).toBe('2.5');
+    expect(JSON.parse(reserialized).version).toBe('2.6');
     expect(JSON.parse(reserialized)).not.toHaveProperty('lat');
     expect(JSON.parse(reserialized)).not.toHaveProperty('lng');
     expect(JSON.parse(reserialized)).not.toHaveProperty('elevation');
@@ -3000,11 +3002,12 @@ describe('v2.4 version', () => {
   const doc = (version: unknown, extra: Record<string, unknown> = {}) =>
     JSON.stringify({ version, ...base, ...extra });
 
-  it('serializeWell writes "2.5"', () => {
-    expect(JSON.parse(serializeWell(emptyWell())).version).toBe('2.5');
+  it('serializeWell writes "2.6"', () => {
+    expect(JSON.parse(serializeWell(emptyWell())).version).toBe('2.6');
   });
 
-  it('parseWell reads "2.5", "2.4", 2, 1 and a future minor "2.9"', () => {
+  it('parseWell reads "2.6", "2.5", "2.4", 2, 1 and a future minor "2.9"', () => {
+    expect(parseWell(doc('2.6')).version).toBe('2.6');
     expect(parseWell(doc('2.5')).version).toBe('2.5');
     expect(parseWell(doc('2.4')).version).toBe('2.4');
     expect(parseWell(doc(2)).version).toBe(2);
@@ -3390,5 +3393,95 @@ describe('v2.4 — ledger rules, references and ranges', () => {
     expect(f.event_id).toBe('missing');
     expect(f.sample_id).toBe('missing');
     expect(out.history_logs[0].hydrodynamic_event_ids).toEqual(['missing']);
+  });
+});
+
+describe('flow_reading', () => {
+  const doc = (production: unknown[]) =>
+    JSON.stringify({
+      version: '2.6',
+      well_type: 'tubular',
+      bore_hole: [],
+      well_case: [],
+      reduction: [],
+      well_screen: [],
+      surface_case: [],
+      hole_fill: [],
+      lithology: [],
+      fractures: [],
+      caves: [],
+      production,
+    });
+  const READING = {
+    id: 'f1',
+    type: 'flow_reading',
+    datetime: '2025-01-04T09:25:00-03:00',
+    flow_rate: 211,
+    discharge_head: 16.75,
+    source: 'telemetry',
+  };
+
+  it('keeps a flow_reading unchanged through serializeWell → parseWell', () => {
+    const well = parseWell(doc([READING]));
+    expect(well.production).toEqual([READING]);
+    const again = parseWell(serializeWell(well));
+    expect(again.production).toEqual([READING]);
+  });
+
+  it('rejects a flow_reading without datetime', () => {
+    const { datetime: _d, ...noDatetime } = READING;
+    expect(() => parseWell(doc([noDatetime]))).toThrow();
+  });
+
+  it('rejects a flow_reading without flow_rate', () => {
+    const { flow_rate: _f, ...noFlow } = READING;
+    expect(() => parseWell(doc([noFlow]))).toThrow();
+  });
+
+  it('rejects a negative flow_rate', () => {
+    expect(() => parseWell(doc([{ ...READING, flow_rate: -1 }]))).toThrow();
+  });
+
+  it('rejects a datetime without offset', () => {
+    expect(() =>
+      parseWell(doc([{ ...READING, datetime: '2025-01-04T09:25:00' }])),
+    ).toThrow();
+  });
+
+  it('accepts a negative discharge_head (vacuum)', () => {
+    const well = parseWell(doc([{ ...READING, discharge_head: -2 }]));
+    expect(well.production![0]).toMatchObject({ discharge_head: -2 });
+  });
+
+  it('accepts the optional precision and meter fields', () => {
+    const full = {
+      ...READING,
+      flow_rate_precision: 2,
+      discharge_head_precision: 0.1,
+      meter_id: 'hm-01',
+      corrects: 'f0',
+      sequence: 1,
+      notes: 'leitura',
+    };
+    expect(parseWell(doc([full])).production).toEqual([full]);
+  });
+
+  it('still accepts an x-flow_reading entry and keeps its x- fields', () => {
+    const custom = {
+      id: 'x1',
+      type: 'x-flow_reading',
+      datetime: '2025-01-04T09:25:00-03:00',
+      flow_rate: 211,
+      'x-discharge_head': 16.75,
+    };
+    const well = parseWell(doc([custom]));
+    expect(well.production).toEqual([custom]);
+    expect(parseWell(serializeWell(well)).production).toEqual([custom]);
+  });
+
+  it('WELL_FORMAT_VERSION is "2.6" and serializeWell writes it', () => {
+    expect(WELL_FORMAT_VERSION).toBe('2.6');
+    const well = parseWell(doc([READING]));
+    expect(JSON.parse(serializeWell(well)).version).toBe('2.6');
   });
 });

@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   resolveDiameterUnitLabel,
   resolveFlowUnitLabel,
+  resolveHeadUnit,
+  resolveHeadUnitLabel,
   resolveVolumeUnitLabel,
 } from './units.utils';
 
@@ -27,5 +29,22 @@ describe('resolveFlowUnitLabel / resolveVolumeUnitLabel', () => {
     expect(resolveVolumeUnitLabel('m3')).toBe('m³');
     expect(resolveVolumeUnitLabel('ft3')).toBe('ft³');
     expect(resolveVolumeUnitLabel('gal')).toBe('gal');
+  });
+});
+
+describe('resolveHeadUnit / resolveHeadUnitLabel', () => {
+  it('follows the length unit when no head unit is set', () => {
+    expect(resolveHeadUnit({ length: 'ft' })).toBe('ft');
+    expect(resolveHeadUnit({ length: 'm' })).toBe('m');
+    expect(resolveHeadUnit({ length: 'ft', head: null })).toBe('ft');
+  });
+
+  it('prefers an explicit head unit', () => {
+    expect(resolveHeadUnit({ length: 'ft', head: 'mca' })).toBe('mca');
+  });
+
+  it('labels head units', () => {
+    expect(resolveHeadUnitLabel('kgf/cm2')).toBe('kgf/cm²');
+    expect(resolveHeadUnitLabel('mca')).toBe('mca');
   });
 });

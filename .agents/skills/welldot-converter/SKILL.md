@@ -95,7 +95,7 @@ See `README.md` next to this file for per-client setup.
 **Always consult the latest spec before extracting or validating data.** The `.well` format may
 evolve; anything in this SKILL.md is secondary to the live spec.
 
-This skill targets **spec version 2.5** — write `"version": "2.5"` (a string). welldot.org / `@welldot/core`
+This skill targets **spec version 2.6** — write `"version": "2.6"` (a string). welldot.org / `@welldot/core`
 do not accept `version: 1` files for new conversions, and `@welldot/core` up to 0.4.0 rejects `"2.x"` files, and up to 0.7 rejects a pipe section without `type`.
 
 | Doc              | URL                                                          |
@@ -155,6 +155,8 @@ Accepted conversions (only when original unit is explicit in the document):
 
 - ft → m: `× 0.3048` | in → mm: `× 25.4` | cm → mm: `× 10`
 - L → m³: `÷ 1000` (meter readings and volumes) | L/s → m³/h: `× 3.6` | cv → kW: `× 0.7355`
+- Head/pressure → m: mca × 1, kPa ÷ 9.80665, kgf/cm² × 10, bar × 10.1972, psi × 0.70307, ft × 0.3048
+  (`discharge_head` and `rated_head` are stored in m of head)
 - DMS → decimal degrees: convert precisely
 - SIRGAS 2000 UTM → WGS84 decimal: convert precisely or ask the user
 - Water quality (v2.3): µg/L → mg/L `÷ 1000` | mS/m → µS/cm `× 10` | mS/cm → µS/cm `× 1000` |
@@ -390,9 +392,14 @@ one retracts — only if the source itself records a correction), `sequence`, `n
 - `meter_reading` — `datetime` (RFC 3339 with offset), `meter_id` (a `meters[].id`, required —
   create the meter entry too), `reading` (register value in **m³**; a meter reading in liters is
   converted `÷ 1000`), `source` (manual/telemetry).
-- `declared_volume` — `period_start`, `period_end` (instants, end later than start), `volume` (m³),
-  `method` (`reported` when the report transcribes a volume declared to a regulator; `estimated`
-  when the report itself gives an estimate such as flow × time).
+- `estimated_volume` — `period_start`, `period_end` (instants, end later than start), `volume` (m³),
+  `method` (optional: `flow_time`, `energy` or `user_statement`, only when the report states the basis).
+- `flow_reading` (v2.6) — an instantaneous flow observed at an instant (telemetry, SCADA, portable meter):
+  `datetime` (RFC 3339 with offset), `flow_rate` (m³/h, ≥ 0; L/s `× 3.6`), optional `flow_rate_precision`,
+  `discharge_head` (m of head, wellhead gauge pressure; convert per § Metric fidelity; may be negative for
+  vacuum), `discharge_head_precision`, `meter_id` (a `meters[].id`), `source` (`manual`/`telemetry`).
+  Excluded from volumes: **never convert flow to volume**. Do not multiply a flow by hours to make an
+  `estimated_volume` unless the report itself states that volume.
 
 **Never compute or store derived values**: no consumption between readings, no monthly/annual totals,
 no average flow — transcribe register values and declared volumes only. Never fabricate a reading
@@ -451,7 +458,7 @@ debris, or partial backfill reduced the depth; SIAGAS-style records with a separ
 Validate the output with the welldot MCP `validate_well` tool when it is available
 (`https://docs.welldot.org/mcp`); it runs the same `parseWell` check as `@welldot/core`.
 
-1. `"version": "2.5"` present (a string), and no optional field written as `null`
+1. `"version": "2.6"` present (a string), and no optional field written as `null`
 2. All required fields present per object type (per spec from Step 1)
 3. Depth consistency: `from < to` for all interval objects
 4. Diameter sanity: boreholes 100–600 mm typical; casings smaller than borehole
@@ -467,15 +474,15 @@ Validate the output with the welldot MCP `validate_well` tool when it is availab
    negative
 8. Every `hydrodynamic_events[]`, `aquifer_analysis[]`, `history_logs[]` `datetime` (and `updated_at`),
    every `pump_installations[]` / `meters[]` `installed_at` / `removed_at`, every `production[]`
-   `datetime` / `period_start` / `period_end`, every `operating_regime[].effective_from`, and every
+   `datetime` (`meter_reading`, `flow_reading`) / `period_start` / `period_end`, every `operating_regime[].effective_from`, and every
    `water_samples[]` `datetime`, `laboratory.received_at` and `results[].analyzed_at`, is
    RFC 3339 **with a UTC offset** — reject and fix any naked `YYYY-MM-DDTHH:MM:SS` or bare date used
    where an instant is required (only `construction_date`, the `permits[]` dates, condition
    `first_due`/`last_due` and `history_logs[].due_date` are bare calendar dates)
    8b. `permits[].conditions[]` `due_after`/`recurrence` are date-only durations (`P90D`, `P6M`, never
    `PT…`); a condition never has both `first_due` and `due_after`
-   8c. Every `production[].meter_id` resolves to a `meters[].id`; readings and volumes are in m³; no
-   derived totals were written; `operating_regime` has no zero placeholders, `daily_operating_time` is
+   8c. Every `production[].meter_id` resolves to a `meters[].id`; readings and volumes are in m³, `flow_rate` in m³/h and `discharge_head` in m; no
+   derived totals were written and no flow was converted to a volume; `operating_regime` has no zero placeholders, `daily_operating_time` is
    0–24 and `days_per_week` an integer 1–7; `history_logs` category-specific fields appear only on
    their own category; every `status` is one of the five closed values
    8d. `water_samples`: the checks in references/well-spec.md § `water_samples[]` — Import checklist
@@ -497,7 +504,7 @@ Present it with a brief summary:
 
 - Sections found: constructive (bore_hole, casing, screen, etc.) / geologic (lithology, fractures) /
   hydrodynamic (pumping tests, aquifer analysis) / history (maintenance, inspections, incidents,
-  status changes) / operation (pumps, permits, meters, production, operating regime) / water quality
+  status changes) / operation (pumps, permits, meters, production incl. flow readings, operating regime) / water quality
   (samples, number of results, any parameter mapped to CAS or `x-` codes, unit conversions applied,
   assumed coverage factor k)
 - Total depth (from `bore_hole`), and `well_depth` separately if the report gave a distinct current/

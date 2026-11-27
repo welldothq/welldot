@@ -47,6 +47,28 @@ describe('useWellUnits', () => {
     expect(toCanonical(toDisplay(42))).toBeCloseTo(42, 6);
   });
 
+  it('follows the length unit for head when no head unit is set', () => {
+    const m = setup('head', { length: 'm' });
+    expect(m.unit.value).toBe('m');
+    expect(m.toDisplay(16.75)).toBe(16.75);
+    const ft = setup('head', { length: 'ft' });
+    expect(ft.unit.value).toBe('ft');
+    expect(ft.toDisplay(3.048)).toBeCloseTo(10, 6);
+    expect(ft.toCanonical(10)).toBeCloseTo(3.048, 6);
+  });
+
+  it('uses an explicit head unit and keeps it through the config merge', () => {
+    const { unit, toDisplay, toCanonical } = setup('head', { head: 'kPa' });
+    expect(unit.value).toBe('kPa');
+    expect(toCanonical(98.0665)).toBeCloseTo(10, 6);
+    expect(toDisplay(10)).toBeCloseTo(98.0665, 6);
+  });
+
+  it('honors a head unitOverride', () => {
+    const { unit } = setup('head', { length: 'ft' }, 'bar');
+    expect(unit.value).toBe('bar');
+  });
+
   it('converts diameter mm ↔ inches', () => {
     const { toDisplay, toCanonical } = setup('diameter', {
       diameter: 'inches',

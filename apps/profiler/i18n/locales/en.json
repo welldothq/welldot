@@ -380,7 +380,9 @@
         "flow": "Flow rate",
         "power": "Power",
         "volume": "Volume",
-        "inches": "in."
+        "inches": "in.",
+        "head": "Head / pressure",
+        "headSameAsLength": "Same as length"
       },
       "coordinates": {
         "title": "Coordinates",
@@ -1409,7 +1411,7 @@
       },
       "production": {
         "title": "Production",
-        "intro": "Append-only ledger of water produced: meter readings and declared volumes. Entries are never edited — a correction is a new entry that retracts the original.",
+        "intro": "Append-only ledger of water produced: meter readings, declared volumes and instantaneous flow readings (these never count in the volume totals). Entries are never edited — a correction is a new entry that retracts the original.",
         "add": "Add entry",
         "correct": "Correct",
         "correctInfo": "The correction is saved as a new entry that retracts this one. The original stays in the file but no longer counts.",
@@ -1420,7 +1422,8 @@
         "noMeters": "Add a meter first to record its readings.",
         "types": {
           "meter_reading": "Meter reading",
-          "estimated_volume": "Estimated volume"
+          "estimated_volume": "Estimated volume",
+          "flow_reading": "Flow reading"
         },
         "fields": {
           "type": "Type",
@@ -1436,7 +1439,10 @@
           "volume": "Volume",
           "method": "Method",
           "methodInfo": "How the volume was estimated (flow × time, energy use…). Descriptive only: estimated volumes count only where no meter reading covers the period.",
-          "notes": "Notes"
+          "notes": "Notes",
+          "flowRate": "Flow rate",
+          "dischargeHead": "Discharge head",
+          "dischargeHeadInfo": "Gauge reading on the discharge pipe at the wellhead, as head of water. Not counted in volumes."
         },
         "totals": {
           "total": "Total",

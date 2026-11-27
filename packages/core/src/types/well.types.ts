@@ -739,7 +739,7 @@ export type Meter = {
 export type ProductionEntryBase = {
   /** Unique within `production`. UUID v4 recommended. */
   id: string;
-  /** `meter_reading` or `estimated_volume`. */
+  /** `meter_reading`, `estimated_volume` or `flow_reading` (since v2.6). */
   type: string;
   /** `production[].id` of the entry this one retracts (ledger correction). */
   corrects?: string;
@@ -781,10 +781,38 @@ export type EstimatedVolume = ProductionEntryBase & {
 };
 
 /**
+ * An instantaneous flow rate observed at an instant, with an optional
+ * discharge head. Never part of a volume derivation: integrating flow over
+ * time is an estimate, written as an {@link EstimatedVolume} with
+ * `method: 'flow_time'`. Since v2.6.
+ */
+export type FlowReading = ProductionEntryBase & {
+  type: 'flow_reading';
+  /** RFC 3339 instant of the reading. */
+  datetime: string;
+  /** Instantaneous flow rate in m³/h, zero or greater. `0` means nothing was flowing. */
+  flow_rate: number;
+  /** One-sigma precision of `flow_rate`, in m³/h. */
+  flow_rate_precision?: number;
+  /**
+   * Gauge pressure at the wellhead discharge, as head of water in m (1 mca =
+   * 1 m). May be negative (vacuum at the gauge). Convert other units with
+   * `headToCanonical`.
+   */
+  discharge_head?: number;
+  /** One-sigma precision of `discharge_head`, in m. */
+  discharge_head_precision?: number;
+  /** `meters[].id` of the meter that reported the flow, if any. */
+  meter_id?: string;
+  /** Recommended values: {@link READING_SOURCES}. */
+  source?: OpenVocab<ReadingSource>;
+};
+
+/**
  * One entry of the append-only `production` ledger, discriminated by `type`.
  * Corrected with `corrects`, never edited in place. Since v2.3.
  */
-export type ProductionEntry = MeterReading | EstimatedVolume;
+export type ProductionEntry = MeterReading | EstimatedVolume | FlowReading;
 
 /**
  * How the well is intended to run from `effective_from` on. A mutable record;

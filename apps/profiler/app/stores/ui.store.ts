@@ -1,6 +1,7 @@
 import type {
   DiameterUnits,
   FlowUnits,
+  HeadUnits,
   LengthUnits,
   PowerUnits,
   VolumeUnits,
@@ -15,6 +16,8 @@ export const useUiStore = defineStore(
     const lengthUnit = ref<LengthUnits>('m');
     const diameterUnit = ref<DiameterUnits>('mm');
     const flowUnit = ref<FlowUnits>('m3/h');
+    // `null`: heads follow the length unit (m → m, ft → ft).
+    const headUnit = ref<HeadUnits | null>(null);
     const powerUnit = ref<PowerUnits>('kW');
     const volumeUnit = ref<VolumeUnits>('m3');
     const coordinateFormat = ref<CoordinateFormat>('DD');
@@ -26,6 +29,7 @@ export const useUiStore = defineStore(
       lengthUnit,
       diameterUnit,
       flowUnit,
+      headUnit,
       powerUnit,
       volumeUnit,
       coordinateFormat,

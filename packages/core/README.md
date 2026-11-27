@@ -107,86 +107,88 @@ const hasData = hasWellData(well);
 
 All types are exported as TypeScript type-only exports (zero runtime cost).
 
-| Type                              | Description                                                                                                                                   |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Well`                            | Complete static record of a water well (v2)                                                                                                   |
-| `BoreHole`                        | A drilled interval with diameter and optional drilling method                                                                                 |
-| `WellCase`                        | Steel or plastic casing installed in the borehole                                                                                             |
-| `Reduction`                       | Transition piece between different casing diameters                                                                                           |
-| `WellScreen`                      | Slotted screen section for water intake (`screen_slot` in mm)                                                                                 |
-| `WellStatus`                      | Closed `status_change` vocabulary: `active`, `maintenance`, `inactive`, `decommissioned`, `abandoned` (v2.3)                                  |
-| `SurfaceCase`                     | Protective casing near the surface                                                                                                            |
-| `HoleFill`                        | Annular fill material (`gravel_pack` or `seal`)                                                                                               |
-| `CementPad`                       | Concrete wellhead pad dimensions                                                                                                              |
-| `Centralizer`                     | Casing/screen centralizers over a depth interval with spacing (v2.1)                                                                          |
-| `Lithology`                       | Geological description of a depth interval                                                                                                    |
-| `Texture`                         | `{ code: string \| number; vocabulary?: string }` — lithology texture reference                                                               |
-| `Fracture`                        | A discrete fracture or fracture zone                                                                                                          |
-| `Cave`                            | A cavity or void zone                                                                                                                         |
-| `Constructive`                    | Grouped type: borehole + casings + screens + fills                                                                                            |
-| `Geologic`                        | Grouped type: lithology + fractures + caves                                                                                                   |
-| `WellId`                          | Authority-scoped well identifier `{ authority, id, primary? }`                                                                                |
-| `Location`                        | Geographic location with optional elevation and CRS properties                                                                                |
-| `LocationProperties`              | CRS, datum, and precision metadata for a `Location`                                                                                           |
-| `LevelReading`                    | A single depth/time reading during a pumping or recovery phase                                                                                |
-| `RecoveryPhase`                   | Time-series of level readings after pump shutdown                                                                                             |
-| `PumpingStep`                     | One flow-rate step in a pumping test                                                                                                          |
-| `HydrodynamicEventBase`           | Common fields shared by all hydrodynamic event types                                                                                          |
-| `SpotMeasurementEvent`            | A single static water level reading                                                                                                           |
-| `ConstantRateEvent`               | A constant-rate pumping test                                                                                                                  |
-| `StepDrawdownEvent`               | A step-drawdown pumping test                                                                                                                  |
-| `AirliftEvent`                    | An air-lift development or test                                                                                                               |
-| `RecoveryOnlyEvent`               | Recovery measurements without drawdown data                                                                                                   |
-| `LoggerSeriesEvent`               | Continuous level series recorded by an installed sensor (v2.4)                                                                                |
-| `LoggerReading`                   | A `logger_series` reading, located by `datetime` (v2.4)                                                                                       |
-| `BarometricCompensation`          | `logger_series.barometric_compensation` values (v2.4)                                                                                         |
-| `ReadingAggregation`              | `logger_series.aggregation` values (v2.4)                                                                                                     |
-| `HydrodynamicEvent`               | Discriminated union of all event types + x- custom events                                                                                     |
-| `AquiferAnalysis`                 | An interpreted set of aquifer parameters                                                                                                      |
-| `Attachment`                      | An HTTPS-referenced document, typed by `document_type` (common type since v2.3)                                                               |
-| `PumpInstallation`                | One installation of a pump in the well (v2.3)                                                                                                 |
-| `PumpElectrical`                  | Electrical data of a pump installation (v2.3)                                                                                                 |
-| `Permit`                          | A legal instrument that authorizes, exempts or registers the well or its use — drilling or abstraction permit, exemption, registration (v2.3) |
-| `PermitAdministrativeStatus`      | `'requested' \| 'granted' \| 'suspended' \| 'revoked' \| 'denied' \| 'withdrawn'` (v2.3)                                                      |
-| `PermitHistoryEntry`              | One administrative step of a permit: filing, process, notification, fee (v2.3)                                                                |
-| `PermitCondition`                 | An obligation (condicionante) of a permit, with derived deadlines and its `fulfillments` (v2.3)                                               |
-| `ConditionFulfillment`            | The record of one condition deadline being met (v2.3)                                                                                         |
-| `VolumeLimit`                     | A volume stated in a permit for a daily, monthly or annual period (v2.3)                                                                      |
-| `MonthlyGrant`                    | One month of a permit's month-by-month grant (v2.3)                                                                                           |
-| `Meter`                           | One installation of a totalizer (hidrômetro) in the well (v2.3)                                                                               |
-| `ProductionEntryBase`             | Common fields of every `production` ledger entry (v2.3)                                                                                       |
-| `MeterReading`                    | A totalizer register value in m³ (`type: 'meter_reading'`) (v2.3)                                                                             |
-| `EstimatedVolume`                 | A volume estimated for a period, without a meter (`type: 'estimated_volume'`) (v2.3)                                                          |
-| `ProductionEntry`                 | `MeterReading \| EstimatedVolume` — one entry of the `production` ledger (v2.3)                                                               |
-| `OperatingRegime`                 | Declared flow rate, daily operating time and days per week from `effective_from` (v2.3)                                                       |
-| `WaterSample`                     | One water sample and its results; `water_samples` is a ledger corrected with `corrects` (v2.3)                                                |
-| `SamplingPoint`                   | Where the sample was taken: `type`, point `depth` or `from`/`to` interval, `device`, `pump_installation_id` (v2.3)                            |
-| `Purge`                           | Purge before collection: duration, volume, flow rate, stabilization and readings (v2.3)                                                       |
-| `PurgeReading`                    | One stabilization reading during the purge (v2.3)                                                                                             |
-| `Laboratory`                      | Laboratory, accreditation, report number, batch, receipt instant and temperature (v2.3)                                                       |
-| `WaterQualityResult`              | One result: exactly one of `value`, `presence` or `text`, plus qualifier, limits, fraction, validation (v2.3)                                 |
-| `ResultQualifier`                 | `'<' \| '>' \| 'not_detected' \| 'estimated'` (v2.3)                                                                                          |
-| `Parameter`                       | `{ code; vocabulary }` — `welldot`, `cas` or `x-…` parameter identity (v2.3)                                                                  |
-| `Filtration`                      | Filter `pore_size` (µm) and `location` (`field` \| `lab`) (v2.3)                                                                              |
-| `ResultValidation`                | Reviewer validation: `status` (`unvalidated`, `validated`, `qualified`, `rejected`), qualifier, guideline (v2.3)                              |
-| `TimeResolution`                  | `'day'` — marks an instant known only by its date (`*_resolution` fields) (v2.3)                                                              |
-| `HistoryLogEntry`                 | One entry in the operational history log (incl. `maintenance` and `status_change` fields, and `hydrodynamic_event_ids` / `sample_ids` links)  |
-| `Units`                           | `{ length; diameter; flow?; power?; volume? }` — display/input unit preferences                                                               |
-| `LengthUnits`                     | `'m' \| 'ft'`                                                                                                                                 |
-| `DiameterUnits`                   | `'mm' \| 'inches'`                                                                                                                            |
-| `FlowUnits`                       | `'m3/h' \| 'L/s' \| 'gpm'`                                                                                                                    |
-| `PowerUnits`                      | `'kW' \| 'cv' \| 'hp'`                                                                                                                        |
-| `VolumeUnits`                     | `'m3' \| 'L' \| 'ft3' \| 'gal'` (`gal` is the US gallon)                                                                                      |
-| `UnitsTypes`                      | `'metric' \| 'imperial'`                                                                                                                      |
-| `TextureType`                     | `{ code: TextureCode; label: string }` — a single FGDC texture entry (lookup)                                                                 |
-| `TextureCode`                     | `number \| string` — numeric FGDC code or custom string code                                                                                  |
-| `SectionKey`                      | Section of a well for share visibility / redaction (includes `'water_quality'` since v2.3)                                                    |
-| `ParameterDefinition`             | One vocabulary entry: code, group, EN label, translations, unit, value form, CAS, molar mass, charge (v2.3)                                   |
-| `ParameterGroup`                  | Vocabulary group (`physical`, `major_ion`, `metal`, `microbiology`, …) (v2.3)                                                                 |
-| `ParameterForm`                   | `'value' \| 'presence' \| 'text'` (v2.3)                                                                                                      |
-| `ParameterUnit`                   | `{ symbol; ucum? }` — canonical unit of a parameter (v2.3)                                                                                    |
-| `LimitSet`, `Limit`, `LimitBasis` | A jurisdiction limit set and its per-code limits (v2.3)                                                                                       |
-| `ConcentrationUnits`              | `'mg/L' \| 'ug/L' \| 'ng/L' \| 'g/L'` (v2.3)                                                                                                  |
+| Type                              | Description                                                                                                                                        |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Well`                            | Complete static record of a water well (v2)                                                                                                        |
+| `BoreHole`                        | A drilled interval with diameter and optional drilling method                                                                                      |
+| `WellCase`                        | Steel or plastic casing installed in the borehole                                                                                                  |
+| `Reduction`                       | Transition piece between different casing diameters                                                                                                |
+| `WellScreen`                      | Slotted screen section for water intake (`screen_slot` in mm)                                                                                      |
+| `WellStatus`                      | Closed `status_change` vocabulary: `active`, `maintenance`, `inactive`, `decommissioned`, `abandoned` (v2.3)                                       |
+| `SurfaceCase`                     | Protective casing near the surface                                                                                                                 |
+| `HoleFill`                        | Annular fill material (`gravel_pack` or `seal`)                                                                                                    |
+| `CementPad`                       | Concrete wellhead pad dimensions                                                                                                                   |
+| `Centralizer`                     | Casing/screen centralizers over a depth interval with spacing (v2.1)                                                                               |
+| `Lithology`                       | Geological description of a depth interval                                                                                                         |
+| `Texture`                         | `{ code: string \| number; vocabulary?: string }` — lithology texture reference                                                                    |
+| `Fracture`                        | A discrete fracture or fracture zone                                                                                                               |
+| `Cave`                            | A cavity or void zone                                                                                                                              |
+| `Constructive`                    | Grouped type: borehole + casings + screens + fills                                                                                                 |
+| `Geologic`                        | Grouped type: lithology + fractures + caves                                                                                                        |
+| `WellId`                          | Authority-scoped well identifier `{ authority, id, primary? }`                                                                                     |
+| `Location`                        | Geographic location with optional elevation and CRS properties                                                                                     |
+| `LocationProperties`              | CRS, datum, and precision metadata for a `Location`                                                                                                |
+| `LevelReading`                    | A single depth/time reading during a pumping or recovery phase                                                                                     |
+| `RecoveryPhase`                   | Time-series of level readings after pump shutdown                                                                                                  |
+| `PumpingStep`                     | One flow-rate step in a pumping test                                                                                                               |
+| `HydrodynamicEventBase`           | Common fields shared by all hydrodynamic event types                                                                                               |
+| `SpotMeasurementEvent`            | A single static water level reading                                                                                                                |
+| `ConstantRateEvent`               | A constant-rate pumping test                                                                                                                       |
+| `StepDrawdownEvent`               | A step-drawdown pumping test                                                                                                                       |
+| `AirliftEvent`                    | An air-lift development or test                                                                                                                    |
+| `RecoveryOnlyEvent`               | Recovery measurements without drawdown data                                                                                                        |
+| `LoggerSeriesEvent`               | Continuous level series recorded by an installed sensor (v2.4)                                                                                     |
+| `LoggerReading`                   | A `logger_series` reading, located by `datetime` (v2.4)                                                                                            |
+| `BarometricCompensation`          | `logger_series.barometric_compensation` values (v2.4)                                                                                              |
+| `ReadingAggregation`              | `logger_series.aggregation` values (v2.4)                                                                                                          |
+| `HydrodynamicEvent`               | Discriminated union of all event types + x- custom events                                                                                          |
+| `AquiferAnalysis`                 | An interpreted set of aquifer parameters                                                                                                           |
+| `Attachment`                      | An HTTPS-referenced document, typed by `document_type` (common type since v2.3)                                                                    |
+| `PumpInstallation`                | One installation of a pump in the well (v2.3)                                                                                                      |
+| `PumpElectrical`                  | Electrical data of a pump installation (v2.3)                                                                                                      |
+| `Permit`                          | A legal instrument that authorizes, exempts or registers the well or its use — drilling or abstraction permit, exemption, registration (v2.3)      |
+| `PermitAdministrativeStatus`      | `'requested' \| 'granted' \| 'suspended' \| 'revoked' \| 'denied' \| 'withdrawn'` (v2.3)                                                           |
+| `PermitHistoryEntry`              | One administrative step of a permit: filing, process, notification, fee (v2.3)                                                                     |
+| `PermitCondition`                 | An obligation (condicionante) of a permit, with derived deadlines and its `fulfillments` (v2.3)                                                    |
+| `ConditionFulfillment`            | The record of one condition deadline being met (v2.3)                                                                                              |
+| `VolumeLimit`                     | A volume stated in a permit for a daily, monthly or annual period (v2.3)                                                                           |
+| `MonthlyGrant`                    | One month of a permit's month-by-month grant (v2.3)                                                                                                |
+| `Meter`                           | One installation of a totalizer (hidrômetro) in the well (v2.3)                                                                                    |
+| `ProductionEntryBase`             | Common fields of every `production` ledger entry (v2.3)                                                                                            |
+| `MeterReading`                    | A totalizer register value in m³ (`type: 'meter_reading'`) (v2.3)                                                                                  |
+| `EstimatedVolume`                 | A volume estimated for a period, without a meter (`type: 'estimated_volume'`) (v2.3)                                                               |
+| `FlowReading`                     | An instantaneous flow rate in m³/h with an optional `discharge_head` in m (`type: 'flow_reading'`); never part of a volume (v2.6)                  |
+| `ProductionEntry`                 | `MeterReading \| EstimatedVolume \| FlowReading` — one entry of the `production` ledger (v2.3)                                                     |
+| `OperatingRegime`                 | Declared flow rate, daily operating time and days per week from `effective_from` (v2.3)                                                            |
+| `WaterSample`                     | One water sample and its results; `water_samples` is a ledger corrected with `corrects` (v2.3)                                                     |
+| `SamplingPoint`                   | Where the sample was taken: `type`, point `depth` or `from`/`to` interval, `device`, `pump_installation_id` (v2.3)                                 |
+| `Purge`                           | Purge before collection: duration, volume, flow rate, stabilization and readings (v2.3)                                                            |
+| `PurgeReading`                    | One stabilization reading during the purge (v2.3)                                                                                                  |
+| `Laboratory`                      | Laboratory, accreditation, report number, batch, receipt instant and temperature (v2.3)                                                            |
+| `WaterQualityResult`              | One result: exactly one of `value`, `presence` or `text`, plus qualifier, limits, fraction, validation (v2.3)                                      |
+| `ResultQualifier`                 | `'<' \| '>' \| 'not_detected' \| 'estimated'` (v2.3)                                                                                               |
+| `Parameter`                       | `{ code; vocabulary }` — `welldot`, `cas` or `x-…` parameter identity (v2.3)                                                                       |
+| `Filtration`                      | Filter `pore_size` (µm) and `location` (`field` \| `lab`) (v2.3)                                                                                   |
+| `ResultValidation`                | Reviewer validation: `status` (`unvalidated`, `validated`, `qualified`, `rejected`), qualifier, guideline (v2.3)                                   |
+| `TimeResolution`                  | `'day'` — marks an instant known only by its date (`*_resolution` fields) (v2.3)                                                                   |
+| `HistoryLogEntry`                 | One entry in the operational history log (incl. `maintenance` and `status_change` fields, and `hydrodynamic_event_ids` / `sample_ids` links)       |
+| `Units`                           | `{ length; diameter; flow?; power?; volume?; head? }` — display/input unit preferences                                                             |
+| `LengthUnits`                     | `'m' \| 'ft'`                                                                                                                                      |
+| `DiameterUnits`                   | `'mm' \| 'inches'`                                                                                                                                 |
+| `FlowUnits`                       | `'m3/h' \| 'L/s' \| 'gpm'`                                                                                                                         |
+| `PowerUnits`                      | `'kW' \| 'cv' \| 'hp'`                                                                                                                             |
+| `VolumeUnits`                     | `'m3' \| 'L' \| 'ft3' \| 'gal'` (`gal` is the US gallon)                                                                                           |
+| `HeadUnits`                       | `'m' \| 'mca' \| 'ft' \| 'kPa' \| 'bar' \| 'psi' \| 'kgf/cm2'` — head of water; canonical `m` (1 mca = 1 m). Absent `head` follows the length unit |
+| `UnitsTypes`                      | `'metric' \| 'imperial'`                                                                                                                           |
+| `TextureType`                     | `{ code: TextureCode; label: string }` — a single FGDC texture entry (lookup)                                                                      |
+| `TextureCode`                     | `number \| string` — numeric FGDC code or custom string code                                                                                       |
+| `SectionKey`                      | Section of a well for share visibility / redaction (includes `'water_quality'` since v2.3)                                                         |
+| `ParameterDefinition`             | One vocabulary entry: code, group, EN label, translations, unit, value form, CAS, molar mass, charge (v2.3)                                        |
+| `ParameterGroup`                  | Vocabulary group (`physical`, `major_ion`, `metal`, `microbiology`, …) (v2.3)                                                                      |
+| `ParameterForm`                   | `'value' \| 'presence' \| 'text'` (v2.3)                                                                                                           |
+| `ParameterUnit`                   | `{ symbol; ucum? }` — canonical unit of a parameter (v2.3)                                                                                         |
+| `LimitSet`, `Limit`, `LimitBasis` | A jurisdiction limit set and its per-code limits (v2.3)                                                                                            |
+| `ConcentrationUnits`              | `'mg/L' \| 'ug/L' \| 'ng/L' \| 'g/L'` (v2.3)                                                                                                       |
 
 ### Validators
 
@@ -238,6 +240,7 @@ Each schema validates its corresponding type at runtime. All schemas are Zod obj
 | `ProductionEntryBaseSchema`        | `ProductionEntryBase`                                                                                                                                             |
 | `MeterReadingSchema`               | `MeterReading`                                                                                                                                                    |
 | `EstimatedVolumeSchema`            | `EstimatedVolume`                                                                                                                                                 |
+| `FlowReadingSchema`                | `FlowReading` (non-negative `flow_rate` and precisions; `discharge_head` of any sign) (v2.6)                                                                      |
 | `ProductionEntrySchema`            | `ProductionEntry` (discriminated union + x- passthrough; a known type missing required fields is rejected)                                                        |
 | `OperatingRegimeSchema`            | `OperatingRegime` (non-negative `daily_operating_time`, integer `days_per_week` 1–7)                                                                              |
 | `HistoryLogEntrySchema`            | `HistoryLogEntry`                                                                                                                                                 |
@@ -261,7 +264,7 @@ Parses a raw JSON string and validates it against `WellSchema`. Throws a `ZodErr
 
 #### `serializeWell(well: Well): string`
 
-Serializes a `Well` object to a versioned `.well` JSON string (`"version": "2.5"`, `WELL_FORMAT_VERSION`). Omits `null` members outside `x-` fields and `@context`. Emits `location` when set; does not emit deprecated flat `lat`/`lng`/`elevation` or other legacy v1 keys. Omits `undefined` optional fields. Root members the spec does not define (`x-` fields and blocks, foreign members) are written unchanged after the spec blocks, as the spec requires. Never writes placeholders: a blank `type` on `well_case`, `well_screen` and `reduction` items is omitted (unknown material), and so is a `cement_pad` whose members are all blank or zero.
+Serializes a `Well` object to a versioned `.well` JSON string (`"version": "2.6"`, `WELL_FORMAT_VERSION`). Omits `null` members outside `x-` fields and `@context`. Emits `location` when set; does not emit deprecated flat `lat`/`lng`/`elevation` or other legacy v1 keys. Omits `undefined` optional fields. Root members the spec does not define (`x-` fields and blocks, foreign members) are written unchanged after the spec blocks, as the spec requires. Never writes placeholders: a blank `type` on `well_case`, `well_screen` and `reduction` items is omitted (unknown material), and so is a `cement_pad` whose members are all blank or zero.
 
 #### `deserializeWell(jsonString: string): Well | null`
 
@@ -280,7 +283,7 @@ A v2 file keeps its `version` as written (`2`, `"2.4"`, …); `serializeWell` al
 
 | Export                                | Description                                                                                                                       |
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `WELL_FORMAT_VERSION`                 | The version `serializeWell` writes: `"2.5"`.                                                                                      |
+| `WELL_FORMAT_VERSION`                 | The version `serializeWell` writes: `"2.6"`.                                                                                      |
 | `parseFormatVersion(value)`           | Parses `2` or `"M.m"` into a `FormatVersion` (`{ major, minor }`); `undefined` for `2.4`, `"2.4.1"`, `"v2.4"` and other values.   |
 | `compareFormatVersions(a, b)`         | Compares two `"M.m"` strings as two integers (`"2.10"` is after `"2.9"`); throws on malformed input.                              |
 | `isIanaTimeZone(value)`               | Whether `value` is an IANA time zone name (`America/Belem`), for `location.properties.timezone`. Offsets are not valid.           |
@@ -320,13 +323,14 @@ redactWell(well, { meters: false, location: false }); // single fields
 | Volume            | `litersToCubicMeters`, `cubicMetersToLiters`, `cubicMetersToCubicFeet`, `cubicFeetToCubicMeters`, `cubicMetersToUsGallons`, `usGallonsToCubicMeters`, `volumeFromCanonical`, `volumeToCanonical`     |
 | Time              | `minutesToHours`, `hoursToMinutes`                                                                                                                                                                   |
 | Pressure          | `kilopascalToPsi`, `psiToKilopascal`                                                                                                                                                                 |
+| Head              | `headFromCanonical`, `headToCanonical` (`HeadUnits`: m, mca, ft, kPa, bar, psi, kgf/cm² ↔ canonical m of water), `METER_OF_WATER_KPA` (9.80665 kPa per m) (v2.6)                                     |
 | Transmissivity    | `squareMeterPerSecondToSquareMeterPerDay`, `squareMeterPerDayToSquareMeterPerSecond`                                                                                                                 |
 | Coordinates       | `decimalDegreesToDms`, `dmsToDecimalDegrees` (`DmsCoordinate`)                                                                                                                                       |
 | Concentration     | `concentrationToCanonical`, `concentrationFromCanonical` (`ConcentrationUnits`: mg/L, µg/L, ng/L, g/L ↔ canonical mg/L) (v2.3)                                                                       |
 | Conductivity      | `milliSiemensPerMeterToMicroSiemensPerCm` (×10), `milliSiemensPerCmToMicroSiemensPerCm` (×1000) (v2.3)                                                                                               |
 | Lab report import | `turbidityCodeForUnit` (NTU/FNU/FAU/FTU/uT → turbidity code), `normalizeColorUnit` (mg Pt-Co/L, PCU, TCU → `uH`), `expandedToStandardUncertainty` (U / k → one-sigma `value_precision`) (v2.3)       |
 
-`*FromCanonical(value, unit)` converts from the canonical unit (m³/h, kW, m³) to the given display unit; `*ToCanonical(value, unit)` converts back.
+`*FromCanonical(value, unit)` converts from the canonical unit (m³/h, kW, m³, m of head) to the given display unit; `*ToCanonical(value, unit)` converts back.
 
 ## Water Quality Vocabulary and Limit Sets _(v2.3)_
 
@@ -467,11 +471,11 @@ See [fgdc-textures.md](https://docs.welldot.org/format/spec/reference/fgdc-textu
 
 All depths are in **meters** from ground level (0 = surface). All diameters are in **millimeters**. Geographic coordinates use WGS84 decimal degrees. The MIME type is `application/vnd.well+json`.
 
-A minimal v2.5 `.well` document:
+A minimal v2.6 `.well` document:
 
 ```json
 {
-  "version": "2.5",
+  "version": "2.6",
   "well_type": "tubular",
   "name": "PP-01",
   "location": { "lat": -1.4558, "lng": -48.5039, "elevation": 12.5 },

@@ -102,6 +102,7 @@ await createWellPdf(well, {
     flow: 'm3/h',
     power: 'kW',
     volume: 'm3',
+    head: 'm', // defaults to the length unit; also mca, ft, kPa, bar, psi, kgf/cm2
   },
   coordinateFormat: 'DMS',
   waterQualityLimitSet: 'who_gdwq_2022',
